@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "211280455582",
+    "project_id": "bubbles-fight",
+    "storage_bucket": "bubbles-fight.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211280455582:android:101873310c297a4284d88f",
+        "android_client_info": {
+          "package_name": "com.example.bubble_fight"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211280455582-6efnod9q8uggfknhfb6ovfu9oskb5a35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMVEnrzT6lbUqCOAVuoDDFFnmiPddPh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211280455582-6efnod9q8uggfknhfb6ovfu9oskb5a35.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
