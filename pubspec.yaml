@@ -38,6 +38,9 @@ dependencies:
   rive: ^0.8.4
   flame_rive: ^1.2.0
   firebase_core: ^1.17.0
+  firebase_database: ^9.0.14
+  uuid: ^3.0.6
+  rxdart: ^0.27.3
 
 dev_dependencies:
   flutter_test:

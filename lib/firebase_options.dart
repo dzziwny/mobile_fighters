@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '211280455582',
     projectId: 'bubbles-fight',
     authDomain: 'bubbles-fight.firebaseapp.com',
+    databaseURL: 'https://bubbles-fight-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bubbles-fight.appspot.com',
   );
 
@@ -57,6 +58,7 @@ class DefaultFirebaseOptions {
     appId: '1:211280455582:android:101873310c297a4284d88f',
     messagingSenderId: '211280455582',
     projectId: 'bubbles-fight',
+    databaseURL: 'https://bubbles-fight-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bubbles-fight.appspot.com',
   );
 
@@ -65,6 +67,7 @@ class DefaultFirebaseOptions {
     appId: '1:211280455582:ios:eeaad2f8a714b63a84d88f',
     messagingSenderId: '211280455582',
     projectId: 'bubbles-fight',
+    databaseURL: 'https://bubbles-fight-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bubbles-fight.appspot.com',
     iosClientId: '211280455582-jrq3nt9egcuqao4lhosoeqccr9v4slaf.apps.googleusercontent.com',
     iosBundleId: 'com.example.bubbleFight',
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:211280455582:ios:eeaad2f8a714b63a84d88f',
     messagingSenderId: '211280455582',
     projectId: 'bubbles-fight',
+    databaseURL: 'https://bubbles-fight-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bubbles-fight.appspot.com',
     iosClientId: '211280455582-jrq3nt9egcuqao4lhosoeqccr9v4slaf.apps.googleusercontent.com',
     iosBundleId: 'com.example.bubbleFight',

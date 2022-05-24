@@ -13,7 +13,7 @@ class Player extends RiveComponent {
     required this.controller,
   });
 
-  static Future<Player> create(PlayerController controller) async {
+  static Future<Player> create() async {
     final artboard =
         await loadArtboard(RiveFile.asset('assets/ball_player.riv'));
 
@@ -24,7 +24,7 @@ class Player extends RiveComponent {
     artboard.addController(playerMovementAnimationController);
     return Player(
       artboard: artboard,
-      controller: controller,
+      controller: PlayerController(),
     );
   }
 
