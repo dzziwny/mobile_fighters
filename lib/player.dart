@@ -7,15 +7,18 @@ class PlayerController {}
 
 class Player extends RiveComponent {
   final PlayerController controller;
+  final String nick;
 
   Player({
     required super.artboard,
     required this.controller,
+    required this.nick,
   });
 
-  static Future<Player> create() async {
-    final artboard =
-        await loadArtboard(RiveFile.asset('assets/ball_player.riv'));
+  static Future<Player> create(String nick) async {
+    final artboard = await loadArtboard(
+      RiveFile.asset('assets/ball_player.riv'),
+    );
 
     final playerMovementAnimationController = OneShotAnimation(
       'movement',
@@ -25,6 +28,7 @@ class Player extends RiveComponent {
     return Player(
       artboard: artboard,
       controller: PlayerController(),
+      nick: nick,
     );
   }
 

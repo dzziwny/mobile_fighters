@@ -1,17 +1,14 @@
 import 'dart:async';
 
 import 'package:bubble_fight/joystic.component.dart';
-import 'package:bubble_fight/server/firebase.server.dart';
-import 'package:bubble_fight/server/local.server.dart';
 import 'package:bubble_fight/player.dart';
-import 'package:bubble_fight/server/server.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:bubble_fight/server/server_client.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:uuid/uuid.dart';
+import 'package:get_it/get_it.dart';
 
 class BubbleGame extends FlameGame with HasDraggables {
   BubbleGame({
@@ -19,23 +16,19 @@ class BubbleGame extends FlameGame with HasDraggables {
   });
 
   final String gameId;
-  final players = <String, Player>{};
-  // final myId = const Uuid().v4();
-  final myId = '59df6c4f-de56-43c5-a006-94071f79ac65';
+  final players = <int, Player>{};
+  late final int myId;
   final nick = 'dzziwny';
-  final Server server = LocalServer();
-  // late Server server = FirebaseServer(gameId: gameId);
+  final ServerClient client = GetIt.I<ServerClient>();
 
   late StreamSubscription<void> onChildAddedSub;
   late StreamSubscription<void> onPlayerRemovedSub;
-  final playersPositionsSubs = <String, StreamSubscription<void>>{};
-
-  double maxSpeed = 300.0;
+  final playersPositionsSubs = <int, StreamSubscription<void>>{};
 
   @override
   Future<void> onLoad() async {
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitDown,
     ]);
     await super.onLoad();
@@ -52,11 +45,9 @@ class BubbleGame extends FlameGame with HasDraggables {
         knob: CircleComponent(radius: 15, paint: knobPaint),
         background: CircleComponent(radius: 50, paint: backgroundPaint),
         margin: const EdgeInsets.only(left: 60, bottom: 60),
-        updateFunc: (dt, relativeDelta, delta) {
+        updateFunc: (dt, delta) {
           if (!delta.isZero()) {
-            final value = relativeDelta * maxSpeed * dt;
-            final angle = delta.screenAngle();
-            server.updatePosition(myId, value, angle);
+            client.updateKnob(myId, dt, delta.x, delta.y);
           }
         });
 
@@ -64,55 +55,41 @@ class BubbleGame extends FlameGame with HasDraggables {
   }
 
   Future<void> initializeMyPlayer() async {
-    await server.createPlayer(myId, nick);
+    myId = await client.createPlayer(nick);
   }
 
   void watchPlayers() {
-    onChildAddedSub = server.onPlayerAdded$().map((event) {
-      addPlayerToGame(event);
-      watchPlayerUpdate(event);
+    onChildAddedSub = client.onPlayerAdded$().map((data) {
+      addPlayerToGame(data);
+      watchPlayerUpdate(data);
     }).listen(null);
 
-    onPlayerRemovedSub = server
+    onPlayerRemovedSub = client
         .onPlayerRemoved$()
         .map((event) => removePlayer(event))
         .listen(null);
   }
 
-  void addPlayerToGame(DatabaseEvent event) async {
-    debugPrint(
-      '[Adding player] key: ${event.snapshot.key}, nick: ${(event.snapshot.value as dynamic)['nick']}',
-    );
-    final player = await Player.create();
-    players[event.snapshot.key!] = player;
+  void addPlayerToGame(List<int> data) async {
+    final playerId = data[0];
+    final nick = String.fromCharCodes(data.sublist(1));
+    final player = await Player.create(nick);
+    players[playerId] = player;
     await add(player);
   }
 
-  void watchPlayerUpdate(DatabaseEvent event) {
-    final playerId = event.snapshot.key!;
-    debugPrint(
-      '[Watching player position] id: $playerId, nick: ${(event.snapshot.value as dynamic)['nick']}',
-    );
-
-    final sub = server.onPlayerPositionUpdate$(playerId).map((change) {
-      debugPrint(
-        '[Player position update] $playerId: ${change.snapshot.value}',
-      );
-
-      players[myId]!.position.add(Vector2(
-          (change.snapshot.value as dynamic)['x'],
-          (change.snapshot.value as dynamic)['y']));
-      players[myId]!.angle = (change.snapshot.value as dynamic)['angle'];
+  void watchPlayerUpdate(List<int> data) {
+    final playerId = data[0];
+    final sub = client.onPlayerPositionUpdate$(playerId).map((position) {
+      players[playerId]!.position = Vector2(position.x, position.y);
+      players[playerId]!.angle = position.angle;
     }).listen(null);
 
     playersPositionsSubs[playerId] = sub;
   }
 
-  void removePlayer(dynamic event) async {
-    debugPrint(
-      '[Removing player] key: ${event.snapshot.key}, nick: ${(event.snapshot.value as dynamic)['nick']}',
-    );
-    final playerId = event.snapshot.key!;
+  void removePlayer(List<int> data) async {
+    final playerId = data[0];
     final player = players[playerId];
     remove(player!);
     players.remove(playerId);

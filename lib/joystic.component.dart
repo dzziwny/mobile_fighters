@@ -5,11 +5,11 @@ class MyJoysticComponent extends JoystickComponent {
     super.knob,
     super.background,
     super.margin,
-    void Function(double, Vector2, Vector2)? updateFunc,
-  }) : updateFunc = updateFunc ?? ((_, __, ___) {});
+    void Function(double, Vector2)? updateFunc,
+  }) : updateFunc = updateFunc ?? ((_, __) {});
 
-  void Function(double, Vector2, Vector2) updateFunc;
-  void Function(double, Vector2, Vector2) runner = (_, __, ___) {};
+  void Function(double, Vector2) updateFunc;
+  void Function(double, Vector2) runner = (_, __) {};
 
   @override
   bool onDragStart(DragStartInfo info) {
@@ -19,13 +19,17 @@ class MyJoysticComponent extends JoystickComponent {
 
   @override
   bool onDragCancel() {
-    runner = (_, __, ___) {};
+    runner = (_, __) {};
+    updateFunc(
+      0.0,
+      delta,
+    );
     return super.onDragCancel();
   }
 
   @override
   void update(double dt) {
-    runner(dt, relativeDelta, delta);
+    runner(dt, delta);
     super.update(dt);
   }
 }
