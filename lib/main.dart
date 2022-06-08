@@ -16,15 +16,25 @@ void main() async {
 
   final toServerSocket =
       await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-  final fromServerSocket =
+  final fromServerSenderSocket =
       await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
+  final fromServerReceiverSocket =
+      await RawDatagramSocket.bind(InternetAddress.anyIPv4, 4545);
+  fromServerReceiverSocket.joinMulticast(InternetAddress('239.10.10.100'));
   var toHttpServer = await HttpServer.bind(InternetAddress.anyIPv4, 0);
   var fromHttpServer = await HttpServer.bind(InternetAddress.anyIPv4, 0);
 
   GetIt.I.registerSingleton(fromHttpServer, instanceName: 'fromHttpServer');
   GetIt.I.registerSingleton(toHttpServer, instanceName: 'toHttpServer');
   GetIt.I.registerSingleton(toServerSocket, instanceName: 'toServerSocket');
-  GetIt.I.registerSingleton(fromServerSocket, instanceName: 'fromServerSocket');
+  GetIt.I.registerSingleton(
+    fromServerSenderSocket,
+    instanceName: 'fromServerSenderSocket',
+  );
+  GetIt.I.registerSingleton(
+    fromServerReceiverSocket,
+    instanceName: 'fromServerReceiverSocket',
+  );
   GetIt.I.registerSingleton(ServerClient()..run());
 
   final server = Server()..run();

@@ -7,8 +7,8 @@ import 'package:get_it/get_it.dart';
 class Server {
   final toServerSocket =
       GetIt.I<RawDatagramSocket>(instanceName: 'toServerSocket');
-  final fromServerSocket =
-      GetIt.I<RawDatagramSocket>(instanceName: 'fromServerSocket');
+  final fromServerSenderSocket =
+      GetIt.I<RawDatagramSocket>(instanceName: 'fromServerSenderSocket');
 
   final toHttpServer = GetIt.I<HttpServer>(instanceName: 'toHttpServer');
   final fromHttpServer = GetIt.I<HttpServer>(instanceName: 'fromHttpServer');
@@ -85,10 +85,10 @@ class Server {
       ...(ByteData(4)..setFloat32(0, angle)).buffer.asUint8List(),
     ];
 
-    fromServerSocket.send(
+    fromServerSenderSocket.send(
       frame,
-      fromServerSocket.address,
-      fromServerSocket.port,
+      InternetAddress('239.10.10.100'),
+      4545,
     );
   }
 }

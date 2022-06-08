@@ -12,14 +12,14 @@ class ServerClient {
 
   final toServerSocket =
       GetIt.I<RawDatagramSocket>(instanceName: 'toServerSocket');
-  final fromServerSocket =
-      GetIt.I<RawDatagramSocket>(instanceName: 'fromServerSocket');
+  final fromServerReceiverSocket =
+      GetIt.I<RawDatagramSocket>(instanceName: 'fromServerReceiverSocket');
   final toHttpServer = GetIt.I<HttpServer>(instanceName: 'toHttpServer');
   final httpClient = HttpClient();
 
   run() {
-    fromServerSocket.skip(1).listen((data) {
-      final data = fromServerSocket.receive()!.data;
+    fromServerReceiverSocket.skip(1).listen((data) {
+      final data = fromServerReceiverSocket.receive()!.data;
       final playerId = data[0];
       final position = Position(
         playerId,
