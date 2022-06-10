@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:bubble_fight/statics.dart' as statics;
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -14,7 +15,6 @@ class ServerClient {
       GetIt.I<RawDatagramSocket>(instanceName: 'toServerSocket');
   final fromServerReceiverSocket =
       GetIt.I<RawDatagramSocket>(instanceName: 'fromServerReceiverSocket');
-  final toHttpServer = GetIt.I<HttpServer>(instanceName: 'toHttpServer');
   final httpClient = HttpClient();
 
   run() {
@@ -71,8 +71,8 @@ class ServerClient {
 
   Future<int> createPlayer(String nick) async {
     final request = await httpClient.post(
-      toHttpServer.address.host,
-      toHttpServer.port,
+      statics.toHttpServerAddress.host,
+      statics.toHttpServerPort,
       'createPlayer',
     );
 

@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:isolate';
 
+import 'package:bubble_fight/statics.dart' as statics;
 import 'package:bubble_fight/firebase_options.dart';
 import 'package:bubble_fight/home.screen.dart';
-import 'package:bubble_fight/server.dart';
+import 'package:bubble_fight/server.dart' as server;
 import 'package:bubble_fight/server/server_client.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,30 +16,25 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final toServerSocket =
-      await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-  final fromServerSenderSocket =
-      await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-  final fromServerReceiverSocket =
-      await RawDatagramSocket.bind(InternetAddress.anyIPv4, 4545);
-  fromServerReceiverSocket.joinMulticast(InternetAddress('239.10.10.100'));
-  var toHttpServer = await HttpServer.bind(InternetAddress.anyIPv4, 0);
-  var fromHttpServer = await HttpServer.bind(InternetAddress.anyIPv4, 0);
-
-  GetIt.I.registerSingleton(fromHttpServer, instanceName: 'fromHttpServer');
-  GetIt.I.registerSingleton(toHttpServer, instanceName: 'toHttpServer');
-  GetIt.I.registerSingleton(toServerSocket, instanceName: 'toServerSocket');
-  GetIt.I.registerSingleton(
-    fromServerSenderSocket,
-    instanceName: 'fromServerSenderSocket',
+  final toServerSocket = await RawDatagramSocket.bind(
+    InternetAddress.anyIPv4,
+    statics.toServerSocketPort,
   );
+
+  final fromServerReceiverSocket = await RawDatagramSocket.bind(
+    InternetAddress.anyIPv4,
+    statics.multicastPort,
+  );
+  fromServerReceiverSocket.joinMulticast(statics.multicastAddress);
+
+  GetIt.I.registerSingleton(toServerSocket, instanceName: 'toServerSocket');
   GetIt.I.registerSingleton(
     fromServerReceiverSocket,
     instanceName: 'fromServerReceiverSocket',
   );
   GetIt.I.registerSingleton(ServerClient()..run());
 
-  final server = Server()..run();
+  Isolate.spawn((_) => server.main(), null);
 
   runApp(MaterialApp(
     home: HomeScreen(),
