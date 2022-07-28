@@ -29,7 +29,7 @@ class MyJoysticComponent extends JoystickComponent {
 
   @override
   void update(double dt) {
-    runner(dt, delta);
     super.update(dt);
+    runner(dt, delta);
   }
 }

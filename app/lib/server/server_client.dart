@@ -1,25 +1,31 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bubble_fight/statics.dart' as statics;
-import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
+import 'package:web_socket_channel/status.dart' as status;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ServerClient {
-  final _playerPositions = <int, BehaviorSubject<Position>>{};
+  final _playerPositions = <int, BehaviorSubject<Position>>{
+    1: BehaviorSubject(),
+  };
+
   final _playerAdded$ = ReplaySubject<List<int>>(maxSize: 1);
   final _playerRemoved$ = ReplaySubject<List<int>>(maxSize: 1);
+  // final _guid = const Uuid().v4().hashCode;
+  final _guid = 915910247;
 
-  final toServerSocket =
-      GetIt.I<RawDatagramSocket>(instanceName: 'toServerSocket');
-  final fromServerReceiverSocket =
-      GetIt.I<RawDatagramSocket>(instanceName: 'fromServerReceiverSocket');
-  final httpClient = HttpClient();
+  final channel = WebSocketChannel.connect(
+    Uri.parse('ws://localhost:8080/ws'),
+  );
 
   run() {
-    fromServerReceiverSocket.skip(1).listen((data) {
-      final data = fromServerReceiverSocket.receive()!.data;
+    channel.stream.listen((data) {
       final playerId = data[0];
       final position = Position(
         playerId,
@@ -31,8 +37,12 @@ class ServerClient {
             .getFloat32(0),
       );
 
-      _playerPositions[playerId]!.add(position);
+      _playerPositions[playerId]?.add(position);
     });
+  }
+
+  void dispose() {
+    channel.sink.close(status.goingAway);
   }
 
   void updateKnob(
@@ -54,15 +64,17 @@ class ServerClient {
       ...deltaYBytes,
     ];
 
-    toServerSocket.send(
-      frameForServer,
-      toServerSocket.address,
-      toServerSocket.port,
-    );
+    channel.sink.add(frameForServer);
   }
 
   Stream<Position> onPlayerPositionUpdate$(int playerId) {
-    return _playerPositions[playerId]!.asBroadcastStream();
+    final position$ = _playerPositions[playerId];
+    if (position$ == null) {
+      debugger();
+      throw "Cannot find position for player id '$playerId'";
+    }
+
+    return position$.asBroadcastStream();
   }
 
   Stream<List<int>> onPlayerRemoved$() {
@@ -70,22 +82,17 @@ class ServerClient {
   }
 
   Future<int> createPlayer(String nick) async {
-    final request = await httpClient.post(
-      statics.toHttpServerAddress.host,
-      statics.toHttpServerPort,
-      'createPlayer',
+    final response = await post(
+      Uri.parse('http://localhost:8080/createPlayer'),
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.value,
+      },
+      body: jsonEncode({
+        'guid': _guid,
+      }),
     );
 
-    request.headers.set(
-      HttpHeaders.contentTypeHeader,
-      "plain/text",
-    );
-    request.write(nick);
-
-    final response = await request.close();
-    final stringData = await response.transform(utf8.decoder).join();
-
-    final id = int.parse(stringData);
+    final id = int.parse(response.body);
 
     _playerPositions[id] = BehaviorSubject();
     _playerAdded$.add([id, ...nick.codeUnits]);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bubble_fight/joystic.component.dart';
 import 'package:bubble_fight/player.dart';
@@ -33,7 +34,7 @@ class BubbleGame extends FlameGame with HasDraggables {
     ]);
     await super.onLoad();
     await initializeJoystic();
-    await initializeMyPlayer();
+    myId = await client.createPlayer(nick);
 
     watchPlayers();
   }
@@ -54,19 +55,15 @@ class BubbleGame extends FlameGame with HasDraggables {
     add(joystick);
   }
 
-  Future<void> initializeMyPlayer() async {
-    myId = await client.createPlayer(nick);
-  }
-
   void watchPlayers() {
-    onChildAddedSub = client.onPlayerAdded$().map((data) {
-      addPlayerToGame(data);
-      watchPlayerUpdate(data);
-    }).listen(null);
+    onChildAddedSub = client
+        .onPlayerAdded$()
+        .asyncMap((data) => onPlayerAdded(data))
+        .listen(null);
 
     onPlayerRemovedSub = client
         .onPlayerRemoved$()
-        .map((event) => removePlayer(event))
+        .asyncMap((event) => removePlayer(event))
         .listen(null);
   }
 
@@ -78,20 +75,31 @@ class BubbleGame extends FlameGame with HasDraggables {
     await add(player);
   }
 
-  void watchPlayerUpdate(List<int> data) {
+  Future<void> onPlayerAdded(List<int> data) async {
     final playerId = data[0];
+    final nick = String.fromCharCodes(data.sublist(1));
+    final player = await Player.create(nick);
+    players[playerId] = player;
+    await add(player);
+
     final sub = client.onPlayerPositionUpdate$(playerId).map((position) {
-      players[playerId]!.position = Vector2(position.x, position.y);
-      players[playerId]!.angle = position.angle;
+      player.position = Vector2(position.x, position.y);
+      player.angle = position.angle;
     }).listen(null);
 
     playersPositionsSubs[playerId] = sub;
   }
 
-  void removePlayer(List<int> data) async {
+  Future<void> removePlayer(List<int> data) async {
     final playerId = data[0];
     final player = players[playerId];
-    remove(player!);
+    if (player == null) {
+      debugger();
+      debugPrint("No player with id '$playerId'  to remove");
+      return;
+    }
+
+    remove(player);
     players.remove(playerId);
     await playersPositionsSubs[playerId]?.cancel();
     playersPositionsSubs.remove(playerId);
