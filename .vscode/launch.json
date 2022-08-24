@@ -19,5 +19,12 @@
             "cwd": "${workspaceFolder}/server"
         },
         
-    ]
+    ],
+    "compounds": [
+        {
+          "name": "app/server",
+          "configurations": ["app", "server"],
+          "stopAll": true
+        }
+      ]
 }
