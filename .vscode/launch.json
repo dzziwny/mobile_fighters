@@ -23,7 +23,7 @@
     "compounds": [
         {
           "name": "app/server",
-          "configurations": ["app", "server"],
+          "configurations": ["server", "app"],
           "stopAll": true
         }
       ]
