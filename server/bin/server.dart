@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:shelf/shelf.dart';
@@ -29,7 +30,7 @@ final playerKnobs = <int, List<double>>{
   1: [0.0, 0.0, 0.0, 0.0],
 };
 
-double maxSpeed = 0.1;
+double maxSpeed = 0.00001;
 int ids = 0;
 
 Future<Response> _createPlayerHandler(Request request) async {
@@ -58,33 +59,38 @@ void _webSocketHandler(WebSocketChannel channel) {
   channel.stream.listen((data) {
     double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
         .getFloat32(0);
+    if (angle > pi || angle < -pi) {
+      return;
+    }
+
     double deltaX = ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
         .getFloat32(0);
+    if (deltaX > 50 || deltaX < -50) {
+      return;
+    }
+
     double deltaY =
         ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
             .getFloat32(0);
-    final angle = screenAngle(Vector2(deltaX, deltaY));
+    if (deltaY > 50 || deltaY < -50) {
+      return;
+    }
+
     final playerId = data[0];
-    playerKnobs[playerId] = [dt, deltaX, deltaY, angle];
+    playerKnobs[playerId] = [deltaX, deltaY, angle];
   });
 }
 
 void schedulePlayerPositionUpdate(int playerId, int time) {
-  final knob = playerKnobs[playerId];
-  if (knob == null) {
-    debugger();
-    return;
-  }
+  final knob = playerKnobs[playerId] ?? [];
+  assert(knob.isNotEmpty);
 
   final deltaX = knob[0];
   final deltaY = knob[1];
   final angle = knob[2];
 
-  final oldPosition = playerPositions[playerId];
-  if (oldPosition == null) {
-    debugger();
-    return;
-  }
+  final oldPosition = playerPositions[playerId] ?? [];
+  assert(oldPosition.isNotEmpty);
 
   final valuex = deltaX * maxSpeed * sliceTime + oldPosition[0];
   final valuey = deltaY * maxSpeed * sliceTime + oldPosition[1];
@@ -100,8 +106,9 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
 
 int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
 int accumulatorTime = 0;
-int sliceTime = 100;
-double sliceFactor = sliceTime / 200;
+
+// If there are lags, try make sliceTime smaller
+const int sliceTime = 5000;
 
 void main(List<String> args) async {
   final ip = InternetAddress.anyIPv4;
@@ -119,7 +126,7 @@ void main(List<String> args) async {
   Timer.periodic(Duration.zero, (_) {
     final now = DateTime.now().microsecondsSinceEpoch;
     final dt = now - lastUpdateTime;
-    lastUpdateTime += dt;
+    lastUpdateTime = now;
     accumulatorTime += dt;
     while (accumulatorTime > sliceTime) {
       update(sliceTime);
