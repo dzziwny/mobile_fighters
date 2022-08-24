@@ -47,11 +47,11 @@ class ServerClient {
 
   void updateKnob(
     int playerId,
-    double dt,
+    double angle,
     double deltaX,
     double deltaY,
   ) {
-    final dtBytes = (ByteData(4)..setFloat32(0, dt)).buffer.asUint8List();
+    final angleBytes = (ByteData(4)..setFloat32(0, angle)).buffer.asUint8List();
     final deltaXBytes =
         (ByteData(4)..setFloat32(0, deltaX)).buffer.asUint8List();
     final deltaYBytes =
@@ -59,7 +59,7 @@ class ServerClient {
 
     final frameForServer = <int>[
       playerId,
-      ...dtBytes,
+      ...angleBytes,
       ...deltaXBytes,
       ...deltaYBytes,
     ];

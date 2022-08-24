@@ -41,7 +41,7 @@ Future<Response> _createPlayerHandler(Request request) async {
 
   final id = ++ids;
   playerPositions[id] = [0.0, 0.0, 0.0];
-  playerKnobs[id] = [0.0, 0.0, 0.0, 0.0];
+  playerKnobs[id] = [0.0, 0.0, 0.0];
 
   players[body['guid']] = id;
   return Response.ok('$id');
@@ -56,7 +56,7 @@ void _webSocketHandler(WebSocketChannel channel) {
   channels.add(channel);
 
   channel.stream.listen((data) {
-    double dt = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
+    double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
         .getFloat32(0);
     double deltaX = ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
         .getFloat32(0);
@@ -76,10 +76,9 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
     return;
   }
 
-  final dt = knob[0];
-  final deltaX = knob[1];
-  final deltaY = knob[2];
-  final angle = knob[3];
+  final deltaX = knob[0];
+  final deltaY = knob[1];
+  final angle = knob[2];
 
   final oldPosition = playerPositions[playerId];
   if (oldPosition == null) {
@@ -87,8 +86,8 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
     return;
   }
 
-  final valuex = deltaX * maxSpeed * dt * sliceFactor + oldPosition[0];
-  final valuey = deltaY * maxSpeed * dt * sliceFactor + oldPosition[1];
+  final valuex = deltaX * maxSpeed * sliceTime + oldPosition[0];
+  final valuey = deltaY * maxSpeed * sliceTime + oldPosition[1];
 
   playerPositions[playerId] = [valuex, valuey, angle];
   playerPositionUpdates[playerId] = <int>[

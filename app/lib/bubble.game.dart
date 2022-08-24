@@ -46,10 +46,8 @@ class BubbleGame extends FlameGame with HasDraggables {
         knob: CircleComponent(radius: 15, paint: knobPaint),
         background: CircleComponent(radius: 50, paint: backgroundPaint),
         margin: const EdgeInsets.only(left: 60, bottom: 60),
-        updateFunc: (dt, delta) {
-          if (!delta.isZero()) {
-            client.updateKnob(myId, dt, delta.x, delta.y);
-          }
+        updateFunc: (angle, delta) {
+          client.updateKnob(myId, angle, delta.x, delta.y);
         });
 
     add(joystick);

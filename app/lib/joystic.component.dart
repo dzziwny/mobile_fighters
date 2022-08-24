@@ -13,16 +13,17 @@ class MyJoysticComponent extends JoystickComponent {
 
   @override
   bool onDragStart(DragStartInfo info) {
+    final start = super.onDragStart(info);
     runner = updateFunc;
-    return super.onDragStart(info);
+    return start;
   }
 
   @override
   bool onDragCancel() {
     runner = (_, __) {};
     updateFunc(
-      0.0,
-      delta,
+      screenAngle(delta),
+      Vector2(0, 0),
     );
     return super.onDragCancel();
   }
@@ -30,6 +31,9 @@ class MyJoysticComponent extends JoystickComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    runner(dt, delta);
+    runner(screenAngle(delta), delta);
   }
+
+  double screenAngle(Vector2 x) =>
+      (x.clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
 }
