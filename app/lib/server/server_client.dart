@@ -25,20 +25,33 @@ class ServerClient {
   );
 
   run() {
-    channel.stream.listen((data) {
-      final playerId = data[0];
-      final position = Position(
-        playerId,
-        ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
-            .getFloat32(0),
-        ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
-            .getFloat32(0),
-        ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
-            .getFloat32(0),
-      );
+    channel.stream.listen((data) => onServerData(data));
+  }
 
-      _playerPositions[playerId]?.add(position);
-    });
+  void onServerData(List<int> data) {
+    final operation = data[0];
+    switch (operation) {
+      case 1:
+        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
+        updatePlayerPosition(data.sublist(1));
+        break;
+      default:
+    }
+  }
+
+  void updatePlayerPosition(List<int> data) {
+    final playerId = data[0];
+    final position = Position(
+      playerId,
+      ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
+          .getFloat32(0),
+      ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
+          .getFloat32(0),
+      ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
+          .getFloat32(0),
+    );
+
+    _playerPositions[playerId]?.add(position);
   }
 
   void dispose() {
