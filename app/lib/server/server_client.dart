@@ -102,6 +102,18 @@ class ServerClient {
   Stream<List<int>> onPlayerAdded$() {
     return _playerAdded$.asBroadcastStream();
   }
+
+  Future<void> leaveGame() async {
+    await post(
+      Uri.parse('http://localhost:8080/leaveGame'),
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.value,
+      },
+      body: jsonEncode({
+        'guid': _guid,
+      }),
+    );
+  }
 }
 
 class Position {

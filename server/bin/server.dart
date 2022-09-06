@@ -14,6 +14,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 final _router = Router()
   ..post('/createPlayer', _createPlayerHandler)
+  ..post('/leaveGame', _leaveGameHandler)
   ..get('/ws', webSocketHandler(_webSocketHandler));
 
 final players = <int, int>{
@@ -46,6 +47,23 @@ Future<Response> _createPlayerHandler(Request request) async {
 
   players[body['guid']] = id;
   return Response.ok('$id');
+}
+
+Future<Response> _leaveGameHandler(Request request) async {
+  final body = jsonDecode(await request.readAsString());
+  int guid = body['guid'];
+  final id = players.remove(guid);
+
+  if (id == null) {
+    return Response.ok(null);
+  }
+
+  playerPositions.remove(id);
+  playerKnobs.remove(id);
+
+  sharePlayerRemoved(id);
+
+  return Response.ok(null);
 }
 
 List<WebSocketChannel> channels = [];
@@ -97,12 +115,15 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
 
   playerPositions[playerId] = [valuex, valuey, angle];
   playerPositionUpdates[playerId] = <int>[
+    1,
     playerId,
     ...(ByteData(4)..setFloat32(0, valuex)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, valuey)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, angle)).buffer.asUint8List(),
   ];
 }
+
+void sharePlayerRemoved(int playerId) {}
 
 int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
 int accumulatorTime = 0;
