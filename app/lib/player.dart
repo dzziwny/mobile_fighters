@@ -3,19 +3,60 @@ import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
+import 'bubble.game.dart';
+
 class PlayerController {}
 
-class Player extends RiveComponent {
+class Player extends PositionComponent with HasGameRef<BubbleGame> {
+  final String nick;
+  late final Future<RivePlayer> rivePlayer;
+  final coordsPaint = TextPaint(
+    style: const TextStyle(
+      fontSize: 20.0,
+      fontFamily: 'Awesome Font',
+      color: Colors.white,
+    ),
+  );
+
+  Player({
+    required this.nick,
+  }) {
+    rivePlayer = RivePlayer.create(nick);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    final player = await rivePlayer
+      ..anchor = Anchor.center;
+    await add(player);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    coordsPaint.render(
+      canvas,
+      '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}]',
+      Vector2(0.0, -30.0),
+      anchor: Anchor.bottomCenter,
+    );
+  }
+
+  Future<void> setAngle(double angle) async {
+    (await rivePlayer).angle = angle;
+  }
+}
+
+class RivePlayer extends RiveComponent {
   final PlayerController controller;
   final String nick;
 
-  Player({
+  RivePlayer({
     required super.artboard,
     required this.controller,
     required this.nick,
   });
 
-  static Future<Player> create(String nick) async {
+  static Future<RivePlayer> create(String nick) async {
     final artboard = await loadArtboard(
       RiveFile.asset('assets/ball_player.riv'),
     );
@@ -25,7 +66,8 @@ class Player extends RiveComponent {
       autoplay: false,
     );
     artboard.addController(playerMovementAnimationController);
-    return Player(
+
+    return RivePlayer(
       artboard: artboard,
       controller: PlayerController(),
       nick: nick,

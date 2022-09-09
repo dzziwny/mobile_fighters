@@ -65,18 +65,10 @@ class BubbleGame extends FlameGame with HasDraggables {
         .listen(null);
   }
 
-  void addPlayerToGame(List<int> data) async {
-    final playerId = data[0];
-    final nick = String.fromCharCodes(data.sublist(1));
-    final player = await Player.create(nick);
-    players[playerId] = player;
-    await add(player);
-  }
-
   Future<void> onPlayerAdded(List<int> data) async {
     final playerId = data[0];
     final nick = String.fromCharCodes(data.sublist(1));
-    final player = await Player.create(nick);
+    final player = Player(nick: nick);
     players[playerId] = player;
     await add(player);
 
@@ -84,7 +76,7 @@ class BubbleGame extends FlameGame with HasDraggables {
         client.onPlayerPositionUpdate$(playerId).map((Position position) {
       // debugPrint(position.toString());
       player.position = Vector2(position.x, position.y);
-      player.angle = position.angle;
+      player.setAngle(position.angle);
     }).listen(null);
 
     playersPositionsSubs[playerId] = sub;
