@@ -1,18 +1,16 @@
 import 'dart:io';
 
-import 'package:http/http.dart';
+import 'package:core/core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final port = '8080';
-  final host = 'http://0.0.0.0:$port';
   late Process p;
 
   setUp(() async {
     p = await Process.start(
       'dart',
-      ['run', 'bin/server.dart'],
-      environment: {'PORT': port},
+      ['run', 'bin/main.dart'],
+      environment: {'PORT': '8080'},
     );
     // Wait for server to start and print to stdout.
     await p.stdout.first;
@@ -20,20 +18,32 @@ void main() {
 
   tearDown(() => p.kill());
 
-  test('Root', () async {
-    final response = await get(Uri.parse('$host/'));
-    expect(response.statusCode, 200);
-    expect(response.body, 'Hello, World!\n');
-  });
+  test("""
+Create player twice with same uuid should return same id and not create one player,
+Create player with new uuid should create a new player,
+Get all players should return 2 players,
+Leave game should work, return 200,
+Get all players should return 1 player,
+After leaving game, player should be removed,
+""", () async {
+    final createPlayerdto = await createPlayer$(100);
+    final createPlayer2dto = await createPlayer$(100);
 
-  test('Echo', () async {
-    final response = await get(Uri.parse('$host/echo/hello'));
-    expect(response.statusCode, 200);
-    expect(response.body, 'hello\n');
-  });
+    expect(createPlayerdto.toString(), createPlayer2dto.toString());
 
-  test('404', () async {
-    final response = await get(Uri.parse('$host/foobar'));
-    expect(response.statusCode, 404);
+    var players = await getPlayers$();
+
+    expect(players.keys.length, 1);
+
+    await createPlayer$(101);
+    players = await getPlayers$();
+
+    expect(players.keys.length, 2);
+
+    await leaveGame$(100);
+
+    players = await getPlayers$();
+
+    expect(players.keys.length, 1);
   });
 }

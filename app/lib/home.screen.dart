@@ -1,5 +1,5 @@
 import 'package:bubble_fight/bubble.game.dart';
-import 'package:bubble_fight/server/server_client.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -38,6 +38,7 @@ class HomeScreen extends StatelessWidget {
                           child: ElevatedButton.icon(
                             onPressed: () {
                               client.leaveGame();
+                              Navigator.of(context).pop();
                             },
                             icon: const Icon(Icons.exit_to_app),
                             label: const Text('Leave'),

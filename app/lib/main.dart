@@ -1,5 +1,5 @@
 import 'package:bubble_fight/home.screen.dart';
-import 'package:bubble_fight/server/server_client.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

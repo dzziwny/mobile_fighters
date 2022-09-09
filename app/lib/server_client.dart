@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:core/core.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -17,12 +14,15 @@ class ServerClient {
 
   final _playerAdded$ = ReplaySubject<List<int>>(maxSize: 1);
   final _playerRemoved$ = ReplaySubject<List<int>>(maxSize: 1);
-  // final _guid = const Uuid().v4().hashCode;
-  final _guid = 915910247;
+  final _guid = const Uuid().v4().hashCode;
 
-  final channel = WebSocketChannel.connect(
-    Uri.parse('ws://localhost:8080/ws'),
-  );
+  late final WebSocketChannel channel;
+
+  ServerClient() {
+    channel = WebSocketChannel.connect(
+      Uri.parse('ws://$host:$port${Endpoint.webSocket}'),
+    );
+  }
 
   run() {
     channel.stream.listen((data) => onServerData(data));
@@ -33,13 +33,27 @@ class ServerClient {
     switch (operation) {
       case 1:
         // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
-        updatePlayerPosition(data.sublist(1));
+        _updatePlayerPosition(data.sublist(1));
+        break;
+      case 2:
+        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
+        _playerAdded$.add(data.sublist(1));
+        break;
+      case 3:
+        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
+        _removePlayer(data.sublist(1));
         break;
       default:
     }
   }
 
-  void updatePlayerPosition(List<int> data) {
+  void _removePlayer(List<int> data) {
+    final playerId = data[0];
+    _playerPositions.remove(playerId);
+    _playerRemoved$.add(data);
+  }
+
+  void _updatePlayerPosition(List<int> data) {
     final playerId = data[0];
     final position = Position(
       playerId,
@@ -95,17 +109,9 @@ class ServerClient {
   }
 
   Future<int> createPlayer(String nick) async {
-    final response = await post(
-      Uri.parse('http://localhost:8080/createPlayer'),
-      headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-      },
-      body: jsonEncode({
-        'guid': _guid,
-      }),
-    );
+    final dto = await createPlayer$(_guid);
 
-    final id = int.parse(response.body);
+    final id = dto.id;
 
     _playerPositions[id] = BehaviorSubject();
     _playerAdded$.add([id, ...nick.codeUnits]);
@@ -116,17 +122,7 @@ class ServerClient {
     return _playerAdded$.asBroadcastStream();
   }
 
-  Future<void> leaveGame() async {
-    await post(
-      Uri.parse('http://localhost:8080/leaveGame'),
-      headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-      },
-      body: jsonEncode({
-        'guid': _guid,
-      }),
-    );
-  }
+  Future<void> leaveGame() => leaveGame$(_guid);
 }
 
 class Position {
@@ -136,4 +132,9 @@ class Position {
   final double angle;
 
   const Position(this.playerId, this.x, this.y, this.angle);
+
+  @override
+  String toString() {
+    return "position: [id: $playerId, x: $x, y: $y, angle: $angle]";
+  }
 }

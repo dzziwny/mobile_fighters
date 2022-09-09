@@ -15,8 +15,9 @@
             "name": "server",
             "type": "dart",
             "request": "launch",
-            "program": "bin/server.dart",
-            "cwd": "${workspaceFolder}/server"
+            "program": "bin/main.dart",
+            "cwd": "${workspaceFolder}/server",
+            "preLaunchTask": "killProcessOnPort8080"
         },
         
     ],

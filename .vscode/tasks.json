@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "killProcessOnPort8080",
+            "command": "lsof -t -i tcp:8080 | xargs kill",
+            "type": "shell",
+            "args": [],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "build"
+        }
+    ]
+}

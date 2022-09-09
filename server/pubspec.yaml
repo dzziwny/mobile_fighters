@@ -1,5 +1,6 @@
 name: server
 description: A server app using the shelf package and Docker.
+publish_to: none
 version: 1.0.0
 # homepage: https://www.example.com
 
@@ -8,9 +9,12 @@ environment:
 
 dependencies:
   args: ^2.0.0
+  core:
+    path: ../core
   shelf: ^1.1.0
   shelf_router: ^1.0.0
   shelf_web_socket: ^1.0.2
+  uuid: ^3.0.6
   vector_math: ^2.1.2
   web_socket_channel: ^2.2.0
 

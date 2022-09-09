@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:bubble_fight/joystic.component.dart';
 import 'package:bubble_fight/player.dart';
-import 'package:bubble_fight/server/server_client.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -80,7 +80,9 @@ class BubbleGame extends FlameGame with HasDraggables {
     players[playerId] = player;
     await add(player);
 
-    final sub = client.onPlayerPositionUpdate$(playerId).map((position) {
+    final sub =
+        client.onPlayerPositionUpdate$(playerId).map((Position position) {
+      // debugPrint(position.toString());
       player.position = Vector2(position.x, position.y);
       player.angle = position.angle;
     }).listen(null);
