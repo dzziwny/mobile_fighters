@@ -21,8 +21,8 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
   final oldPosition = playerPositions[playerId] ?? [];
   assert(oldPosition.isNotEmpty);
 
-  final valuex = deltaX * maxSpeed * sliceTime + oldPosition[0];
-  final valuey = deltaY * maxSpeed * sliceTime + oldPosition[1];
+  var valuex = resolveX(deltaX, maxSpeed, sliceTime, oldPosition[0]);
+  var valuey = resolveY(deltaY, maxSpeed, sliceTime, oldPosition[1]);
 
   playerPositions[playerId] = [valuex, valuey, angle];
   playerPositionUpdates[playerId] = <int>[
@@ -32,6 +32,32 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
     ...(ByteData(4)..setFloat32(0, valuey)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, angle)).buffer.asUint8List(),
   ];
+}
+
+double resolveX(double delta, double maxSpeed, int sliceTime, double oldX) {
+  var newX = delta * maxSpeed * sliceTime + oldX;
+  if (newX > 750.0) {
+    return 750.0;
+  }
+
+  if (newX < 50.0) {
+    return 50.0;
+  }
+
+  return newX;
+}
+
+double resolveY(double delta, double maxSpeed, int sliceTime, double oldY) {
+  var newY = delta * maxSpeed * sliceTime + oldY;
+  if (newY > 550.0) {
+    return 550.0;
+  }
+
+  if (newY < 50.0) {
+    return 50.0;
+  }
+
+  return newY;
 }
 
 int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;

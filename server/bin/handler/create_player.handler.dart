@@ -29,7 +29,7 @@ int createPlayer(int guid) {
   }
 
   final id = ++ids;
-  playerPositions[id] = [0.0, 0.0, 0.0];
+  playerPositions[id] = [400.0, 300.0, 0.0];
   playerKnobs[id] = [0.0, 0.0, 0.0];
 
   players[guid] = id;
