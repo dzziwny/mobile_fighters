@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
@@ -29,7 +30,9 @@ int createPlayer(int guid) {
   }
 
   final id = ++ids;
-  playerPositions[id] = [400.0, 300.0, 0.0];
+  final randomX = minX + Random().nextInt((maxX - minX).toInt());
+  final randomY = minY + Random().nextInt((maxY - minY).toInt());
+  playerPositions[id] = [randomX, randomY, 0.0];
   playerKnobs[id] = [0.0, 0.0, 0.0];
 
   players[guid] = id;

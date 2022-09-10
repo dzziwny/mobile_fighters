@@ -8,8 +8,6 @@ import 'package:shelf/shelf_io.dart';
 import 'router.dart';
 import 'setup.dart';
 
-double maxSpeed = 0.00001;
-
 void schedulePlayerPositionUpdate(int playerId, int time) {
   final knob = playerKnobs[playerId] ?? [];
   assert(knob.isNotEmpty);
@@ -36,12 +34,12 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
 
 double resolveX(double delta, double maxSpeed, int sliceTime, double oldX) {
   var newX = delta * maxSpeed * sliceTime + oldX;
-  if (newX > 750.0) {
-    return 750.0;
+  if (newX > maxX) {
+    return maxX;
   }
 
-  if (newX < 50.0) {
-    return 50.0;
+  if (newX < minX) {
+    return minX;
   }
 
   return newX;
@@ -49,12 +47,12 @@ double resolveX(double delta, double maxSpeed, int sliceTime, double oldX) {
 
 double resolveY(double delta, double maxSpeed, int sliceTime, double oldY) {
   var newY = delta * maxSpeed * sliceTime + oldY;
-  if (newY > 550.0) {
-    return 550.0;
+  if (newY > maxY) {
+    return maxY;
   }
 
-  if (newY < 50.0) {
-    return 50.0;
+  if (newY < minY) {
+    return minY;
   }
 
   return newY;
