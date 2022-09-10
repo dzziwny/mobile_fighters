@@ -16,6 +16,9 @@ class BubbleGame extends FlameGame with HasDraggables {
     required this.gameId,
   });
 
+  @override
+  Color backgroundColor() => const Color.fromRGBO(160, 196, 255, 1);
+
   final String gameId;
   final players = <int, Player>{};
   late final int myId;
