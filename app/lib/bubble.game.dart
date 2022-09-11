@@ -17,7 +17,7 @@ class BubbleGame extends FlameGame with HasDraggables {
   });
 
   @override
-  Color backgroundColor() => const Color.fromRGBO(160, 196, 255, 1);
+  Color backgroundColor() => Colors.blue;
 
   final String gameId;
   final players = <int, Player>{};
@@ -35,6 +35,16 @@ class BubbleGame extends FlameGame with HasDraggables {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitDown,
     ]);
+
+    final paint = const PaletteEntry(Color.fromRGBO(160, 196, 255, 1)).paint()
+      ..style = PaintingStyle.fill;
+    final rectangle = RectangleComponent(
+      size: Vector2(750.0, 550.0),
+      position: Vector2(400.0, 300.0),
+      paint: paint,
+      anchor: Anchor.center,
+    );
+    add(rectangle);
     await super.onLoad();
     await initializeJoystic();
     myId = await client.createPlayer(nick);
