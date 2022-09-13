@@ -33,17 +33,17 @@ After leaving game, player should be removed,
 
     var players = await getPlayers$();
 
-    expect(players.keys.length, 1);
+    expect(players.length, 1);
 
     await createPlayer$(101, 'test101');
     players = await getPlayers$();
 
-    expect(players.keys.length, 2);
+    expect(players.length, 2);
 
     await leaveGame$(100);
 
     players = await getPlayers$();
 
-    expect(players.keys.length, 1);
+    expect(players.length, 1);
   });
 }

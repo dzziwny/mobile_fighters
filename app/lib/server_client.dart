@@ -30,46 +30,6 @@ class ServerClient implements Disposable {
     );
   }
 
-  Stream<Position> position$() {
-    return positionsChannel.stream.map((data) => _dataToPosition(data));
-  }
-
-  Stream<PlayerChangeDto> playerChange$() {
-    return playersChangeChannel.stream.map((data) => _dataToPlayerChange(data));
-  }
-
-  Stream<List<Player>> players$() {
-    return playersChannel.stream.map((data) => _dataToPlayers(data));
-  }
-
-  List<Player> _dataToPlayers(String data) {
-    final json = jsonDecode(data);
-    final List list = json;
-    final players = list.map((e) => Player.fromJson(e)).toList();
-    return players;
-  }
-
-  Position _dataToPosition(List<int> data) {
-    final playerId = data[0];
-    final position = Position(
-      playerId,
-      ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
-          .getFloat32(0),
-    );
-
-    return position;
-  }
-
-  PlayerChangeDto _dataToPlayerChange(String data) {
-    final json = jsonDecode(data);
-    final dto = PlayerChangeDto.fromJson(json);
-    return dto;
-  }
-
   void updateKnob(
     double angle,
     double deltaX,
@@ -104,6 +64,43 @@ class ServerClient implements Disposable {
   Future<void> leaveGame() => leaveGame$(_guid).then((_) => id$.add(null));
 
   Stream<bool> isInGame() => id$.map((id) => id != null);
+
+  Stream<Position> position$() =>
+      positionsChannel.stream.map((data) => _dataToPosition(data));
+
+  Stream<PlayerChangeDto> playerChange$() =>
+      playersChangeChannel.stream.map((data) => _dataToPlayerChange(data));
+
+  Stream<List<Player>> players$() =>
+      playersChannel.stream.map((data) => _dataToPlayers(data));
+
+  List<Player> _dataToPlayers(String data) {
+    final json = jsonDecode(data);
+    final List list = json;
+    final players = list.map((e) => Player.fromJson(e)).toList();
+    return players;
+  }
+
+  Position _dataToPosition(List<int> data) {
+    final playerId = data[0];
+    final position = Position(
+      playerId,
+      ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
+          .getFloat32(0),
+      ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
+          .getFloat32(0),
+      ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
+          .getFloat32(0),
+    );
+
+    return position;
+  }
+
+  PlayerChangeDto _dataToPlayerChange(String data) {
+    final json = jsonDecode(data);
+    final dto = PlayerChangeDto.fromJson(json);
+    return dto;
+  }
 
   @override
   FutureOr onDispose() {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bubble_fight/joystic.component.dart';
 import 'package:bubble_fight/player.dart';
@@ -13,12 +12,30 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class BubbleGame extends FlameGame with HasDraggables {
+  final String gameId;
+  final players = <int, PlayerComponent>{};
+  final nick = 'dzziwny';
+  final ServerClient client = GetIt.I<ServerClient>();
+
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription changePlayersSubscription;
 
   BubbleGame({
     required this.gameId,
   }) {
+    getPlayers$().then((players) {
+      for (final player in players) {
+        if (this.players[player.id] != null) {
+          return;
+        }
+
+        // TODO: add position
+        final component = PlayerComponent(nick: nick);
+        this.players[player.id] = component;
+        add(component);
+      }
+    });
+
     positionsSubscription = client.position$().map((Position position) {
       final player = players[position.playerId];
       if (player == null) {
@@ -32,7 +49,11 @@ class BubbleGame extends FlameGame with HasDraggables {
     changePlayersSubscription = client.playerChange$().map((dto) {
       switch (dto.type) {
         case PlayerChangeType.added:
+          if (players[dto.id] != null) {
+            return;
+          }
           final nick = dto.nick;
+          // TODO: add position
           final player = PlayerComponent(nick: nick);
           players[dto.id] = player;
           add(player);
@@ -52,29 +73,34 @@ class BubbleGame extends FlameGame with HasDraggables {
   @override
   Color backgroundColor() => Colors.blue;
 
-  final String gameId;
-  final players = <int, PlayerComponent>{};
-  final nick = 'dzziwny';
-  final ServerClient client = GetIt.I<ServerClient>();
-
   @override
   Future<void> onLoad() async {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitDown,
-    ]);
+    await super.onLoad();
+    // client.players$()
 
+    await Future.wait([
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.portraitDown,
+      ]),
+      initializeBoard(),
+      initializeJoystic(),
+    ]);
+  }
+
+  Future<void> initializeBoard() async {
     final paint = const PaletteEntry(Color.fromRGBO(160, 196, 255, 1)).paint()
       ..style = PaintingStyle.fill;
-    final rectangle = RectangleComponent(
+
+    // TODO: get board size from server
+    final board = RectangleComponent(
       size: Vector2(750.0, 550.0),
       position: Vector2(400.0, 300.0),
       paint: paint,
       anchor: Anchor.center,
     );
-    add(rectangle);
-    await super.onLoad();
-    await initializeJoystic();
+
+    await add(board);
   }
 
   Future<void> initializeJoystic() async {

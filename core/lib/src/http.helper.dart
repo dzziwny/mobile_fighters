@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 
 import 'dto/_dto.dart';
 import 'endpoints.dart';
+import 'model/_model.dart';
 
 final port = '8080';
 final host = 'localhost';
@@ -25,10 +26,12 @@ Future<Response> getPlayersResponse$() => get(
       Uri.parse('$base${Endpoint.getAllPlayers}'),
     );
 
-Future<Map<int, int>> getPlayers$() async {
+Future<List<Player>> getPlayers$() async {
   final response = await getPlayersResponse$();
-  final dto = GetPlayersDtoResponse.fromJson(jsonDecode(response.body));
-  return dto.players;
+  final List list = jsonDecode(response.body);
+  final players = list.map((json) => Player.fromJson(json)).toList();
+
+  return players;
 }
 
 Future<void> leaveGame$(int guid) => post(
