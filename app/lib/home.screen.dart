@@ -2,6 +2,7 @@ import 'package:bubble_fight/bubble.game.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -54,11 +55,12 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: 200.0,
-            height: double.maxFinite,
-            child: DebugInfo(),
-          ),
+          if (kDebugMode)
+            SizedBox(
+              width: 200.0,
+              height: double.maxFinite,
+              child: DebugInfo(),
+            ),
         ],
       ),
     );

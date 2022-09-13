@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_rive/flame_rive.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
@@ -10,7 +11,7 @@ class PlayerController {}
 class PlayerComponent extends PositionComponent with HasGameRef<BubbleGame> {
   final String nick;
   late final Future<PlayerRiveComponent> rivePlayer;
-  final coordsPaint = TextPaint(
+  final paint = TextPaint(
     style: const TextStyle(
       fontSize: 20.0,
       fontFamily: 'Awesome Font',
@@ -33,9 +34,17 @@ class PlayerComponent extends PositionComponent with HasGameRef<BubbleGame> {
 
   @override
   void render(Canvas canvas) {
-    coordsPaint.render(
+    if (kDebugMode) {
+      paint.render(
+        canvas,
+        '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}]',
+        Vector2(0.0, -60.0),
+        anchor: Anchor.bottomCenter,
+      );
+    }
+    paint.render(
       canvas,
-      '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}]',
+      nick,
       Vector2(0.0, -30.0),
       anchor: Anchor.bottomCenter,
     );
