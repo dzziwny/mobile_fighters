@@ -19,7 +19,7 @@ void main() {
   tearDown(() => p.kill());
 
   test("""
-Create player twice with same uuid should return same id and not create one player,
+Create player twice with same uuid should return same id and create one player,
 Create player with new uuid should create a new player,
 Get all players should return 2 players,
 Leave game should work, return 200,
