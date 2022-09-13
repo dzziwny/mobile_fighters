@@ -10,12 +10,14 @@ _$_CreatePlayerDtoRequest _$$_CreatePlayerDtoRequestFromJson(
         Map<String, dynamic> json) =>
     _$_CreatePlayerDtoRequest(
       guid: json['guid'] as int,
+      nick: json['nick'] as String,
     );
 
 Map<String, dynamic> _$$_CreatePlayerDtoRequestToJson(
         _$_CreatePlayerDtoRequest instance) =>
     <String, dynamic>{
       'guid': instance.guid,
+      'nick': instance.nick,
     };
 
 _$_CreatePlayerDtoResponse _$$_CreatePlayerDtoResponseFromJson(

@@ -3,5 +3,7 @@ class Endpoint {
   static const createTestPlayer = '/createTestPlayer';
   static const getAllPlayers = '/players';
   static const leaveGame = '/leaveGame';
-  static const webSocket = '/ws';
+  static const positionWs = '/positions/ws';
+  static const playersWs = '/players/ws';
+  static const playerChangeWs = '/playerChange/ws';
 }

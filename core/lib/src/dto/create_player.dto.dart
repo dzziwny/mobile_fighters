@@ -10,6 +10,7 @@ class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
   @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoRequest({
     required int guid,
+    required String nick,
   }) = _CreatePlayerDtoRequest;
 
   factory CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =>

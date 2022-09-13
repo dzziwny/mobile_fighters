@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  GetIt.I.registerSingleton(ServerClient()..run());
+  GetIt.I.registerSingleton(ServerClient());
 
   // Isolate.spawn((_) => server.main(), null);
 

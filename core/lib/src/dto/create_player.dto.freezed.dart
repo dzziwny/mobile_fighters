@@ -22,6 +22,7 @@ CreatePlayerDtoRequest _$CreatePlayerDtoRequestFromJson(
 /// @nodoc
 mixin _$CreatePlayerDtoRequest {
   int get guid => throw _privateConstructorUsedError;
+  String get nick => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ abstract class $CreatePlayerDtoRequestCopyWith<$Res> {
   factory $CreatePlayerDtoRequestCopyWith(CreatePlayerDtoRequest value,
           $Res Function(CreatePlayerDtoRequest) then) =
       _$CreatePlayerDtoRequestCopyWithImpl<$Res>;
-  $Res call({int guid});
+  $Res call({int guid, String nick});
 }
 
 /// @nodoc
@@ -49,12 +50,17 @@ class _$CreatePlayerDtoRequestCopyWithImpl<$Res>
   @override
   $Res call({
     Object? guid = freezed,
+    Object? nick = freezed,
   }) {
     return _then(_value.copyWith(
       guid: guid == freezed
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
+      nick: nick == freezed
+          ? _value.nick
+          : nick // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -66,7 +72,7 @@ abstract class _$$_CreatePlayerDtoRequestCopyWith<$Res>
           $Res Function(_$_CreatePlayerDtoRequest) then) =
       __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>;
   @override
-  $Res call({int guid});
+  $Res call({int guid, String nick});
 }
 
 /// @nodoc
@@ -84,12 +90,17 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
   @override
   $Res call({
     Object? guid = freezed,
+    Object? nick = freezed,
   }) {
     return _then(_$_CreatePlayerDtoRequest(
       guid: guid == freezed
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
+      nick: nick == freezed
+          ? _value.nick
+          : nick // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -98,17 +109,19 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
-  const _$_CreatePlayerDtoRequest({required this.guid});
+  const _$_CreatePlayerDtoRequest({required this.guid, required this.nick});
 
   factory _$_CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =>
       _$$_CreatePlayerDtoRequestFromJson(json);
 
   @override
   final int guid;
+  @override
+  final String nick;
 
   @override
   String toString() {
-    return 'CreatePlayerDtoRequest(guid: $guid)';
+    return 'CreatePlayerDtoRequest(guid: $guid, nick: $nick)';
   }
 
   @override
@@ -116,13 +129,16 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CreatePlayerDtoRequest &&
-            const DeepCollectionEquality().equals(other.guid, guid));
+            const DeepCollectionEquality().equals(other.guid, guid) &&
+            const DeepCollectionEquality().equals(other.nick, nick));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(guid));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(guid),
+      const DeepCollectionEquality().hash(nick));
 
   @JsonKey(ignore: true)
   @override
@@ -139,14 +155,17 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
 }
 
 abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
-  const factory _CreatePlayerDtoRequest({required final int guid}) =
-      _$_CreatePlayerDtoRequest;
+  const factory _CreatePlayerDtoRequest(
+      {required final int guid,
+      required final String nick}) = _$_CreatePlayerDtoRequest;
 
   factory _CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =
       _$_CreatePlayerDtoRequest.fromJson;
 
   @override
   int get guid;
+  @override
+  String get nick;
   @override
   @JsonKey(ignore: true)
   _$$_CreatePlayerDtoRequestCopyWith<_$_CreatePlayerDtoRequest> get copyWith =>

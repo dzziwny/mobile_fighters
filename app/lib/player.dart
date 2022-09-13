@@ -7,9 +7,9 @@ import 'bubble.game.dart';
 
 class PlayerController {}
 
-class Player extends PositionComponent with HasGameRef<BubbleGame> {
+class PlayerComponent extends PositionComponent with HasGameRef<BubbleGame> {
   final String nick;
-  late final Future<RivePlayer> rivePlayer;
+  late final Future<PlayerRiveComponent> rivePlayer;
   final coordsPaint = TextPaint(
     style: const TextStyle(
       fontSize: 20.0,
@@ -18,10 +18,10 @@ class Player extends PositionComponent with HasGameRef<BubbleGame> {
     ),
   );
 
-  Player({
+  PlayerComponent({
     required this.nick,
   }) {
-    rivePlayer = RivePlayer.create(nick);
+    rivePlayer = PlayerRiveComponent.create(nick);
   }
 
   @override
@@ -46,17 +46,17 @@ class Player extends PositionComponent with HasGameRef<BubbleGame> {
   }
 }
 
-class RivePlayer extends RiveComponent {
+class PlayerRiveComponent extends RiveComponent {
   final PlayerController controller;
   final String nick;
 
-  RivePlayer({
+  PlayerRiveComponent({
     required super.artboard,
     required this.controller,
     required this.nick,
   });
 
-  static Future<RivePlayer> create(String nick) async {
+  static Future<PlayerRiveComponent> create(String nick) async {
     final artboard = await loadArtboard(
       RiveFile.asset('assets/ball_player.riv'),
     );
@@ -67,7 +67,7 @@ class RivePlayer extends RiveComponent {
     );
     artboard.addController(playerMovementAnimationController);
 
-    return RivePlayer(
+    return PlayerRiveComponent(
       artboard: artboard,
       controller: PlayerController(),
       nick: nick,

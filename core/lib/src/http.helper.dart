@@ -8,10 +8,13 @@ final port = '8080';
 final host = 'localhost';
 final base = 'http://$host:$port';
 
-Future<CreatePlayerDtoResponse> createPlayer$(int guid) async {
+Future<CreatePlayerDtoResponse> createPlayer$(int guid, String nick) async {
   final response = await post(
     Uri.parse('$base${Endpoint.createPlayer}'),
-    body: jsonEncode(CreatePlayerDtoRequest(guid: guid).toJson()),
+    body: jsonEncode(CreatePlayerDtoRequest(
+      guid: guid,
+      nick: nick,
+    ).toJson()),
   );
 
   final dto = CreatePlayerDtoResponse.fromJson(jsonDecode(response.body));

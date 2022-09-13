@@ -24,7 +24,6 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
 
   playerPositions[playerId] = [valuex, valuey, angle];
   playerPositionUpdates[playerId] = <int>[
-    1,
     playerId,
     ...(ByteData(4)..setFloat32(0, valuex)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, valuey)).buffer.asUint8List(),
@@ -91,14 +90,14 @@ void main(List<String> args) async {
 }
 
 void update(int time) {
-  for (var playerId in players.values) {
+  for (var playerId in players.keys) {
     schedulePlayerPositionUpdate(playerId, time);
   }
 }
 
 void draw() {
   for (var position in playerPositionUpdates.values) {
-    for (var channel in channels) {
+    for (var channel in positionsWSChannels) {
       channel.sink.add(position);
     }
   }

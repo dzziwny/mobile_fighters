@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bubble_fight/joystic.component.dart';
 import 'package:bubble_fight/player.dart';
 import 'package:bubble_fight/server_client.dart';
+import 'package:core/core.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -12,22 +13,49 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class BubbleGame extends FlameGame with HasDraggables {
+  late final StreamSubscription positionsSubscription;
+  late final StreamSubscription changePlayersSubscription;
+
   BubbleGame({
     required this.gameId,
-  });
+  }) {
+    positionsSubscription = client.position$().map((Position position) {
+      final player = players[position.playerId];
+      if (player == null) {
+        return;
+      }
+
+      player.position = Vector2(position.x, position.y);
+      player.setAngle(position.angle);
+    }).listen(null);
+
+    changePlayersSubscription = client.playerChange$().map((dto) {
+      switch (dto.type) {
+        case PlayerChangeType.added:
+          final nick = dto.nick;
+          final player = PlayerComponent(nick: nick);
+          players[dto.id] = player;
+          add(player);
+          break;
+        case PlayerChangeType.removed:
+          final player = players.remove(dto.id);
+          if (player != null) {
+            remove(player);
+          }
+          break;
+        default:
+          throw 'Unknown PlayerChangeType';
+      }
+    }).listen(null);
+  }
 
   @override
   Color backgroundColor() => Colors.blue;
 
   final String gameId;
-  final players = <int, Player>{};
-  late final int myId;
+  final players = <int, PlayerComponent>{};
   final nick = 'dzziwny';
   final ServerClient client = GetIt.I<ServerClient>();
-
-  late StreamSubscription<void> onChildAddedSub;
-  late StreamSubscription<void> onPlayerRemovedSub;
-  final playersPositionsSubs = <int, StreamSubscription<void>>{};
 
   @override
   Future<void> onLoad() async {
@@ -47,9 +75,6 @@ class BubbleGame extends FlameGame with HasDraggables {
     add(rectangle);
     await super.onLoad();
     await initializeJoystic();
-    myId = await client.createPlayer(nick);
-
-    watchPlayers();
   }
 
   Future<void> initializeJoystic() async {
@@ -60,53 +85,9 @@ class BubbleGame extends FlameGame with HasDraggables {
         background: CircleComponent(radius: 50, paint: backgroundPaint),
         margin: const EdgeInsets.only(left: 60, bottom: 60),
         updateFunc: (angle, delta) {
-          client.updateKnob(myId, angle, delta.x, delta.y);
+          client.updateKnob(angle, delta.x, delta.y);
         });
 
     add(joystick);
-  }
-
-  void watchPlayers() {
-    onChildAddedSub = client
-        .onPlayerAdded$()
-        .asyncMap((data) => onPlayerAdded(data))
-        .listen(null);
-
-    onPlayerRemovedSub = client
-        .onPlayerRemoved$()
-        .asyncMap((event) => removePlayer(event))
-        .listen(null);
-  }
-
-  Future<void> onPlayerAdded(List<int> data) async {
-    final playerId = data[0];
-    final nick = String.fromCharCodes(data.sublist(1));
-    final player = Player(nick: nick);
-    players[playerId] = player;
-    await add(player);
-
-    final sub =
-        client.onPlayerPositionUpdate$(playerId).map((Position position) {
-      // debugPrint(position.toString());
-      player.position = Vector2(position.x, position.y);
-      player.setAngle(position.angle);
-    }).listen(null);
-
-    playersPositionsSubs[playerId] = sub;
-  }
-
-  Future<void> removePlayer(List<int> data) async {
-    final playerId = data[0];
-    final player = players[playerId];
-    if (player == null) {
-      debugger();
-      debugPrint("No player with id '$playerId'  to remove");
-      return;
-    }
-
-    remove(player);
-    players.remove(playerId);
-    await playersPositionsSubs[playerId]?.cancel();
-    playersPositionsSubs.remove(playerId);
   }
 }

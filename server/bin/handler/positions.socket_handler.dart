@@ -5,8 +5,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
 
-void socketHandler(WebSocketChannel channel) {
-  channels.add(channel);
+void positionsSocketHandler(WebSocketChannel channel) {
+  positionsWSChannels.add(channel);
 
   channel.stream.listen((data) {
     double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))

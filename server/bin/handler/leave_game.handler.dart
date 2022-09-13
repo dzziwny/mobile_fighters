@@ -11,7 +11,7 @@ Future<Response> leaveGameHandler(Request request) async {
   final json = jsonDecode(body);
   final dto = LeaveGameDtoRequest.fromJson(json);
 
-  final id = players.remove(dto.guid);
+  final id = guids.remove(dto.guid);
 
   if (id == null) {
     return Response.ok(null);
@@ -19,14 +19,9 @@ Future<Response> leaveGameHandler(Request request) async {
 
   playerPositions.remove(id);
   playerKnobs.remove(id);
+  players.remove(id);
 
+  sharePlayers();
   sharePlayerRemoved(id);
   return Response.ok(null);
-}
-
-void sharePlayerRemoved(int playerId) {
-  final data = <int>[2, playerId];
-  for (var channel in channels) {
-    channel.sink.add(data);
-  }
 }

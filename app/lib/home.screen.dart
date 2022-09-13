@@ -1,5 +1,6 @@
 import 'package:bubble_fight/bubble.game.dart';
 import 'package:bubble_fight/server_client.dart';
+import 'package:core/core.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -13,46 +14,50 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Row(
         children: [
-          MaterialButton(
-            child: const Text('Create game'),
-            onPressed: () {},
-          ),
-          TextField(controller: controller),
-          MaterialButton(
-            child: const Text('Enter the game'),
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => Scaffold(
-                    body: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 800.0,
-                              child: GameWidget(
-                                game: BubbleGame(gameId: controller.text),
-                              ),
-                            ),
-                            const Expanded(
-                              child: DebugInfo(),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          alignment: Alignment.topLeft,
-                          child: _LeaveButton(client: client),
-                        ),
-                      ],
-                    ),
-                  ),
+          Expanded(
+            child: Stack(
+              children: [
+                GameWidget(
+                  game: BubbleGame(gameId: controller.text),
                 ),
-              );
-            },
+                StreamBuilder<bool>(
+                    stream: client.isInGame(),
+                    builder: (context, snapshot) {
+                      final isInGame = snapshot.data;
+                      if (isInGame == true) {
+                        return const SizedBox();
+                      }
+                      return Center(
+                        child: Container(
+                          width: 200.0,
+                          height: 200.0,
+                          color: Colors.white,
+                          child: Center(
+                            child: MaterialButton(
+                              color: Colors.blue,
+                              child: const Text('Enter the game'),
+                              onPressed: () {
+                                client.createPlayer('dzziwny');
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                Container(
+                  margin: const EdgeInsets.all(8.0),
+                  alignment: Alignment.topLeft,
+                  child: _LeaveButton(client: client),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 200.0,
+            height: double.maxFinite,
+            child: DebugInfo(),
           ),
         ],
       ),
@@ -61,7 +66,9 @@ class HomeScreen extends StatelessWidget {
 }
 
 class DebugInfo extends StatelessWidget {
-  const DebugInfo({
+  final _client = GetIt.I<ServerClient>();
+
+  DebugInfo({
     Key? key,
   }) : super(key: key);
 
@@ -69,15 +76,29 @@ class DebugInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Players: [bla, blab, dajsk]',
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
+      child: StreamBuilder<List<Player>>(
+          stream: _client.players$(),
+          builder: (context, snapshot) {
+            final players = snapshot.data;
+            if (players == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Players:',
+                  style: TextStyle(color: Colors.white),
+                ),
+                for (final player in players)
+                  Text(
+                    player.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+              ],
+            );
+          }),
     );
   }
 }
@@ -95,7 +116,6 @@ class _LeaveButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: () {
         client.leaveGame();
-        Navigator.of(context).pop();
       },
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Leave'),

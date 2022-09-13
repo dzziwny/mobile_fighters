@@ -1,59 +1,55 @@
-import 'dart:developer';
+import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class ServerClient {
-  final _playerPositions = <int, BehaviorSubject<Position>>{
-    1: BehaviorSubject(),
-  };
-
-  final _playerAdded$ = ReplaySubject<List<int>>(maxSize: 1);
-  final _playerRemoved$ = ReplaySubject<List<int>>(maxSize: 1);
+class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
-  late final WebSocketChannel channel;
+  late final WebSocketChannel positionsChannel;
+  late final WebSocketChannel playersChannel;
+  late final WebSocketChannel playersChangeChannel;
+
+  final id$ = BehaviorSubject<int?>.seeded(null);
 
   ServerClient() {
-    channel = WebSocketChannel.connect(
-      Uri.parse('ws://$host:$port${Endpoint.webSocket}'),
+    positionsChannel = WebSocketChannel.connect(
+      Uri.parse('ws://$host:$port${Endpoint.positionWs}'),
+    );
+    playersChannel = WebSocketChannel.connect(
+      Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
+    );
+    playersChangeChannel = WebSocketChannel.connect(
+      Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
     );
   }
 
-  run() {
-    channel.stream.listen((data) => onServerData(data));
+  Stream<Position> position$() {
+    return positionsChannel.stream.map((data) => _dataToPosition(data));
   }
 
-  void onServerData(List<int> data) {
-    final operation = data[0];
-    switch (operation) {
-      case 1:
-        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
-        _updatePlayerPosition(data.sublist(1));
-        break;
-      case 2:
-        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
-        _playerAdded$.add(data.sublist(1));
-        break;
-      case 3:
-        // TODO: can be more performant - dont move sublist, just fix logic in updatePlayerPosition
-        _removePlayer(data.sublist(1));
-        break;
-      default:
-    }
+  Stream<PlayerChangeDto> playerChange$() {
+    return playersChangeChannel.stream.map((data) => _dataToPlayerChange(data));
   }
 
-  void _removePlayer(List<int> data) {
-    final playerId = data[0];
-    _playerPositions.remove(playerId);
-    _playerRemoved$.add(data);
+  Stream<List<Player>> players$() {
+    return playersChannel.stream.map((data) => _dataToPlayers(data));
   }
 
-  void _updatePlayerPosition(List<int> data) {
+  List<Player> _dataToPlayers(String data) {
+    final json = jsonDecode(data);
+    final List list = json;
+    final players = list.map((e) => Player.fromJson(e)).toList();
+    return players;
+  }
+
+  Position _dataToPosition(List<int> data) {
     final playerId = data[0];
     final position = Position(
       playerId,
@@ -65,15 +61,16 @@ class ServerClient {
           .getFloat32(0),
     );
 
-    _playerPositions[playerId]?.add(position);
+    return position;
   }
 
-  void dispose() {
-    channel.sink.close(status.goingAway);
+  PlayerChangeDto _dataToPlayerChange(String data) {
+    final json = jsonDecode(data);
+    final dto = PlayerChangeDto.fromJson(json);
+    return dto;
   }
 
   void updateKnob(
-    int playerId,
     double angle,
     double deltaX,
     double deltaY,
@@ -85,44 +82,35 @@ class ServerClient {
         (ByteData(4)..setFloat32(0, deltaY)).buffer.asUint8List();
 
     final frameForServer = <int>[
-      playerId,
+      // TODO: user can't just update position for someone else
+      id$.value!,
       ...angleBytes,
       ...deltaXBytes,
       ...deltaYBytes,
     ];
 
-    channel.sink.add(frameForServer);
-  }
-
-  Stream<Position> onPlayerPositionUpdate$(int playerId) {
-    final position$ = _playerPositions[playerId];
-    if (position$ == null) {
-      debugger();
-      throw "Cannot find position for player id '$playerId'";
-    }
-
-    return position$.asBroadcastStream();
-  }
-
-  Stream<List<int>> onPlayerRemoved$() {
-    return _playerRemoved$.asBroadcastStream();
+    positionsChannel.sink.add(frameForServer);
   }
 
   Future<int> createPlayer(String nick) async {
-    final dto = await createPlayer$(_guid);
+    final dto = await createPlayer$(_guid, nick);
 
     final id = dto.id;
 
-    _playerPositions[id] = BehaviorSubject();
-    _playerAdded$.add([id, ...nick.codeUnits]);
+    id$.add(id);
     return id;
   }
 
-  Stream<List<int>> onPlayerAdded$() {
-    return _playerAdded$.asBroadcastStream();
-  }
+  Future<void> leaveGame() => leaveGame$(_guid).then((_) => id$.add(null));
 
-  Future<void> leaveGame() => leaveGame$(_guid);
+  Stream<bool> isInGame() => id$.map((id) => id != null);
+
+  @override
+  FutureOr onDispose() {
+    positionsChannel.sink.close(status.goingAway);
+    playersChannel.sink.close(status.goingAway);
+    playersChangeChannel.sink.close(status.goingAway);
+  }
 }
 
 class Position {
