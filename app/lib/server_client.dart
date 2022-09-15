@@ -20,7 +20,7 @@ class ServerClient implements Disposable {
 
   ServerClient() {
     positionsChannel = WebSocketChannel.connect(
-      Uri.parse('ws://$host:$port${Endpoint.positionWs}'),
+      Uri.parse('ws://$host:$port${Endpoint.rawDataWs}'),
     );
     playersChannel = WebSocketChannel.connect(
       Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
@@ -28,6 +28,16 @@ class ServerClient implements Disposable {
     playersChangeChannel = WebSocketChannel.connect(
       Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
     );
+  }
+
+  Future<void> dash() async {
+    final frame = <int>[
+      1,
+      // TODO: user can't just update position for someone else
+      id$.value!,
+    ];
+
+    positionsChannel.sink.add(frame);
   }
 
   void updateKnob(
@@ -41,7 +51,8 @@ class ServerClient implements Disposable {
     final deltaYBytes =
         (ByteData(4)..setFloat32(0, deltaY)).buffer.asUint8List();
 
-    final frameForServer = <int>[
+    final frame = <int>[
+      0,
       // TODO: user can't just update position for someone else
       id$.value!,
       ...angleBytes,
@@ -49,7 +60,7 @@ class ServerClient implements Disposable {
       ...deltaYBytes,
     ];
 
-    positionsChannel.sink.add(frameForServer);
+    positionsChannel.sink.add(frame);
   }
 
   Future<int> createPlayer(String nick) async {

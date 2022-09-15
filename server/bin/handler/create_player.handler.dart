@@ -36,6 +36,7 @@ int createPlayer(CreatePlayerDtoRequest dto) {
   final randomY = minY + Random().nextInt((maxY - minY).toInt());
   playerPositions[id] = [randomX, randomY, 0.0];
   playerKnobs[id] = [0.0, 0.0, 0.0];
+  playerSpeed[id] = normalSpeed;
 
   final model = Player(id: id, nick: dto.nick);
   players[id] = model;

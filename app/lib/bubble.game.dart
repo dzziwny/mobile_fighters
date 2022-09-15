@@ -6,12 +6,13 @@ import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-class BubbleGame extends FlameGame with HasDraggables {
+class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
   final String gameId;
   final players = <int, PlayerComponent>{};
   final nick = 'dzziwny';
@@ -29,7 +30,6 @@ class BubbleGame extends FlameGame with HasDraggables {
           return;
         }
 
-        // TODO: add position
         final component = PlayerComponent(nick: nick);
         this.players[player.id] = component;
         add(component);
@@ -53,7 +53,6 @@ class BubbleGame extends FlameGame with HasDraggables {
             return;
           }
           final nick = dto.nick;
-          // TODO: add position
           final player = PlayerComponent(nick: nick);
           players[dto.id] = player;
           add(player);
@@ -76,7 +75,6 @@ class BubbleGame extends FlameGame with HasDraggables {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // client.players$()
 
     await Future.wait([
       SystemChrome.setPreferredOrientations([
@@ -86,6 +84,37 @@ class BubbleGame extends FlameGame with HasDraggables {
       initializeBoard(),
       initializeJoystic(),
     ]);
+  }
+
+  @override
+  void onAttach() {
+    super.onAttach();
+    // Focus on game, so that keyboard evens could work
+    client.isInGame().where((event) => event).first.then((_) {
+      final game = findGame();
+      if (game == null) {
+        return;
+      }
+      final context = game.buildContext;
+      if (context != null) {
+        Focus.of(context).requestFocus();
+      }
+    });
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    final isKeyDown = event is RawKeyDownEvent;
+    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
+
+    if (isSpace && isKeyDown) {
+      client.dash();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
   }
 
   Future<void> initializeBoard() async {

@@ -4,11 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-import 'bubble.game.dart';
-
 class PlayerController {}
 
-class PlayerComponent extends PositionComponent with HasGameRef<BubbleGame> {
+class PlayerComponent extends PositionComponent {
   final String nick;
   late final Future<PlayerRiveComponent> rivePlayer;
   final paint = TextPaint(

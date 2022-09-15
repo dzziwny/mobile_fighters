@@ -15,12 +15,11 @@ void schedulePlayerPositionUpdate(int playerId, int time) {
   final deltaX = knob[0];
   final deltaY = knob[1];
   final angle = knob[2];
+  final oldPosition = playerPositions[playerId]!;
+  final speed = playerSpeed[playerId]!;
 
-  final oldPosition = playerPositions[playerId] ?? [];
-  assert(oldPosition.isNotEmpty);
-
-  var valuex = resolveX(deltaX, maxSpeed, sliceTime, oldPosition[0]);
-  var valuey = resolveY(deltaY, maxSpeed, sliceTime, oldPosition[1]);
+  var valuex = resolveX(deltaX, speed, sliceTime, oldPosition[0]);
+  var valuey = resolveY(deltaY, speed, sliceTime, oldPosition[1]);
 
   playerPositions[playerId] = [valuex, valuey, angle];
   playerPositionUpdates[playerId] = <int>[
@@ -97,7 +96,7 @@ void update(int time) {
 
 void draw() {
   for (var position in playerPositionUpdates.values) {
-    for (var channel in positionsWSChannels) {
+    for (var channel in rawDataWSChannels) {
       channel.sink.add(position);
     }
   }

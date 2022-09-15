@@ -20,17 +20,20 @@ final players = <int, Player>{};
 */
 final playerPositions = <int, List<double>>{};
 
+final playerSpeed = <int, double>{};
+
 final playerPositionUpdates = <int, List<int>>{};
 
 final playerKnobs = <int, List<double>>{};
 
 int ids = 0;
 
-List<WebSocketChannel> positionsWSChannels = [];
+List<WebSocketChannel> rawDataWSChannels = [];
 List<WebSocketChannel> playersWSChannels = [];
 List<WebSocketChannel> playerChangeWSChannels = [];
 
-double maxSpeed = 0.00001;
+double normalSpeed = 0.00001;
+double dashSpeed = 0.00005;
 double maxX = 750;
 double minX = 50;
 double maxY = 550;
