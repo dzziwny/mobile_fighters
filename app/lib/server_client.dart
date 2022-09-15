@@ -12,23 +12,24 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
-  late final WebSocketChannel positionsChannel;
-  late final WebSocketChannel playersChannel;
-  late final WebSocketChannel playersChangeChannel;
+  final WebSocketChannel positionsChannel = WebSocketChannel.connect(
+    Uri.parse('ws://$host:$port${Endpoint.rawDataWs}'),
+  );
+  final WebSocketChannel playersChannel = WebSocketChannel.connect(
+    Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
+  );
+  final WebSocketChannel playersChangeChannel = WebSocketChannel.connect(
+    Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
+  );
+
+  late final Stream<dynamic> positionsData$ =
+      positionsChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> playersData$ =
+      playersChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> playersChangeData$ =
+      playersChangeChannel.stream.asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
-
-  ServerClient() {
-    positionsChannel = WebSocketChannel.connect(
-      Uri.parse('ws://$host:$port${Endpoint.rawDataWs}'),
-    );
-    playersChannel = WebSocketChannel.connect(
-      Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
-    );
-    playersChangeChannel = WebSocketChannel.connect(
-      Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
-    );
-  }
 
   Future<void> dash() async {
     final frame = <int>[
@@ -77,13 +78,14 @@ class ServerClient implements Disposable {
   Stream<bool> isInGame() => id$.map((id) => id != null);
 
   Stream<Position> position$() =>
-      positionsChannel.stream.map((data) => _dataToPosition(data));
+      positionsData$.asBroadcastStream().map((data) => _dataToPosition(data));
 
-  Stream<PlayerChangeDto> playerChange$() =>
-      playersChangeChannel.stream.map((data) => _dataToPlayerChange(data));
+  Stream<PlayerChangeDto> playerChange$() => playersChangeData$
+      .asBroadcastStream()
+      .map((data) => _dataToPlayerChange(data));
 
   Stream<List<Player>> players$() =>
-      playersChannel.stream.map((data) => _dataToPlayers(data));
+      playersData$.asBroadcastStream().map((data) => _dataToPlayers(data));
 
   List<Player> _dataToPlayers(String data) {
     final json = jsonDecode(data);

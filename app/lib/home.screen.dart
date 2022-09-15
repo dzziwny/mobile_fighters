@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+final game = BubbleGame(gameId: '');
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             child: Stack(
               children: [
                 GameWidget(
-                  game: BubbleGame(gameId: controller.text),
+                  game: game,
                 ),
                 StreamBuilder<bool>(
                     stream: client.isInGame(),
