@@ -24,18 +24,6 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
   BubbleGame({
     required this.gameId,
   }) {
-    getPlayers$().then((players) {
-      for (final player in players) {
-        if (this.players[player.id] != null) {
-          return;
-        }
-
-        final component = PlayerComponent(nick: nick);
-        this.players[player.id] = component;
-        add(component);
-      }
-    });
-
     positionsSubscription = client.position$().map((Position position) {
       final player = players[position.playerId];
       if (player == null) {
@@ -81,8 +69,9 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.portraitDown,
       ]),
-      initializeBoard(),
-      initializeJoystic(),
+      initializeBoard()
+          .then((_) => initializePlayers())
+          .then((_) => initializeJoystic()),
     ]);
   }
 
@@ -121,15 +110,28 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
     final paint = const PaletteEntry(Color.fromRGBO(160, 196, 255, 1)).paint()
       ..style = PaintingStyle.fill;
 
-    // TODO: get board size from server
+    final frame = await client.gameFrame();
     final board = RectangleComponent(
-      size: Vector2(750.0, 550.0),
-      position: Vector2(400.0, 300.0),
+      size: Vector2(frame.sizex, frame.sizey),
+      position: Vector2(frame.positionx, frame.positiony),
       paint: paint,
       anchor: Anchor.center,
     );
 
     await add(board);
+  }
+
+  Future<void> initializePlayers() async {
+    final players = await getPlayers$();
+    for (final player in players) {
+      if (this.players[player.id] != null) {
+        return;
+      }
+
+      final component = PlayerComponent(nick: nick);
+      this.players[player.id] = component;
+      add(component);
+    }
   }
 
   Future<void> initializeJoystic() async {

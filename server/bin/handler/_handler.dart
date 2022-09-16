@@ -1,4 +1,5 @@
 export 'create_player.handler.dart';
+export 'get_game_frame.handler.dart';
 export 'get_players.handler.dart';
 export 'leave_game.handler.dart';
 export 'player_change.socket_handler.dart';

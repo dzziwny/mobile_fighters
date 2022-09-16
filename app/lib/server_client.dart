@@ -77,6 +77,8 @@ class ServerClient implements Disposable {
 
   Stream<bool> isInGame() => id$.map((id) => id != null);
 
+  Future<GameFrame> gameFrame() => gameFrame$();
+
   Stream<Position> position$() =>
       positionsData$.asBroadcastStream().map((data) => _dataToPosition(data));
 

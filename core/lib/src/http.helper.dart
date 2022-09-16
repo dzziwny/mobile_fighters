@@ -22,6 +22,15 @@ Future<CreatePlayerDtoResponse> createPlayer$(int guid, String nick) async {
   return dto;
 }
 
+Future<GameFrame> gameFrame$() async {
+  final response = await get(
+    Uri.parse('$base${Endpoint.gameFrame}'),
+  );
+
+  final frame = GameFrame.fromJson(jsonDecode(response.body));
+  return frame;
+}
+
 Future<Response> getPlayersResponse$() => get(
       Uri.parse('$base${Endpoint.getAllPlayers}'),
     );
