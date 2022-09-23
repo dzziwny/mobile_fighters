@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -26,53 +24,33 @@ final playerPositionUpdates = <int, List<int>>{};
 
 final playerKnobs = <int, List<double>>{};
 
+/*
+* Game events. First value indicates, what event came.
+* 0 - position update
+* 1 - attack
+*/
+final gameUpdates = <List<int>>[];
+
+/*
+* Game draws. First value indicates, what event came.
+* 0 - position update
+* 1 - attack
+*/
+final gameDraws = <void Function()>[];
+
 int ids = 0;
 
 List<WebSocketChannel> rawDataWSChannels = [];
 List<WebSocketChannel> playersWSChannels = [];
 List<WebSocketChannel> playerChangeWSChannels = [];
+List<WebSocketChannel> attackWSChannels = [];
 
-double normalSpeed = 0.00001;
-double dashSpeed = 0.00005;
-double maxX = 750;
-double minX = 50;
-double maxY = 550;
-double minY = 50;
+// If there are lags, try make sliceTime smaller
+const int sliceTime = 5000;
 
-void sharePlayers() {
-  for (final channel in playersWSChannels) {
-    final data = jsonEncode(players.values.toList());
-    channel.sink.add(data);
-  }
-}
-
-void sharePlayerCreated(int id) {
-  final player = players[id];
-  if (player == null) {
-    return;
-  }
-
-  final dto = PlayerChangeDto(
-    id: id,
-    nick: player.nick,
-    type: PlayerChangeType.added,
-  );
-
-  final data = jsonEncode(dto);
-  for (final channel in playerChangeWSChannels) {
-    channel.sink.add(data);
-  }
-}
-
-void sharePlayerRemoved(int id) {
-  final dto = PlayerChangeDto(
-    id: id,
-    nick: '',
-    type: PlayerChangeType.removed,
-  );
-
-  final data = jsonEncode(dto);
-  for (final channel in playerChangeWSChannels) {
-    channel.sink.add(data);
-  }
-}
+const double normalSpeed = 0.00001;
+const double dashSpeed = 0.00005;
+const double maxX = 750;
+const double minX = 50;
+const double maxY = 550;
+const double minY = 50;

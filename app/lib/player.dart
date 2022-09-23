@@ -1,3 +1,6 @@
+import 'dart:async' as async;
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/foundation.dart';
@@ -17,6 +20,8 @@ class PlayerComponent extends PositionComponent {
     ),
   );
 
+  double _angle = 0.0;
+
   PlayerComponent({
     required this.nick,
   }) {
@@ -35,7 +40,7 @@ class PlayerComponent extends PositionComponent {
     if (kDebugMode) {
       paint.render(
         canvas,
-        '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}]',
+        '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}, a: ${double.parse((_angle).toStringAsFixed(2))}]',
         Vector2(0.0, -60.0),
         anchor: Anchor.bottomCenter,
       );
@@ -46,10 +51,57 @@ class PlayerComponent extends PositionComponent {
       Vector2(0.0, -30.0),
       anchor: Anchor.bottomCenter,
     );
+
+    if (isAttacking) {
+      _drawAttack(canvas);
+    }
+  }
+
+  bool isAttacking = false;
+  void _drawAttack(Canvas canvas) {
+    var area = Path();
+    const center = Point(0.0, 0.0);
+    area.moveTo(center.x, center.y);
+    const r = 150.0;
+    const dAngle = pi / 6;
+    final dx1 = r * sin(_angle - dAngle);
+    final dy1 = r * cos(_angle - dAngle);
+    final x1 = center.x + dx1;
+    final y1 = center.y - dy1;
+    area.lineTo(x1, y1);
+
+    final dx2 = r * sin(_angle + dAngle);
+    final dy2 = r * cos(_angle + dAngle);
+    final x2 = center.x + dx2;
+    final y2 = center.y - dy2;
+    area.lineTo(x2, y2);
+
+    area.close();
+    canvas.drawPath(
+      area,
+      Paint()
+        ..color = Colors.green
+        ..style = PaintingStyle.fill,
+    );
   }
 
   Future<void> setAngle(double angle) async {
+    _angle = angle;
     (await rivePlayer).angle = angle;
+  }
+
+  async.Timer? attackTimer;
+
+  void attack() {
+    isAttacking = true;
+    attackTimer?.cancel();
+    attackTimer = async.Timer.periodic(
+      const Duration(milliseconds: 500),
+      (timer) {
+        isAttacking = false;
+        timer.cancel();
+      },
+    );
   }
 }
 
@@ -86,30 +138,5 @@ class PlayerRiveComponent extends RiveComponent {
     super.render(canvas);
     size = Vector2.all(50);
     anchor = Anchor.center;
-  }
-
-  Future<void> removeBackground() async {
-    artboard.forEachComponent((p0) {
-      if (p0 is Fill) {
-        final isBackground = p0.paint.color.value == 0xff977bc3;
-        if (isBackground) {
-          p0.paint.color = Colors.transparent;
-        }
-      }
-
-      if (p0 is Stroke) {
-        final isShadow = p0.paint.color.value == 0xff844da3;
-        if (isShadow) {
-          p0.paint.color = Colors.transparent;
-        }
-      }
-
-      if (p0 is Shape) {
-        final isShadow = p0.name == 'shadow';
-        if (isShadow && p0.fills.isNotEmpty) {
-          p0.fills.first.paint.color = Colors.transparent;
-        }
-      }
-    });
   }
 }

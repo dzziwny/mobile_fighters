@@ -12,4 +12,5 @@ final router = Router()
   ..post(Endpoint.leaveGame, leaveGameHandler)
   ..get(Endpoint.rawDataWs, webSocketHandler(rawDataSocketHandler))
   ..get(Endpoint.playersWs, webSocketHandler(playersSocketHandler))
-  ..get(Endpoint.playerChangeWs, webSocketHandler(playerChangeSocketHandler));
+  ..get(Endpoint.playerChangeWs, webSocketHandler(playerChangeSocketHandler))
+  ..get(Endpoint.attackWs, webSocketHandler(attackSocketHandler));

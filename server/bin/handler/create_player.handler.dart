@@ -42,7 +42,32 @@ int createPlayer(CreatePlayerDtoRequest dto) {
   players[id] = model;
 
   guids[guid] = id;
-  sharePlayers();
-  sharePlayerCreated(id);
+  _sharePlayers();
+  _sharePlayerCreated(id);
   return id;
+}
+
+void _sharePlayerCreated(int id) {
+  final player = players[id];
+  if (player == null) {
+    return;
+  }
+
+  final dto = PlayerChangeDto(
+    id: id,
+    nick: player.nick,
+    type: PlayerChangeType.added,
+  );
+
+  final data = jsonEncode(dto);
+  for (final channel in playerChangeWSChannels) {
+    channel.sink.add(data);
+  }
+}
+
+void _sharePlayers() {
+  for (final channel in playersWSChannels) {
+    final data = jsonEncode(players.values.toList());
+    channel.sink.add(data);
+  }
 }

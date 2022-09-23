@@ -7,4 +7,5 @@ class Endpoint {
   static const rawDataWs = '/positions/ws';
   static const playersWs = '/players/ws';
   static const playerChangeWs = '/playerChange/ws';
+  static const attackWs = '/attack/ws';
 }

@@ -12,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
+class BubbleGame extends FlameGame
+    with HasDraggables, KeyboardEvents, TapDetector {
   final String gameId;
   final players = <int, PlayerComponent>{};
   final nick = 'dzziwny';
@@ -20,6 +21,9 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription changePlayersSubscription;
+  late final StreamSubscription attackSubscription;
+
+  bool isAttacking = false;
 
   BubbleGame({
     required this.gameId,
@@ -54,6 +58,15 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
         default:
           throw 'Unknown PlayerChangeType';
       }
+    }).listen(null);
+
+    attackSubscription = client.attack$().map((position) {
+      final player = players[position.playerId];
+      if (player == null) {
+        return;
+      }
+
+      player.attack();
     }).listen(null);
   }
 
@@ -97,13 +110,27 @@ class BubbleGame extends FlameGame with HasDraggables, KeyboardEvents {
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final isKeyDown = event is RawKeyDownEvent;
-    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
+    final isAttackKey = event.character == 'e';
 
+    if (isAttackKey) {
+      client.attack();
+      return KeyEventResult.handled;
+    }
+
+    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
     if (isSpace && isKeyDown) {
       client.dash();
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
+  }
+
+  @override
+  bool onTapDown(TapDownInfo info) {
+    final position = info.eventPosition.game;
+    // final component = PlayerComponent(nick: 'hit')..position = position;
+    // add(component);
+    return true;
   }
 
   Future<void> initializeBoard() async {

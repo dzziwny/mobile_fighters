@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
@@ -12,33 +13,46 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
-  final WebSocketChannel positionsChannel = WebSocketChannel.connect(
+  final rawDataChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.rawDataWs}'),
   );
-  final WebSocketChannel playersChannel = WebSocketChannel.connect(
+  final playersChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
   );
-  final WebSocketChannel playersChangeChannel = WebSocketChannel.connect(
+  final addOrRemovePlayerChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
+  );
+  final attackChannel = WebSocketChannel.connect(
+    Uri.parse('ws://$host:$port${Endpoint.attackWs}'),
   );
 
   late final Stream<dynamic> positionsData$ =
-      positionsChannel.stream.asBroadcastStream();
+      rawDataChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersData$ =
       playersChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersChangeData$ =
-      playersChangeChannel.stream.asBroadcastStream();
+      addOrRemovePlayerChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> attackData$ =
+      attackChannel.stream.asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
-  Future<void> dash() async {
-    final frame = <int>[
+  void dash() {
+    final data = <int>[
       1,
       // TODO: user can't just update position for someone else
       id$.value!,
     ];
 
-    positionsChannel.sink.add(frame);
+    rawDataChannel.sink.add(data);
+  }
+
+  void attack() {
+    final data = <int>[
+      id$.value!,
+    ];
+
+    attackChannel.sink.add(data);
   }
 
   void updateKnob(
@@ -61,7 +75,7 @@ class ServerClient implements Disposable {
       ...deltaYBytes,
     ];
 
-    positionsChannel.sink.add(frame);
+    rawDataChannel.sink.add(frame);
   }
 
   Future<int> createPlayer(String nick) async {
@@ -88,6 +102,9 @@ class ServerClient implements Disposable {
 
   Stream<List<Player>> players$() =>
       playersData$.asBroadcastStream().map((data) => _dataToPlayers(data));
+
+  Stream<Position> attack$() =>
+      attackData$.asBroadcastStream().map((data) => _dataToAttack(data));
 
   List<Player> _dataToPlayers(String data) {
     final json = jsonDecode(data);
@@ -117,24 +134,15 @@ class ServerClient implements Disposable {
     return dto;
   }
 
+  Position _dataToAttack(List<int> data) {
+    final position = _dataToPosition(data);
+    return position;
+  }
+
   @override
   FutureOr onDispose() {
-    positionsChannel.sink.close(status.goingAway);
+    rawDataChannel.sink.close(status.goingAway);
     playersChannel.sink.close(status.goingAway);
-    playersChangeChannel.sink.close(status.goingAway);
-  }
-}
-
-class Position {
-  final int playerId;
-  final double x;
-  final double y;
-  final double angle;
-
-  const Position(this.playerId, this.x, this.y, this.angle);
-
-  @override
-  String toString() {
-    return "position: [id: $playerId, x: $x, y: $y, angle: $angle]";
+    addOrRemovePlayerChannel.sink.close(status.goingAway);
   }
 }
