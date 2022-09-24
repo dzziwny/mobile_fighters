@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import '../setup.dart';
 
 void attackUpdate(List<int> data) {
-  final attackingPlayerId = data[1];
+  final attackingPlayerId = data[0];
   final targets = Map<int, List<double>>.from(playerPositions);
   final position = targets.remove(attackingPlayerId);
   if (position == null) {

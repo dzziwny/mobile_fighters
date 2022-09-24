@@ -42,10 +42,16 @@ void positionUpdate(int playerId) {
   var valuey = _resolveY(deltaY, speed, sliceTime, oldPosition[1]);
 
   playerPositions[playerId] = [valuex, valuey, angle];
-  playerPositionUpdates[playerId] = <int>[
+  final data = <int>[
     playerId,
     ...(ByteData(4)..setFloat32(0, valuex)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, valuey)).buffer.asUint8List(),
     ...(ByteData(4)..setFloat32(0, angle)).buffer.asUint8List(),
   ];
+
+  gameDraws.add(() {
+    for (var channel in rawDataWSChannels) {
+      channel.sink.add(data);
+    }
+  });
 }

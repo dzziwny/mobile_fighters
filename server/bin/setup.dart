@@ -20,8 +20,6 @@ final playerPositions = <int, List<double>>{};
 
 final playerSpeed = <int, double>{};
 
-final playerPositionUpdates = <int, List<int>>{};
-
 final playerKnobs = <int, List<double>>{};
 
 /*
@@ -29,7 +27,7 @@ final playerKnobs = <int, List<double>>{};
 * 0 - position update
 * 1 - attack
 */
-final gameUpdates = <List<int>>[];
+final gameUpdates = <void Function()>[];
 
 /*
 * Game draws. First value indicates, what event came.

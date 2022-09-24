@@ -12,7 +12,8 @@ int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
 int accumulatorTime = 0;
 
 void main(List<String> args) async {
-  final ip = InternetAddress.anyIPv4;
+  // final ip = InternetAddress.anyIPv4;
+  final ip = '0.0.0.0';
 
   final handler = Pipeline()
       // .addMiddleware(
@@ -38,20 +39,13 @@ void main(List<String> args) async {
 }
 
 void update() {
+  // TODO: add attack, add position
   for (var i = 0; i < gameUpdates.length; i++) {
-    final data = gameUpdates.removeAt(0);
-    final type = data[0];
-    switch (type) {
-      case 1:
-        attackUpdate(data);
-        break;
-      default:
-        assert(false, 'Unknown update type');
-    }
+    final func = gameUpdates.removeAt(0);
+    func();
   }
 
   for (var playerId in players.keys) {
-    // TODO: change it to not update position every time
     positionUpdate(playerId);
   }
 }
@@ -60,16 +54,5 @@ void draw() {
   for (var i = 0; i < gameDraws.length; i++) {
     final func = gameDraws.removeAt(0);
     func();
-  }
-
-  // TODO: change it to not draw position every time
-  positionDraw();
-}
-
-void positionDraw() {
-  for (var position in playerPositionUpdates.values) {
-    for (var channel in rawDataWSChannels) {
-      channel.sink.add(position);
-    }
   }
 }

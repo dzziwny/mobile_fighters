@@ -1,6 +1,7 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
+import '../updates/_updates.dart';
 
 void attackSocketHandler(WebSocketChannel channel) {
   attackWSChannels.add(channel);
@@ -8,5 +9,5 @@ void attackSocketHandler(WebSocketChannel channel) {
 }
 
 void _attack(List<int> data) {
-  gameUpdates.add([1, ...data]);
+  gameUpdates.add(() => attackUpdate(data));
 }
