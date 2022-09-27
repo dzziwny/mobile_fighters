@@ -17,44 +17,51 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue,
       body: Row(
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                GameWidget(
-                  game: game,
-                ),
-                StreamBuilder<bool>(
-                    stream: client.isInGame(),
-                    builder: (context, snapshot) {
-                      final isInGame = snapshot.data;
-                      if (isInGame == true) {
-                        return const SizedBox();
-                      }
-                      return Center(
-                        child: Container(
-                          width: 200.0,
-                          height: 200.0,
-                          color: Colors.white,
-                          child: Center(
-                            child: MaterialButton(
-                              color: Colors.blue,
-                              child: const Text('Enter the game'),
-                              onPressed: () {
-                                client.createPlayer('dzziwny');
-                              },
+            child: FittedBox(
+              child: SizedBox(
+                width: 800,
+                height: 600,
+                child: Stack(
+                  children: [
+                    GameWidget(
+                      game: game,
+                    ),
+                    StreamBuilder<bool>(
+                        stream: client.isInGame(),
+                        builder: (context, snapshot) {
+                          final isInGame = snapshot.data;
+                          if (isInGame == true) {
+                            return const SizedBox();
+                          }
+                          return Center(
+                            child: Container(
+                              width: 200.0,
+                              height: 200.0,
+                              color: Colors.white,
+                              child: Center(
+                                child: MaterialButton(
+                                  color: Colors.blue,
+                                  child: const Text('Enter the game'),
+                                  onPressed: () {
+                                    client.createPlayer('dzziwny');
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    }),
-                Container(
-                  margin: const EdgeInsets.all(8.0),
-                  alignment: Alignment.topLeft,
-                  child: _LeaveButton(client: client),
+                          );
+                        }),
+                    Container(
+                      margin: const EdgeInsets.all(8.0),
+                      alignment: Alignment.topLeft,
+                      child: _LeaveButton(client: client),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           if (kDebugMode)
