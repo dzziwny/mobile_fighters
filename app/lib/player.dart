@@ -12,6 +12,7 @@ class PlayerController {}
 class PlayerComponent extends PositionComponent {
   final String nick;
   late final Future<PlayerRiveComponent> rivePlayer;
+  late final Future<HpIndicatorComponent> hpIndicator;
   final paint = TextPaint(
     style: const TextStyle(
       fontSize: 20.0,
@@ -26,13 +27,22 @@ class PlayerComponent extends PositionComponent {
     required this.nick,
   }) {
     rivePlayer = PlayerRiveComponent.create(nick);
+    hpIndicator = HpIndicatorComponent.create();
   }
 
   @override
   Future<void> onLoad() async {
     final player = await rivePlayer
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.center
+      ..size = Vector2.all(50);
+
     await add(player);
+    await add(
+      (await hpIndicator)
+        ..position = Vector2(0.0, 5.0)
+        ..size = Vector2.all(361.5 / 3.5)
+        ..anchor = Anchor.bottomCenter,
+    );
   }
 
   @override
@@ -41,14 +51,14 @@ class PlayerComponent extends PositionComponent {
       paint.render(
         canvas,
         '[x: ${position.x.ceilToDouble()}, y: ${position.y.ceilToDouble()}, a: ${double.parse((_angle).toStringAsFixed(2))}]',
-        Vector2(0.0, -60.0),
+        Vector2(0.0, -90.0),
         anchor: Anchor.bottomCenter,
       );
     }
     paint.render(
       canvas,
       nick,
-      Vector2(0.0, -30.0),
+      Vector2(0.0, -65.0),
       anchor: Anchor.bottomCenter,
     );
 
@@ -132,11 +142,26 @@ class PlayerRiveComponent extends RiveComponent {
       nick: nick,
     );
   }
+}
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    size = Vector2.all(50);
-    anchor = Anchor.center;
+class HpIndicatorComponent extends RiveComponent {
+  HpIndicatorComponent({
+    required super.artboard,
+  });
+
+  static Future<HpIndicatorComponent> create() async {
+    final artboard = await loadArtboard(
+      RiveFile.asset('assets/hp_indicator.riv'),
+    );
+
+    // final playerMovementAnimationController = OneShotAnimation(
+    //   'movement',
+    //   autoplay: false,
+    // );
+    // artboard.addController(playerMovementAnimationController);
+
+    return HpIndicatorComponent(
+      artboard: artboard,
+    );
   }
 }

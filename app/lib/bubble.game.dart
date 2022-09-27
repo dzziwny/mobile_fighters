@@ -110,8 +110,11 @@ class BubbleGame extends FlameGame
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final isKeyDown = event is RawKeyDownEvent;
-    final isAttackKey = event.character == 'e';
+    if (!isKeyDown) {
+      return KeyEventResult.ignored;
+    }
 
+    final isAttackKey = event.character == 'e';
     if (isAttackKey) {
       client.attack();
       return KeyEventResult.handled;
