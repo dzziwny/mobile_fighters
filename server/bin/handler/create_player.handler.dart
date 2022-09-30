@@ -37,6 +37,7 @@ int createPlayer(CreatePlayerDtoRequest dto) {
   playerPositions[id] = [randomX, randomY, 0.0];
   playerKnobs[id] = [0.0, 0.0, 0.0];
   playerSpeed[id] = normalSpeed;
+  playerHp[id] = 100;
 
   final model = Player(id: id, nick: dto.nick);
   players[id] = model;

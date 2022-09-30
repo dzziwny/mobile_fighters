@@ -25,6 +25,9 @@ class ServerClient implements Disposable {
   final attackChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.attackWs}'),
   );
+  final hitChannel = WebSocketChannel.connect(
+    Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
+  );
 
   late final Stream<dynamic> positionsData$ =
       rawDataChannel.stream.asBroadcastStream();
@@ -34,6 +37,7 @@ class ServerClient implements Disposable {
       addOrRemovePlayerChannel.stream.asBroadcastStream();
   late final Stream<dynamic> attackData$ =
       attackChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
@@ -106,6 +110,9 @@ class ServerClient implements Disposable {
   Stream<Position> attack$() =>
       attackData$.asBroadcastStream().map((data) => _dataToAttack(data));
 
+  Stream<HitDto> hit$() =>
+      hitData$.asBroadcastStream().map((data) => _dataToHit(data));
+
   List<Player> _dataToPlayers(String data) {
     final json = jsonDecode(data);
     final List list = json;
@@ -137,6 +144,11 @@ class ServerClient implements Disposable {
   Position _dataToAttack(List<int> data) {
     final position = _dataToPosition(data);
     return position;
+  }
+
+  HitDto _dataToHit(List<int> data) {
+    final dto = HitDto(playerId: data[0], hp: data[1]);
+    return dto;
   }
 
   @override

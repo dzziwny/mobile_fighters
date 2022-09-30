@@ -100,6 +100,10 @@ class PlayerComponent extends PositionComponent {
     (await rivePlayer).angle = angle;
   }
 
+  Future<void> setHp(int value) async {
+    (await hpIndicator).set(value.toDouble());
+  }
+
   async.Timer? attackTimer;
 
   void attack() {
@@ -145,8 +149,11 @@ class PlayerRiveComponent extends RiveComponent {
 }
 
 class HpIndicatorComponent extends RiveComponent {
+  final SMIInput<double> energyInput;
+
   HpIndicatorComponent({
     required super.artboard,
+    required this.energyInput,
   });
 
   static Future<HpIndicatorComponent> create() async {
@@ -154,14 +161,25 @@ class HpIndicatorComponent extends RiveComponent {
       RiveFile.asset('assets/hp_indicator.riv'),
     );
 
-    // final playerMovementAnimationController = OneShotAnimation(
-    //   'movement',
-    //   autoplay: false,
-    // );
-    // artboard.addController(playerMovementAnimationController);
+    var controller =
+        StateMachineController.fromArtboard(artboard, 'State Machine ');
+    if (controller == null) {
+      throw Exception(
+          'Cannot find state machine controler in hp indicator artboard.');
+    }
+
+    final energyInput = controller.findInput<double>('Energy');
+    if (energyInput == null) {
+      throw Exception('Cannot find energy input in hp indicator artboard.');
+    }
+
+    artboard.addController(controller);
 
     return HpIndicatorComponent(
       artboard: artboard,
+      energyInput: energyInput,
     );
   }
+
+  set(double value) => energyInput.change(value);
 }

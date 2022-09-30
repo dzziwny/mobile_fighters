@@ -23,6 +23,12 @@ final playerSpeed = <int, double>{};
 final playerKnobs = <int, List<double>>{};
 
 /*
+* key   ->  playerId
+* value ->  hp max 100, min 0
+*/
+final playerHp = <int, int>{};
+
+/*
 * Game events. First value indicates, what event came.
 * 0 - position update
 * 1 - attack
@@ -42,6 +48,7 @@ List<WebSocketChannel> rawDataWSChannels = [];
 List<WebSocketChannel> playersWSChannels = [];
 List<WebSocketChannel> playerChangeWSChannels = [];
 List<WebSocketChannel> attackWSChannels = [];
+List<WebSocketChannel> hitWSChannels = [];
 
 // If there are lags, try make sliceTime smaller
 const int sliceTime = 5000;

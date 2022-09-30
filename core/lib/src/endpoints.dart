@@ -8,4 +8,5 @@ class Endpoint {
   static const playersWs = '/players/ws';
   static const playerChangeWs = '/playerChange/ws';
   static const attackWs = '/attack/ws';
+  static const hitWs = '/hit/ws';
 }

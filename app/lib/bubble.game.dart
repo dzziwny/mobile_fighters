@@ -22,6 +22,7 @@ class BubbleGame extends FlameGame
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription changePlayersSubscription;
   late final StreamSubscription attackSubscription;
+  late final StreamSubscription hitSubscription;
 
   bool isAttacking = false;
 
@@ -67,6 +68,15 @@ class BubbleGame extends FlameGame
       }
 
       player.attack();
+    }).listen(null);
+
+    hitSubscription = client.hit$().map((dto) {
+      final player = players[dto.playerId];
+      if (player == null) {
+        return;
+      }
+
+      player.setHp(dto.hp);
     }).listen(null);
   }
 
