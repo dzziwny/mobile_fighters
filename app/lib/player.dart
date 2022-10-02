@@ -109,11 +109,10 @@ class PlayerComponent extends PositionComponent {
   void attack() {
     isAttacking = true;
     attackTimer?.cancel();
-    attackTimer = async.Timer.periodic(
-      const Duration(milliseconds: 500),
-      (timer) {
+    attackTimer = async.Timer(
+      const Duration(milliseconds: 200),
+      () {
         isAttacking = false;
-        timer.cancel();
       },
     );
   }

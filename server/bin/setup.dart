@@ -22,6 +22,9 @@ final playerSpeed = <int, double>{};
 
 final playerKnobs = <int, List<double>>{};
 
+final Map<int, bool> attackCooldowns = {};
+final Map<int, bool> dashCooldowns = {};
+
 /*
 * key   ->  playerId
 * value ->  hp max 100, min 0
@@ -59,3 +62,5 @@ const double maxX = 750;
 const double minX = 50;
 const double maxY = 550;
 const double minY = 50;
+const int attackCooldownSesconds = 2;
+const int dashCooldownSesconds = 1;

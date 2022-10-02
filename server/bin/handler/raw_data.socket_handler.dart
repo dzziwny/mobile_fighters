@@ -46,23 +46,19 @@ void updateKnob(List<int> data) {
   playerKnobs[playerId] = [deltaX, deltaY, angle];
 }
 
-final Map<int, bool> _dashCooldowns = {};
-
 void dash(List<int> data) {
   final playerId = data[1];
-  if (_dashCooldowns[playerId] == true) {
+  if (dashCooldowns[playerId] == true) {
     return;
   }
 
   playerSpeed[playerId] = dashSpeed;
-  _dashCooldowns[playerId] = true;
-  Timer.periodic(Duration(milliseconds: 200), (timer) {
+  dashCooldowns[playerId] = true;
+  Timer(Duration(milliseconds: 200), () {
     playerSpeed[playerId] = normalSpeed;
-    timer.cancel();
   });
 
-  Timer.periodic(Duration(seconds: 1), (timer) {
-    _dashCooldowns[playerId] = false;
-    timer.cancel();
+  Timer(Duration(seconds: dashCooldownSesconds), () {
+    dashCooldowns[playerId] = false;
   });
 }
