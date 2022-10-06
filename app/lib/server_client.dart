@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
@@ -29,6 +28,12 @@ class ServerClient implements Disposable {
     Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
   );
 
+  late final cooldownChannel = id$.where((id) => id != null).map(
+        (id) => WebSocketChannel.connect(
+          Uri.parse('ws://$host:$port${Endpoint.cooldownWs(id!)}'),
+        ),
+      );
+
   late final Stream<dynamic> positionsData$ =
       rawDataChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersData$ =
@@ -38,6 +43,9 @@ class ServerClient implements Disposable {
   late final Stream<dynamic> attackData$ =
       attackChannel.stream.asBroadcastStream();
   late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> cooldownData$ = cooldownChannel
+      .switchMap((channel) => channel.stream)
+      .asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
@@ -82,6 +90,9 @@ class ServerClient implements Disposable {
     rawDataChannel.sink.add(frame);
   }
 
+  /*
+  * Streams
+  */
   Future<int> createPlayer(String nick) async {
     final dto = await createPlayer$(_guid, nick);
 
@@ -113,6 +124,12 @@ class ServerClient implements Disposable {
   Stream<HitDto> hit$() =>
       hitData$.asBroadcastStream().map((data) => _dataToHit(data));
 
+  late Stream<CooldownDto> cooldown$ =
+      cooldownData$.asBroadcastStream().map((data) => _dataToCooldown(data));
+
+  /*
+  * Converters
+  */
   List<Player> _dataToPlayers(String data) {
     final json = jsonDecode(data);
     final List list = json;
@@ -148,6 +165,11 @@ class ServerClient implements Disposable {
 
   HitDto _dataToHit(List<int> data) {
     final dto = HitDto(playerId: data[0], hp: data[1]);
+    return dto;
+  }
+
+  CooldownDto _dataToCooldown(List<int> data) {
+    final dto = CooldownDto.fromData(data);
     return dto;
   }
 

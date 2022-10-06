@@ -1,4 +1,5 @@
 export 'attack.socket_handler.dart';
+export 'cooldown.socket_handler.dart';
 export 'create_player.handler.dart';
 export 'get_game_frame.handler.dart';
 export 'get_players.handler.dart';

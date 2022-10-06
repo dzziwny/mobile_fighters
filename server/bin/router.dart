@@ -1,3 +1,4 @@
+import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 
@@ -14,4 +15,7 @@ final router = Router()
   ..get(Endpoint.playersWs, webSocketHandler(playersSocketHandler))
   ..get(Endpoint.playerChangeWs, webSocketHandler(playerChangeSocketHandler))
   ..get(Endpoint.attackWs, webSocketHandler(attackSocketHandler))
-  ..get(Endpoint.hitWs, webSocketHandler(hitSocketHandler));
+  ..get(Endpoint.hitWs, webSocketHandler(hitSocketHandler))
+  ..get(Endpoint.cooldownWsTemplate, (Request request, String id) {
+    return webSocketHandler(cooldownSocketHandler(id))(request);
+  });

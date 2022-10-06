@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
@@ -52,13 +53,30 @@ void dash(List<int> data) {
     return;
   }
 
+  gameUpdates.add(() => dashCooldownUpdate(playerId, true));
   playerSpeed[playerId] = dashSpeed;
   dashCooldowns[playerId] = true;
+
   Timer(Duration(milliseconds: 200), () {
     playerSpeed[playerId] = normalSpeed;
   });
 
   Timer(Duration(seconds: dashCooldownSesconds), () {
+    gameUpdates.add(() => dashCooldownUpdate(playerId, false));
     dashCooldowns[playerId] = false;
   });
+}
+
+dashCooldownUpdate(int playerId, bool isCooldown) {
+  final channel = cooldownWSChannels[playerId];
+  if (channel == null) {
+    return;
+  }
+
+  final frame = CooldownDto(
+    isCooldown: isCooldown,
+    cooldownType: CooldownType.dash,
+  ).toData();
+
+  channel.sink.add(frame);
 }

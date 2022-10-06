@@ -25,6 +25,8 @@ class BubbleGame extends FlameGame
   late final StreamSubscription hitSubscription;
 
   bool isAttacking = false;
+  bool isAttackCooldown = false;
+  bool isDashCooldown = false;
 
   BubbleGame({
     required this.gameId,
