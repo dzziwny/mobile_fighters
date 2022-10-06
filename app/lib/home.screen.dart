@@ -5,14 +5,13 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
 
 final game = BubbleGame(gameId: '');
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  final controller = TextEditingController(text: '1234');
+  final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
 
   @override
@@ -44,13 +43,38 @@ class HomeScreen extends StatelessWidget {
                             height: 200.0,
                             color: Colors.white,
                             child: Center(
-                              child: MaterialButton(
-                                color: Colors.blue,
-                                child: const Text('Enter the game'),
-                                onPressed: () {
-                                  client.createPlayer('dzziwny');
-                                },
-                              ),
+                              child: StatefulBuilder(builder: (_, setState) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextField(
+                                      controller: nickController,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Nick',
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            width: 2.0,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) => setState(() {}),
+                                      maxLength: 10,
+                                    ),
+                                    const SizedBox(height: 20.0),
+                                    MaterialButton(
+                                      color: Colors.blue,
+                                      onPressed: nickController.text == ''
+                                          ? null
+                                          : () {
+                                              client.createPlayer(
+                                                  nickController.text);
+                                            },
+                                      child: const Text('Enter the game'),
+                                    ),
+                                  ],
+                                );
+                              }),
                             ),
                           ),
                         );
