@@ -97,7 +97,6 @@ class BubbleGame extends FlameGame
               TextButton(
                 child: const Text('Back to the game.'),
                 onPressed: () {
-                  client.backToTheGame();
                   Navigator.of(context).pop();
                 },
               ),

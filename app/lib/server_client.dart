@@ -193,6 +193,7 @@ class ServerClient implements Disposable {
   }
 
   int _dataToDead(List<int> data) {
+    leaveGame();
     final attackingPlayerId = data[0];
     return attackingPlayerId;
   }
