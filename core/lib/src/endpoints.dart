@@ -11,4 +11,6 @@ class Endpoint {
   static const hitWs = '/hit/ws';
   static const cooldownWsTemplate = '/cooldownWs/ws/<id>';
   static cooldownWs(int playerId) => '/cooldownWs/ws/$playerId';
+  static const deadWsTemplate = '/deadWs/ws/<id>';
+  static deadWs(int playerId) => '/deadWs/ws/$playerId';
 }

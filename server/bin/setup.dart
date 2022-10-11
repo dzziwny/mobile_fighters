@@ -53,6 +53,7 @@ List<WebSocketChannel> playerChangeWSChannels = [];
 List<WebSocketChannel> attackWSChannels = [];
 List<WebSocketChannel> hitWSChannels = [];
 Map<int, WebSocketChannel> cooldownWSChannels = {};
+Map<int, WebSocketChannel> deadWSChannels = {};
 
 // If there are lags, try make sliceTime smaller
 const int sliceTime = 5000;

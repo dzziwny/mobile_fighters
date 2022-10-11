@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
+
+import 'package:core/core.dart';
 
 import '../setup.dart';
 
@@ -21,7 +24,11 @@ void attackUpdate(List<int> data) {
     if (isHit) {
       final hp = playerHp[targetId]! - 20;
       playerHp[targetId] = hp;
-      drawPlayerHit(targetId, hp);
+      if (hp <= 0) {
+        handlePlayerDead(targetId, attackingPlayerId);
+      } else {
+        drawPlayerHit(targetId, hp);
+      }
     }
   }
 
@@ -76,11 +83,50 @@ bool isInAttackArea(
   return s > 0 && t > 0 && (s + t) < 2 * A * sign;
 }
 
-drawPlayerHit(int playerId, int hp) {
+void drawPlayerHit(int playerId, int hp) {
   final List<int> data = [playerId, hp];
   gameDraws.add(() {
     for (var channel in hitWSChannels) {
       channel.sink.add(data);
     }
   });
+}
+
+void handlePlayerDead(int playerId, int attackingPlayerId) {
+  playerPositions.remove(playerId);
+  playerKnobs.remove(playerId);
+  players.remove(playerId);
+
+  _sharePlayers();
+  _sharePlayerRemoved(playerId);
+  _sharePlayerDead(playerId, attackingPlayerId);
+}
+
+void _sharePlayerRemoved(int id) {
+  final dto = PlayerChangeDto(
+    id: id,
+    nick: '',
+    type: PlayerChangeType.removed,
+  );
+
+  final data = jsonEncode(dto);
+  for (final channel in playerChangeWSChannels) {
+    channel.sink.add(data);
+  }
+}
+
+void _sharePlayers() {
+  for (final channel in playersWSChannels) {
+    final data = jsonEncode(players.values.toList());
+    channel.sink.add(data);
+  }
+}
+
+void _sharePlayerDead(int playerId, int attackingPlayerId) {
+  final channel = deadWSChannels[playerId];
+  if (channel == null) {
+    return;
+  }
+
+  channel.sink.add([attackingPlayerId]);
 }

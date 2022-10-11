@@ -18,4 +18,7 @@ final router = Router()
   ..get(Endpoint.hitWs, webSocketHandler(hitSocketHandler))
   ..get(Endpoint.cooldownWsTemplate, (Request request, String id) {
     return webSocketHandler(cooldownSocketHandler(id))(request);
+  })
+  ..get(Endpoint.deadWsTemplate, (Request request, String id) {
+    return webSocketHandler(deadSocketHandler(id))(request);
   });

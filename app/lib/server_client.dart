@@ -34,6 +34,12 @@ class ServerClient implements Disposable {
         ),
       );
 
+  late final deadChannel = id$.where((id) => id != null).map(
+        (id) => WebSocketChannel.connect(
+          Uri.parse('ws://$host:$port${Endpoint.deadWs(id!)}'),
+        ),
+      );
+
   late final Stream<dynamic> positionsData$ =
       rawDataChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersData$ =
@@ -46,8 +52,12 @@ class ServerClient implements Disposable {
   late final Stream<dynamic> cooldownData$ = cooldownChannel
       .switchMap((channel) => channel.stream)
       .asBroadcastStream();
+  late final Stream<dynamic> deadData$ =
+      deadChannel.switchMap((channel) => channel.stream).asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
+
+  final nick$ = ReplaySubject<String>(maxSize: 1);
 
   void dash() {
     final data = <int>[
@@ -95,11 +105,17 @@ class ServerClient implements Disposable {
   */
   Future<int> createPlayer(String nick) async {
     final dto = await createPlayer$(_guid, nick);
+    nick$.add(nick);
 
     final id = dto.id;
 
     id$.add(id);
     return id;
+  }
+
+  Future<int> backToTheGame() async {
+    final nick = await nick$.first;
+    return await createPlayer(nick);
   }
 
   Future<void> leaveGame() => leaveGame$(_guid).then((_) => id$.add(null));
@@ -126,6 +142,9 @@ class ServerClient implements Disposable {
 
   late Stream<CooldownDto> cooldown$ =
       cooldownData$.asBroadcastStream().map((data) => _dataToCooldown(data));
+
+  late Stream<int> dead$ =
+      deadData$.asBroadcastStream().map((data) => _dataToDead(data));
 
   /*
   * Converters
@@ -171,6 +190,11 @@ class ServerClient implements Disposable {
   CooldownDto _dataToCooldown(List<int> data) {
     final dto = CooldownDto.fromData(data);
     return dto;
+  }
+
+  int _dataToDead(List<int> data) {
+    final attackingPlayerId = data[0];
+    return attackingPlayerId;
   }
 
   @override

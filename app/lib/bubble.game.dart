@@ -16,7 +16,6 @@ class BubbleGame extends FlameGame
     with HasDraggables, KeyboardEvents, TapDetector {
   final String gameId;
   final players = <int, PlayerComponent>{};
-  final nick = 'dzziwny';
   final ServerClient client = GetIt.I<ServerClient>();
 
   late final StreamSubscription positionsSubscription;
@@ -79,6 +78,33 @@ class BubbleGame extends FlameGame
       }
 
       player.setHp(dto.hp);
+    }).listen(null);
+
+    client.dead$.map((id) {
+      final player = players[id];
+      final context = buildContext;
+      if (player == null || context == null) {
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('You have been killed by ${player.nick}.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Back to the game.'),
+                onPressed: () {
+                  client.backToTheGame();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }).listen(null);
   }
 
@@ -170,7 +196,7 @@ class BubbleGame extends FlameGame
         return;
       }
 
-      final component = PlayerComponent(nick: nick);
+      final component = PlayerComponent(nick: player.nick);
       this.players[player.id] = component;
       add(component);
     }

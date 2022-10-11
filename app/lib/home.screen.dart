@@ -9,10 +9,10 @@ import 'package:get_it/get_it.dart';
 final game = BubbleGame(gameId: '');
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
-
   final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
