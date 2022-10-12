@@ -1,10 +1,14 @@
-import 'package:bubble_fight/bubble.game.dart';
+import 'package:bubble_fight/ui/bubble.game.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
+import 'debug_info.dart';
+import 'leave_button.dart';
+import 'nick_window.dart';
 
 final game = BubbleGame(gameId: '');
 
@@ -43,38 +47,9 @@ class HomeScreen extends StatelessWidget {
                             height: 200.0,
                             color: Colors.white,
                             child: Center(
-                              child: StatefulBuilder(builder: (_, setState) {
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextField(
-                                      controller: nickController,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Nick',
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 2.0,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
-                                      onChanged: (value) => setState(() {}),
-                                      maxLength: 10,
-                                    ),
-                                    const SizedBox(height: 20.0),
-                                    MaterialButton(
-                                      color: Colors.blue,
-                                      onPressed: nickController.text == ''
-                                          ? null
-                                          : () {
-                                              client.createPlayer(
-                                                  nickController.text);
-                                            },
-                                      child: const Text('Enter the game'),
-                                    ),
-                                  ],
-                                );
-                              }),
+                              child: NickWindow(
+                                  nickController: nickController,
+                                  client: client),
                             ),
                           ),
                         );
@@ -83,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.all(8.0),
                       alignment: Alignment.topLeft,
-                      child: _LeaveButton(client: client),
+                      child: LeaveButton(client: client),
                     ),
                     Positioned(
                       bottom: 20.0,
@@ -145,67 +120,6 @@ class HomeScreen extends StatelessWidget {
               child: DebugInfo(),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class DebugInfo extends StatelessWidget {
-  final _client = GetIt.I<ServerClient>();
-
-  DebugInfo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: StreamBuilder<List<Player>>(
-          stream: _client.players$(),
-          builder: (context, snapshot) {
-            final players = snapshot.data;
-            if (players == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Players:',
-                  style: TextStyle(color: Colors.white),
-                ),
-                for (final player in players)
-                  Text(
-                    player.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-              ],
-            );
-          }),
-    );
-  }
-}
-
-class _LeaveButton extends StatelessWidget {
-  const _LeaveButton({
-    Key? key,
-    required this.client,
-  }) : super(key: key);
-
-  final ServerClient client;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        client.leaveGame();
-      },
-      icon: const Icon(Icons.exit_to_app),
-      label: const Text('Leave'),
-      style: const ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(Colors.red),
       ),
     );
   }
