@@ -39,13 +39,37 @@ int createPlayer(CreatePlayerDtoRequest dto) {
   playerSpeed[id] = normalSpeed;
   playerHp[id] = 100;
 
-  final model = Player(id: id, nick: dto.nick);
-  players[id] = model;
+  final team = _selectTeam();
+  final player = Player(
+    id: id,
+    nick: dto.nick,
+    team: team,
+  );
+
+  teams[team]?[id] = player;
+
+  players[id] = player;
 
   guids[guid] = id;
-  _sharePlayers();
+  sharePlayers();
   _sharePlayerCreated(id);
+  shareTeams();
   return id;
+}
+
+Team _selectTeam() {
+  final material = materialTeam.length;
+  final cupertino = cupertinoTeam.length;
+  final fluent = fluentTeam.length;
+  if (fluent <= cupertino && fluent <= material) {
+    return Team.fluent;
+  }
+
+  if (cupertino <= material && cupertino <= fluent) {
+    return Team.cupertino;
+  }
+
+  return Team.material;
 }
 
 void _sharePlayerCreated(int id) {
@@ -58,17 +82,11 @@ void _sharePlayerCreated(int id) {
     id: id,
     nick: player.nick,
     type: PlayerChangeType.added,
+    team: player.team,
   );
 
   final data = jsonEncode(dto);
   for (final channel in playerChangeWSChannels) {
-    channel.sink.add(data);
-  }
-}
-
-void _sharePlayers() {
-  for (final channel in playersWSChannels) {
-    final data = jsonEncode(players.values.toList());
     channel.sink.add(data);
   }
 }

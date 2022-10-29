@@ -1,14 +1,10 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'package:core/src/model/_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'player_change.dto.freezed.dart';
 part 'player_change.dto.g.dart';
-
-enum PlayerChangeType {
-  added,
-  removed,
-}
 
 @freezed
 class PlayerChangeDto with _$PlayerChangeDto {
@@ -17,6 +13,7 @@ class PlayerChangeDto with _$PlayerChangeDto {
     required int id,
     required PlayerChangeType type,
     required String nick,
+    required Team team,
   }) = _PlayerChangeDto;
 
   factory PlayerChangeDto.fromJson(Map<String, dynamic> json) =>

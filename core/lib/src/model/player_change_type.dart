@@ -1,0 +1,4 @@
+enum PlayerChangeType {
+  added,
+  removed,
+}

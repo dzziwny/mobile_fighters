@@ -28,17 +28,33 @@ class ServerClient implements Disposable {
     Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
   );
 
-  late final cooldownChannel = id$.where((id) => id != null).map(
+  late final cooldownChannel = id$
+      .where((id) => id != null)
+      .map(
         (id) => WebSocketChannel.connect(
           Uri.parse('ws://$host:$port${Endpoint.cooldownWs(id!)}'),
         ),
-      );
+      )
+      .shareReplay(maxSize: 1);
 
-  late final deadChannel = id$.where((id) => id != null).map(
+  late final deadChannel = id$
+      .where((id) => id != null)
+      .map(
         (id) => WebSocketChannel.connect(
           Uri.parse('ws://$host:$port${Endpoint.deadWs(id!)}'),
         ),
-      );
+      )
+      .shareReplay(maxSize: 1);
+
+  // TODO add .shareReplay(maxSize: 1); to others
+  late final selectTeamChannel = id$
+      .where((id) => id != null)
+      .map(
+        (id) => WebSocketChannel.connect(
+          Uri.parse('ws://$host:$port${Endpoint.selectTeamWs(id!)}'),
+        ),
+      )
+      .shareReplay(maxSize: 1);
 
   late final Stream<dynamic> positionsData$ =
       rawDataChannel.stream.asBroadcastStream();
@@ -54,6 +70,9 @@ class ServerClient implements Disposable {
       .asBroadcastStream();
   late final Stream<dynamic> deadData$ =
       deadChannel.switchMap((channel) => channel.stream).asBroadcastStream();
+  late final Stream<dynamic> teamsData$ = selectTeamChannel
+      .switchMap((channel) => channel.stream)
+      .asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
@@ -146,6 +165,10 @@ class ServerClient implements Disposable {
   late Stream<int> dead$ =
       deadData$.asBroadcastStream().map((data) => _dataToDead(data));
 
+  late Stream<TeamsDto> teams$ = teamsData$.asBroadcastStream().map((data) {
+    return _dataToTeams(data);
+  });
+
   /*
   * Converters
   */
@@ -198,10 +221,49 @@ class ServerClient implements Disposable {
     return attackingPlayerId;
   }
 
+  TeamsDto _dataToTeams(data) {
+    final teams = TeamsDto.fromJson(jsonDecode(data));
+    return teams;
+  }
+
   @override
-  FutureOr onDispose() {
+  Future onDispose() async {
     rawDataChannel.sink.close(status.goingAway);
     playersChannel.sink.close(status.goingAway);
     addOrRemovePlayerChannel.sink.close(status.goingAway);
+    attackChannel.sink.close(status.goingAway);
+    hitChannel.sink.close(status.goingAway);
+  }
+
+  Stream<bool> isSelectingTeam$() {
+    return Stream.value(true);
+  }
+
+  Stream<List<String>> fluentTeam$() {
+    return teams$.map((teams) => teams.fluent);
+  }
+
+  Stream<List<String>> cupertinoTeam$() {
+    return teams$.map((teams) => teams.cupertino);
+  }
+
+  Stream<List<String>> materialTeam$() {
+    return teams$.map((teams) => teams.material);
+  }
+
+  Stream<List<String>> spectatorsTeam$() {
+    return teams$.map((teams) => teams.spectators);
+  }
+
+  Future<void> selectBlueTeam() async {
+    final channel = await selectTeamChannel.first;
+    final data = [0, 0];
+    channel.sink.add(data);
+  }
+
+  Future<void> selectRedTeam() async {
+    final channel = await selectTeamChannel.first;
+    final data = [0, 1];
+    channel.sink.add(data);
   }
 }

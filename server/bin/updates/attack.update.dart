@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-
-import 'package:core/core.dart';
 
 import '../setup.dart';
 
@@ -95,31 +92,14 @@ void drawPlayerHit(int playerId, int hp) {
 void handlePlayerDead(int playerId, int attackingPlayerId) {
   playerPositions.remove(playerId);
   playerKnobs.remove(playerId);
-  players.remove(playerId);
+  final player = players.remove(playerId);
 
-  _sharePlayers();
-  _sharePlayerRemoved(playerId);
+  sharePlayers();
+  if (player != null) {
+    sharePlayerRemoved(player);
+  }
+
   _sharePlayerDead(playerId, attackingPlayerId);
-}
-
-void _sharePlayerRemoved(int id) {
-  final dto = PlayerChangeDto(
-    id: id,
-    nick: '',
-    type: PlayerChangeType.removed,
-  );
-
-  final data = jsonEncode(dto);
-  for (final channel in playerChangeWSChannels) {
-    channel.sink.add(data);
-  }
-}
-
-void _sharePlayers() {
-  for (final channel in playersWSChannels) {
-    final data = jsonEncode(players.values.toList());
-    channel.sink.add(data);
-  }
 }
 
 void _sharePlayerDead(int playerId, int attackingPlayerId) {

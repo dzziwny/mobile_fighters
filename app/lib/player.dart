@@ -1,6 +1,7 @@
 import 'dart:async' as async;
 import 'dart:math';
 
+import 'package:core/core.dart';
 import 'package:flame/components.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/foundation.dart';
@@ -9,23 +10,33 @@ import 'package:rive/rive.dart';
 
 class PlayerController {}
 
+final _teamsColors = {
+  Team.material: Colors.green,
+  Team.cupertino: Colors.grey,
+  Team.fluent: Colors.blue,
+};
+
 class PlayerComponent extends PositionComponent {
   final String nick;
+  final Team team;
   late final Future<PlayerRiveComponent> rivePlayer;
   late final Future<HpIndicatorComponent> hpIndicator;
-  final paint = TextPaint(
-    style: const TextStyle(
-      fontSize: 20.0,
-      fontFamily: 'Awesome Font',
-      color: Colors.white,
-    ),
-  );
+  late final TextPaint paint;
 
   double _angle = 0.0;
 
   PlayerComponent({
     required this.nick,
+    required this.team,
   }) {
+    paint = TextPaint(
+      style: TextStyle(
+        fontSize: 20.0,
+        fontFamily: 'Awesome Font',
+        color: _teamsColors[team],
+      ),
+    );
+
     rivePlayer = PlayerRiveComponent.create(nick);
     hpIndicator = HpIndicatorComponent.create();
   }

@@ -46,8 +46,7 @@ class BubbleGame extends FlameGame
           if (players[dto.id] != null) {
             return;
           }
-          final nick = dto.nick;
-          final player = PlayerComponent(nick: nick);
+          final player = PlayerComponent(nick: dto.nick, team: dto.team);
           players[dto.id] = player;
           add(player);
           break;
@@ -195,7 +194,7 @@ class BubbleGame extends FlameGame
         return;
       }
 
-      final component = PlayerComponent(nick: player.nick);
+      final component = PlayerComponent(nick: player.nick, team: player.team);
       this.players[player.id] = component;
       add(component);
     }

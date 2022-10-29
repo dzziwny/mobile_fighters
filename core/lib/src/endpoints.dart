@@ -13,4 +13,8 @@ class Endpoint {
   static cooldownWs(int playerId) => '/cooldownWs/ws/$playerId';
   static const deadWsTemplate = '/deadWs/ws/<id>';
   static deadWs(int playerId) => '/deadWs/ws/$playerId';
+  static const selectTeamWsTemplate = '/selectTeamWs/ws/<id>';
+  static selectTeamWs(int playerId) => '/selectTeamWs/ws/$playerId';
+  static const gamePhaseWsTemplate = '/gamePhaseWs/ws/<id>';
+  static gamePhaseWs(int playerId) => '/gamePhaseWs/ws/$playerId';
 }

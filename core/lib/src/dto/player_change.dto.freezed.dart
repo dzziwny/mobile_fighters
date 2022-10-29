@@ -23,6 +23,7 @@ mixin _$PlayerChangeDto {
   int get id => throw _privateConstructorUsedError;
   PlayerChangeType get type => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
+  Team get team => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $PlayerChangeDtoCopyWith<$Res> {
   factory $PlayerChangeDtoCopyWith(
           PlayerChangeDto value, $Res Function(PlayerChangeDto) then) =
       _$PlayerChangeDtoCopyWithImpl<$Res>;
-  $Res call({int id, PlayerChangeType type, String nick});
+  $Res call({int id, PlayerChangeType type, String nick, Team team});
 }
 
 /// @nodoc
@@ -52,6 +53,7 @@ class _$PlayerChangeDtoCopyWithImpl<$Res>
     Object? id = freezed,
     Object? type = freezed,
     Object? nick = freezed,
+    Object? team = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -66,6 +68,10 @@ class _$PlayerChangeDtoCopyWithImpl<$Res>
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
+      team: team == freezed
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
     ));
   }
 }
@@ -77,7 +83,7 @@ abstract class _$$_PlayerChangeDtoCopyWith<$Res>
           _$_PlayerChangeDto value, $Res Function(_$_PlayerChangeDto) then) =
       __$$_PlayerChangeDtoCopyWithImpl<$Res>;
   @override
-  $Res call({int id, PlayerChangeType type, String nick});
+  $Res call({int id, PlayerChangeType type, String nick, Team team});
 }
 
 /// @nodoc
@@ -96,6 +102,7 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
     Object? id = freezed,
     Object? type = freezed,
     Object? nick = freezed,
+    Object? team = freezed,
   }) {
     return _then(_$_PlayerChangeDto(
       id: id == freezed
@@ -110,6 +117,10 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
+      team: team == freezed
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
     ));
   }
 }
@@ -119,7 +130,10 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_PlayerChangeDto implements _PlayerChangeDto {
   const _$_PlayerChangeDto(
-      {required this.id, required this.type, required this.nick});
+      {required this.id,
+      required this.type,
+      required this.nick,
+      required this.team});
 
   factory _$_PlayerChangeDto.fromJson(Map<String, dynamic> json) =>
       _$$_PlayerChangeDtoFromJson(json);
@@ -130,10 +144,12 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
   final PlayerChangeType type;
   @override
   final String nick;
+  @override
+  final Team team;
 
   @override
   String toString() {
-    return 'PlayerChangeDto(id: $id, type: $type, nick: $nick)';
+    return 'PlayerChangeDto(id: $id, type: $type, nick: $nick, team: $team)';
   }
 
   @override
@@ -143,7 +159,8 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
             other is _$_PlayerChangeDto &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.type, type) &&
-            const DeepCollectionEquality().equals(other.nick, nick));
+            const DeepCollectionEquality().equals(other.nick, nick) &&
+            const DeepCollectionEquality().equals(other.team, team));
   }
 
   @JsonKey(ignore: true)
@@ -152,7 +169,8 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(type),
-      const DeepCollectionEquality().hash(nick));
+      const DeepCollectionEquality().hash(nick),
+      const DeepCollectionEquality().hash(team));
 
   @JsonKey(ignore: true)
   @override
@@ -171,7 +189,8 @@ abstract class _PlayerChangeDto implements PlayerChangeDto {
   const factory _PlayerChangeDto(
       {required final int id,
       required final PlayerChangeType type,
-      required final String nick}) = _$_PlayerChangeDto;
+      required final String nick,
+      required final Team team}) = _$_PlayerChangeDto;
 
   factory _PlayerChangeDto.fromJson(Map<String, dynamic> json) =
       _$_PlayerChangeDto.fromJson;
@@ -182,6 +201,8 @@ abstract class _PlayerChangeDto implements PlayerChangeDto {
   PlayerChangeType get type;
   @override
   String get nick;
+  @override
+  Team get team;
   @override
   @JsonKey(ignore: true)
   _$$_PlayerChangeDtoCopyWith<_$_PlayerChangeDto> get copyWith =>

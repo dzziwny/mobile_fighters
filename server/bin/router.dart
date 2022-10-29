@@ -1,9 +1,9 @@
+import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 
 import 'handler/_handler.dart';
-import 'package:core/core.dart';
 
 final router = Router()
   ..post(Endpoint.createPlayer, createPlayerHandler)
@@ -21,4 +21,8 @@ final router = Router()
   })
   ..get(Endpoint.deadWsTemplate, (Request request, String id) {
     return webSocketHandler(deadSocketHandler(id))(request);
-  });
+  })
+  ..get(Endpoint.selectTeamWsTemplate, (Request request, String id) {
+    return webSocketHandler(selectingTeamSocketHandler(id))(request);
+  })
+  ..get(Endpoint.gamePhaseWsTemplate, gamePhaseSocketHandler);

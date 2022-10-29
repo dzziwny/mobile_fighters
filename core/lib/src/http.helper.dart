@@ -6,7 +6,8 @@ import 'endpoints.dart';
 import 'model/_model.dart';
 
 final port = '8080';
-final host = '192.168.0.171';
+// final host = '192.168.0.171';
+final host = '192.168.1.25';
 final base = 'http://$host:$port';
 
 Future<CreatePlayerDtoResponse> createPlayer$(int guid, String nick) async {

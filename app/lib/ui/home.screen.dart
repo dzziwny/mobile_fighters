@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'debug_info.dart';
 import 'leave_button.dart';
 import 'nick_window.dart';
+import 'selecting_team_table.dart';
 
 final game = BubbleGame(gameId: '');
 
@@ -33,6 +34,15 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     GameWidget(
                       game: game,
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: SizedBox(
+                        width: 200.0,
+                        height: 200.0,
+                        child: FittedBox(child: SelectingTeamTable()),
+                      ),
                     ),
                     StreamBuilder<bool>(
                       stream: client.isInGame(),
@@ -113,12 +123,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          if (kDebugMode)
-            SizedBox(
-              width: 200.0,
-              height: double.maxFinite,
-              child: DebugInfo(),
-            ),
         ],
       ),
     );

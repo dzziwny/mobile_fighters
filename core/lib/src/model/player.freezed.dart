@@ -22,6 +22,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 mixin _$Player {
   int get id => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
+  Team get team => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -32,7 +33,7 @@ mixin _$Player {
 abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res>;
-  $Res call({int id, String nick});
+  $Res call({int id, String nick, Team team});
 }
 
 /// @nodoc
@@ -47,6 +48,7 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? nick = freezed,
+    Object? team = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -57,6 +59,10 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
+      team: team == freezed
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
     ));
   }
 }
@@ -66,7 +72,7 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
       __$$_PlayerCopyWithImpl<$Res>;
   @override
-  $Res call({int id, String nick});
+  $Res call({int id, String nick, Team team});
 }
 
 /// @nodoc
@@ -82,6 +88,7 @@ class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? nick = freezed,
+    Object? team = freezed,
   }) {
     return _then(_$_Player(
       id: id == freezed
@@ -92,6 +99,10 @@ class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
+      team: team == freezed
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as Team,
     ));
   }
 }
@@ -100,7 +111,7 @@ class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$_Player implements _Player {
-  const _$_Player({required this.id, required this.nick});
+  const _$_Player({required this.id, required this.nick, required this.team});
 
   factory _$_Player.fromJson(Map<String, dynamic> json) =>
       _$$_PlayerFromJson(json);
@@ -109,10 +120,12 @@ class _$_Player implements _Player {
   final int id;
   @override
   final String nick;
+  @override
+  final Team team;
 
   @override
   String toString() {
-    return 'Player(id: $id, nick: $nick)';
+    return 'Player(id: $id, nick: $nick, team: $team)';
   }
 
   @override
@@ -121,7 +134,8 @@ class _$_Player implements _Player {
         (other.runtimeType == runtimeType &&
             other is _$_Player &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.nick, nick));
+            const DeepCollectionEquality().equals(other.nick, nick) &&
+            const DeepCollectionEquality().equals(other.team, team));
   }
 
   @JsonKey(ignore: true)
@@ -129,7 +143,8 @@ class _$_Player implements _Player {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(nick));
+      const DeepCollectionEquality().hash(nick),
+      const DeepCollectionEquality().hash(team));
 
   @JsonKey(ignore: true)
   @override
@@ -145,8 +160,10 @@ class _$_Player implements _Player {
 }
 
 abstract class _Player implements Player {
-  const factory _Player({required final int id, required final String nick}) =
-      _$_Player;
+  const factory _Player(
+      {required final int id,
+      required final String nick,
+      required final Team team}) = _$_Player;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$_Player.fromJson;
 
@@ -154,6 +171,8 @@ abstract class _Player implements Player {
   int get id;
   @override
   String get nick;
+  @override
+  Team get team;
   @override
   @JsonKey(ignore: true)
   _$$_PlayerCopyWith<_$_Player> get copyWith =>
