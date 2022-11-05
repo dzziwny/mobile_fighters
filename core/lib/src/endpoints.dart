@@ -5,6 +5,7 @@ class Endpoint {
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
   static const rawDataWs = '/positions/ws';
+  static const rawDataWsWeb = '/positions/web/ws';
   static const playersWs = '/players/ws';
   static const playerChangeWs = '/playerChange/ws';
   static const attackWs = '/attack/ws';

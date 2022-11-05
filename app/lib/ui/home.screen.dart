@@ -1,20 +1,20 @@
-import 'package:bubble_fight/ui/bubble.game.dart';
+// import 'package:bubble_fight/ui/bubble.game.dart';
 import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:core/core.dart';
-import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flame/game.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import 'debug_info.dart';
+// import 'debug_info.dart';
 import 'leave_button.dart';
 import 'nick_window.dart';
 import 'selecting_team_table.dart';
 
-final game = BubbleGame(gameId: '');
+// final game = BubbleGame(gameId: '');
 
 class HomeScreen extends StatelessWidget {
-  final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
 
   HomeScreen({super.key});
@@ -32,8 +32,10 @@ class HomeScreen extends StatelessWidget {
                 height: 600,
                 child: Stack(
                   children: [
-                    GameWidget(
-                      game: game,
+                    // GameWidget(game: game),
+                    Container(
+                      margin: const EdgeInsets.all(24.0),
+                      child: const BubbleGameV2(),
                     ),
                     Positioned(
                       right: 0,
@@ -56,11 +58,7 @@ class HomeScreen extends StatelessWidget {
                             width: 200.0,
                             height: 200.0,
                             color: Colors.white,
-                            child: Center(
-                              child: NickWindow(
-                                  nickController: nickController,
-                                  client: client),
-                            ),
+                            child: const Center(child: NickWindow()),
                           ),
                         );
                       },

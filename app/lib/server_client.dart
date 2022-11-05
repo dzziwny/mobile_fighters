@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
@@ -13,7 +13,8 @@ class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
   final rawDataChannel = WebSocketChannel.connect(
-    Uri.parse('ws://$host:$port${Endpoint.rawDataWs}'),
+    Uri.parse(
+        'ws://$host:$port${kIsWeb ? Endpoint.rawDataWsWeb : Endpoint.rawDataWs}'),
   );
   final playersChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playersWs}'),

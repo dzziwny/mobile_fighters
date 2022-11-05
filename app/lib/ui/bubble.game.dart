@@ -114,10 +114,6 @@ class BubbleGame extends FlameGame
     await super.onLoad();
 
     await Future.wait([
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.portraitDown,
-      ]),
       initializeBoard()
           .then((_) => initializePlayers())
           .then((_) => initializeJoystic()),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 import 'router.dart';
 import 'setup.dart';
@@ -19,6 +20,7 @@ void main(List<String> args) async {
       // .addMiddleware(
       //   logRequests(),
       // )
+      .addMiddleware(corsHeaders())
       .addHandler(router);
 
   final port = int.parse(Platform.environment['PORT'] ?? '8080');

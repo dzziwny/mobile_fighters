@@ -19,6 +19,46 @@
             "cwd": "${workspaceFolder}/server",
             "preLaunchTask": "killProcessOnPort8080"
         },
+        {
+            "name": "ONEPLUS A6000",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "0bf579b7",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
+        {
+            "name": "VOG L29",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "EHT7N19515004813",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
+        {
+            "name": "iPhone 6s",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "1d7c436495647f004145cfb02bfa09b547684a0f",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
+        {
+            "name": "iPhone SE",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "00008030-000244823CDA402E",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
+        {
+            "name": "chrome",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "chrome",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
         
     ],
     "compounds": [
@@ -26,6 +66,16 @@
           "name": "app/server",
           "configurations": ["server", "app"],
           "stopAll": true
-        }
+        },
+        {
+          "name": "all",
+          "configurations": ["server", "chrome","iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29"],
+          "stopAll": true
+        },
+        {
+          "name": "all apps",
+          "configurations": ["chrome", "iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29"],
+          "stopAll": true
+        },
       ]
 }

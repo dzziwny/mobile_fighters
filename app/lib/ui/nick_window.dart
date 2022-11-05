@@ -1,15 +1,21 @@
 import 'package:bubble_fight/server_client.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-class NickWindow extends StatelessWidget {
+class NickWindow extends StatefulWidget {
   const NickWindow({
     Key? key,
-    required this.nickController,
-    required this.client,
   }) : super(key: key);
 
-  final TextEditingController nickController;
-  final ServerClient client;
+  @override
+  State<NickWindow> createState() => _NickWindowState();
+}
+
+class _NickWindowState extends State<NickWindow> {
+  final nickController =
+      TextEditingController(text: defaultTargetPlatform.name);
+  final client = GetIt.I<ServerClient>();
 
   @override
   Widget build(BuildContext context) {

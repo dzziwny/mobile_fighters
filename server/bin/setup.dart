@@ -85,9 +85,9 @@ const int sliceTime = 5000;
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
 const double maxX = 750;
-const double minX = 50;
+const double minX = 0;
 const double maxY = 550;
-const double minY = 50;
+const double minY = 0;
 const int attackCooldownSesconds = 2;
 const int dashCooldownSesconds = 1;
 

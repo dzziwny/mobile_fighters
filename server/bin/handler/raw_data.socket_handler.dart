@@ -7,21 +7,36 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
 
-void rawDataSocketHandler(WebSocketChannel channel) {
+void rawDataSocketHandlerWeb(WebSocketChannel channel) {
   rawDataWSChannels.add(channel);
 
   channel.stream.listen((data) {
-    switch (data[0]) {
-      case 0:
-        updateKnob(data);
-        break;
-      case 1:
-        dash(data);
-        break;
-      default:
-        assert(false);
+    if (data is! String) {
+      throw Exception('unknown data');
     }
+
+    final intData = data.split(',').map((e) => int.parse(e)).toList();
+    return _handler(intData);
   });
+}
+
+void rawDataSocketHandler(WebSocketChannel channel) {
+  rawDataWSChannels.add(channel);
+
+  channel.stream.listen((data) => _handler(data));
+}
+
+void _handler(List<int> data) {
+  switch (data[0]) {
+    case 0:
+      updateKnob(data);
+      break;
+    case 1:
+      dash(data);
+      break;
+    default:
+      assert(false);
+  }
 }
 
 void updateKnob(List<int> data) {
