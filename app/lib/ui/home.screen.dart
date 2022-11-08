@@ -12,7 +12,7 @@ import 'leave_button.dart';
 import 'nick_window.dart';
 import 'selecting_team_table.dart';
 
-// final game = BubbleGame(gameId: '');
+// final game = BubbleFlameGame(gameId: '');
 
 class HomeScreen extends StatelessWidget {
   final client = GetIt.I<ServerClient>();
@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.black,
       body: Row(
         children: [
           Expanded(
@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                     // GameWidget(game: game),
                     Container(
                       margin: const EdgeInsets.all(24.0),
-                      child: const BubbleGameV2(),
+                      child: const BubbleGame(),
                     ),
                     Positioned(
                       right: 0,

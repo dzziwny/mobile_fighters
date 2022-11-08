@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-class BubbleGame extends FlameGame
+class BubbleFlameGame extends FlameGame
     with HasDraggables, KeyboardEvents, TapDetector {
   final String gameId;
   final players = <int, PlayerComponent>{};
@@ -27,7 +27,7 @@ class BubbleGame extends FlameGame
   bool isAttackCooldown = false;
   bool isDashCooldown = false;
 
-  BubbleGame({
+  BubbleFlameGame({
     required this.gameId,
   }) {
     positionsSubscription = client.position$().map((Position position) {
