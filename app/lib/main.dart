@@ -16,7 +16,27 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(MaterialApp(
-    home: HomeScreen(),
-  ));
+  runApp(const App());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = ColorScheme.fromSeed(
+      seedColor: Colors.amber,
+      brightness: Brightness.dark,
+    );
+
+    final base = ThemeData.from(
+      colorScheme: scheme,
+      useMaterial3: true,
+    );
+
+    return MaterialApp(
+      theme: base,
+      home: HomeScreen(),
+    );
+  }
 }

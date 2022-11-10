@@ -11,18 +11,49 @@ class PlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
-      height: 30.0,
-      width: 30.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: 10.0,
-            width: 10.0,
-            color: Colors.white,
+      height: 144.0,
+      width: 89.0,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        //   border: Border.all(width: 4.0),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: FittedBox(
+        child: SizedBox(
+          height: 144.0 * 3,
+          width: 89.0 * 3,
+          child: Scaffold(
+            appBar: AppBar(
+              elevation: 1.0,
+              leading: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.menu),
+              ),
+            ),
+            // body: Column(),
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.mail),
+                  label: 'Mail',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble_outline),
+                  label: 'Chat',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people_outline),
+                  label: 'Rooms',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.videocam_outlined),
+                  label: 'Meet',
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

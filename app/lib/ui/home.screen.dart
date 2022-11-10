@@ -10,6 +10,9 @@ import 'package:get_it/get_it.dart';
 // import 'debug_info.dart';
 import 'leave_button.dart';
 import 'nick_window.dart';
+import 'nick_window_layer.dart';
+import 'rail.dart';
+import 'selecting_table_layer.dart';
 import 'selecting_team_table.dart';
 
 // final game = BubbleFlameGame(gameId: '');
@@ -25,6 +28,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       body: Row(
         children: [
+          const Rail(),
           Expanded(
             child: FittedBox(
               child: SizedBox(
@@ -37,32 +41,8 @@ class HomeScreen extends StatelessWidget {
                       margin: const EdgeInsets.all(24.0),
                       child: const BubbleGame(),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: SizedBox(
-                        width: 200.0,
-                        height: 200.0,
-                        child: FittedBox(child: SelectingTeamTable()),
-                      ),
-                    ),
-                    StreamBuilder<bool>(
-                      stream: client.isInGame(),
-                      builder: (context, snapshot) {
-                        final isInGame = snapshot.data;
-                        if (isInGame == true) {
-                          return const SizedBox();
-                        }
-                        return Center(
-                          child: Container(
-                            width: 200.0,
-                            height: 200.0,
-                            color: Colors.white,
-                            child: const Center(child: NickWindow()),
-                          ),
-                        );
-                      },
-                    ),
+                    const SelectingTableLayer(),
+                    NickWindowLayer(),
                     Container(
                       margin: const EdgeInsets.all(8.0),
                       alignment: Alignment.topLeft,

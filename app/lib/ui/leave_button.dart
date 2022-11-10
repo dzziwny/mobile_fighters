@@ -17,9 +17,6 @@ class LeaveButton extends StatelessWidget {
       },
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Leave'),
-      style: const ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(Colors.red),
-      ),
     );
   }
 }
