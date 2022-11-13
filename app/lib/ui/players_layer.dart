@@ -1,4 +1,5 @@
 import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/ui/google_pixel_7.dart';
 import 'package:bubble_fight/ui/player_widget.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +34,16 @@ class PlayersLayer extends StatelessWidget {
                     }
 
                     return Positioned(
-                      top: position.y - 15.0,
-                      left: position.x - 15.0,
+                      top: position.y - 72.0,
+                      left: position.x - 72.0,
                       child: Transform.rotate(
                         angle: position.angle,
-                        child: PlayerWidget(player: player),
+                        child: SizedBox(
+                          height: 144.0,
+                          width: 89.0,
+                          // child: PlayerWidget(player: player),
+                          child: FittedBox(child: GooglePixel7()),
+                        ),
                       ),
                     );
                   },

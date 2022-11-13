@@ -25,10 +25,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Row(
         children: [
-          const Rail(),
+          Rail(),
           Expanded(
             child: FittedBox(
               child: SizedBox(
@@ -37,17 +36,14 @@ class HomeScreen extends StatelessWidget {
                 child: Stack(
                   children: [
                     // GameWidget(game: game),
-                    Container(
-                      margin: const EdgeInsets.all(24.0),
-                      child: const BubbleGame(),
-                    ),
-                    const SelectingTableLayer(),
+                    const BubbleGame(),
+                    // const SelectingTableLayer(),
                     NickWindowLayer(),
-                    Container(
-                      margin: const EdgeInsets.all(8.0),
-                      alignment: Alignment.topLeft,
-                      child: LeaveButton(client: client),
-                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.all(8.0),
+                    //   alignment: Alignment.topLeft,
+                    //   child: LeaveButton(client: client),
+                    // ),
                     Positioned(
                       bottom: 20.0,
                       right: 20.0,

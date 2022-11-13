@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import 'theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -24,18 +26,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: Colors.amber,
-      brightness: Brightness.dark,
-    );
-
-    final base = ThemeData.from(
-      colorScheme: scheme,
-      useMaterial3: true,
-    );
-
     return MaterialApp(
-      theme: base,
+      theme: lightTheme(),
       home: HomeScreen(),
     );
   }

@@ -8,12 +8,12 @@ class BubbleGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(color: Colors.white),
+      // ),
       child: Stack(
         children: [
-          Container(color: Colors.grey),
+          // Container(color: Colors.grey),
           PlayersLayer(),
           const ControlsLayer(),
         ],

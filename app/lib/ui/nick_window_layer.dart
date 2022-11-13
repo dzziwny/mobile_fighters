@@ -20,13 +20,9 @@ class NickWindowLayer extends StatelessWidget {
         if (isInGame == true) {
           return const SizedBox();
         }
-        return Center(
-          child: Container(
-            width: 200.0,
-            height: 200.0,
-            color: Colors.white,
-            child: const Center(child: NickWindow()),
-          ),
+        return const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: NickWindow(),
         );
       },
     );

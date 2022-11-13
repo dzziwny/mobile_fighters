@@ -1,7 +1,13 @@
 import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/theme.dart';
+import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+
+import 'google_pixel_7.dart';
+import 'player_widget.dart';
 
 class NickWindow extends StatefulWidget {
   const NickWindow({
@@ -13,42 +19,123 @@ class NickWindow extends StatefulWidget {
 }
 
 class _NickWindowState extends State<NickWindow> {
-  final nickController =
-      TextEditingController(text: defaultTargetPlatform.name);
+  // final nickController = TextEditingController(
+  //   text: kDebugMode ? defaultTargetPlatform.name : null,
+  // );
+  final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(builder: (_, setState) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextField(
-            controller: nickController,
-            decoration: const InputDecoration(
-              labelText: 'Nick',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2.0,
-                  color: Colors.blue,
+    final theme = Theme.of(context);
+    return Card(
+      // can be used with joystic
+      // shape: CircleBorder(),
+      elevation: 2.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: nickController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nickname',
+                    counterText: '',
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) => setState(() {}),
+                  maxLength: 15,
                 ),
               ),
             ),
-            onChanged: (value) => setState(() {}),
-            maxLength: 10,
+            const SizedBox(height: 8.0),
+            Flexible(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Select a character'),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const FittedBox(child: GooglePixel7()),
+                            CharacterCard(
+                              name: 'Fluent',
+                              icon: SvgPicture.asset(
+                                'assets/material-design.svg',
+                              ),
+                              description: 'Description',
+                            ),
+                            CharacterCard(
+                              name: 'HIG',
+                              icon: SvgPicture.asset(
+                                'assets/material-design.svg',
+                              ),
+                              description: 'Description',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            ElevatedButton.icon(
+              label: const Text('Play'),
+              onPressed: nickController.text == ''
+                  ? null
+                  : () {
+                      client.createPlayer(nickController.text);
+                    },
+              icon: const Icon(Icons.play_arrow_rounded),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CharacterCard extends StatelessWidget {
+  const CharacterCard({
+    required this.name,
+    required this.icon,
+    required this.description,
+    Key? key,
+  }) : super(key: key);
+
+  final String name;
+  final Widget icon;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(name),
+              icon,
+              Text(description),
+            ],
           ),
-          const SizedBox(height: 20.0),
-          MaterialButton(
-            color: Colors.blue,
-            onPressed: nickController.text == ''
-                ? null
-                : () {
-                    client.createPlayer(nickController.text);
-                  },
-            child: const Text('Enter the game'),
-          ),
-        ],
-      );
-    });
+        ),
+      ),
+    );
   }
 }
