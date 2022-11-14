@@ -5,73 +5,127 @@ class GooglePixel7 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const deviceHeight = 720.0;
+    const deviceWidth = 324.0;
+    const deviceRadius = 16.0;
+
+    const frameThickness = 8.0;
+    const frameHeight = deviceHeight + frameThickness * 3;
+    const frameWidth = deviceWidth + frameThickness * 2;
+    const frameRadius = deviceRadius + frameThickness;
+    const frameColor = Color.fromARGB(255, 40, 40, 40);
+
+    const externalFrameThickness = 2.0;
+    const externalFrameHeight = frameHeight + externalFrameThickness * 2;
+    const externalFrameWidth = frameWidth + externalFrameThickness * 2;
+    const externalFrameRadius = frameRadius + externalFrameThickness;
+    const externalFrameColor = Colors.black;
+
     return Container(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
+      height: externalFrameHeight,
+      width: externalFrameWidth,
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(24.0)),
-        color: Colors.black,
-      ),
-      height: 740,
-      width: 344,
-      child: Center(
-        child: Container(
-          height: 720,
-          width: 324,
-          clipBehavior: Clip.hardEdge,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(14.0)),
-          ),
-          child: Stack(
-            children: [
-              Scaffold(
-                appBar: AppBar(
-                  leading: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.menu),
-                  ),
-                ),
-                body: Builder(builder: (context) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }),
-                bottomNavigationBar: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  items: const [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.mail),
-                      label: 'Mail',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.chat_bubble_outline),
-                      label: 'Chat',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.people_outline),
-                      label: 'Rooms',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.videocam_outlined),
-                      label: 'Meet',
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 10.0,
-                left: 155.0,
-                child: Container(
-                  width: 14,
-                  height: 14,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(externalFrameRadius),
+          topRight: Radius.circular(externalFrameRadius),
+          bottomRight: Radius.circular(externalFrameRadius),
+          bottomLeft: Radius.circular(externalFrameRadius * 1.2),
         ),
+        color: externalFrameColor,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(frameRadius)),
+              color: frameColor,
+            ),
+            height: frameHeight,
+            width: frameWidth,
+            child: Column(
+              children: [
+                const SizedBox(height: frameThickness),
+                Container(
+                  height: deviceHeight,
+                  width: deviceWidth,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(deviceRadius)),
+                  ),
+                  child: Stack(
+                    children: [
+                      Scaffold(
+                        appBar: AppBar(
+                          leading: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.menu),
+                          ),
+                        ),
+                        // body: Builder(builder: (context) {
+                        //   return const Center(
+                        //     child: CircularProgressIndicator(),
+                        //   );
+                        // }),
+                        bottomNavigationBar: Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            items: const [
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.mail),
+                                label: 'Mail',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.chat_bubble_outline),
+                                label: 'Chat',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.people_outline),
+                                label: 'Rooms',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.videocam_outlined),
+                                label: 'Meet',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 11.0,
+                        left: 155.0,
+                        child: Container(
+                          width: 19,
+                          height: 19,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(9.5)),
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 7.0,
+                        left: 162.0 - 40.5,
+                        child: Container(
+                          width: 2 * 40.5,
+                          height: 3,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(7.0)),
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

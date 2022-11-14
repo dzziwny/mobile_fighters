@@ -1,5 +1,6 @@
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/ui/google_pixel_7.dart';
+import 'package:bubble_fight/ui/iphone_14.dart';
 import 'package:bubble_fight/ui/player_widget.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class PlayersLayer extends StatelessWidget {
                           width: 89.0,
                           // child: PlayerWidget(player: player),
                           child: FittedBox(child: GooglePixel7()),
+                          // child: FittedBox(child: IPhone14()),
                         ),
                       ),
                     );

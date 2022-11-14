@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
 import 'google_pixel_7.dart';
+import 'iphone_14.dart';
 import 'player_widget.dart';
 
 class NickWindow extends StatefulWidget {
@@ -59,30 +60,24 @@ class _NickWindowState extends State<NickWindow> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Select a character'),
-                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.all(8.0),
+                      //   child: Text('Select a character'),
+                      // ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const FittedBox(child: GooglePixel7()),
-                            CharacterCard(
-                              name: 'Fluent',
-                              icon: SvgPicture.asset(
-                                'assets/material-design.svg',
-                              ),
-                              description: 'Description',
-                            ),
-                            CharacterCard(
-                              name: 'HIG',
-                              icon: SvgPicture.asset(
-                                'assets/material-design.svg',
-                              ),
-                              description: 'Description',
-                            ),
+                            const FittedBox(child: IPhone14()),
+                            // CharacterCard(
+                            //   name: 'HIG',
+                            //   icon: SvgPicture.asset(
+                            //     'assets/material-design.svg',
+                            //   ),
+                            //   description: 'Description',
+                            // ),
                           ],
                         ),
                       ),
