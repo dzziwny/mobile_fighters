@@ -1,3 +1,4 @@
+import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/theme.dart';
 import 'package:core/core.dart';
@@ -20,11 +21,12 @@ class NickWindow extends StatefulWidget {
 }
 
 class _NickWindowState extends State<NickWindow> {
-  // final nickController = TextEditingController(
-  //   text: kDebugMode ? defaultTargetPlatform.name : null,
-  // );
-  final nickController = TextEditingController();
+  final nickController = TextEditingController(
+    text: kDebugMode ? defaultTargetPlatform.name : null,
+  );
+  // final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
+  int selected = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,64 +39,99 @@ class _NickWindowState extends State<NickWindow> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: nickController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nickname',
-                    counterText: '',
-                    border: InputBorder.none,
+            Row(
+              children: [
+                Flexible(
+                  child: Card(
+                    child: SizedBox(
+                      width: 240.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TextField(
+                          controller: nickController,
+                          decoration: const InputDecoration(
+                            labelText: 'Type a nickname',
+                            counterText: '',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) => setState(() {}),
+                          maxLength: 15,
+                        ),
+                      ),
+                    ),
                   ),
-                  onChanged: (value) => setState(() {}),
-                  maxLength: 15,
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 8.0),
             Flexible(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // const Padding(
-                      //   padding: EdgeInsets.all(8.0),
-                      //   child: Text('Select a character'),
-                      // ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 8,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Choose the warior',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Expanded(child: WarriorChooser(
+                            onChange: (value) {
+                              setState(() {
+                                selected = value;
+                              });
+                            },
+                          )),
+                        ],
+                      ),
+                    ),
+                    const VerticalDivider(),
+                    Flexible(
+                      flex: 5,
+                      child: Center(
+                        child: Column(
                           children: [
-                            const FittedBox(child: GooglePixel7()),
-                            const FittedBox(child: IPhone14()),
-                            // CharacterCard(
-                            //   name: 'HIG',
-                            //   icon: SvgPicture.asset(
-                            //     'assets/material-design.svg',
-                            //   ),
-                            //   description: 'Description',
-                            // ),
+                            Text(
+                              nickController.text,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: theme.colorScheme.error,
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+                            Expanded(
+                              child: FittedBox(
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: selected == 0
+                                      ? const GooglePixel7()
+                                      : const IPhone14(),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+                            ElevatedButton.icon(
+                              label: const Text('Play'),
+                              onPressed: nickController.text == ''
+                                  ? null
+                                  : () {
+                                      client.createPlayer(nickController.text);
+                                    },
+                              icon: const Icon(Icons.play_arrow_rounded),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 8.0),
-            ElevatedButton.icon(
-              label: const Text('Play'),
-              onPressed: nickController.text == ''
-                  ? null
-                  : () {
-                      client.createPlayer(nickController.text);
-                    },
-              icon: const Icon(Icons.play_arrow_rounded),
             ),
           ],
         ),
@@ -103,30 +140,171 @@ class _NickWindowState extends State<NickWindow> {
   }
 }
 
-class CharacterCard extends StatelessWidget {
-  const CharacterCard({
-    required this.name,
-    required this.icon,
-    required this.description,
+class WarriorChooser extends StatefulWidget {
+  const WarriorChooser({
     Key? key,
+    required this.onChange,
   }) : super(key: key);
 
-  final String name;
-  final Widget icon;
-  final String description;
+  final void Function(int) onChange;
+
+  @override
+  State<WarriorChooser> createState() => _WarriorChooserState();
+}
+
+class _WarriorChooserState extends State<WarriorChooser> {
+  int selected = 0;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        const height = 100.0;
+        var count = width ~/ 117;
+        final ratio = width / count / height;
+        return GridView.count(
+          crossAxisCount: count,
+          childAspectRatio: ratio,
+          children: [
+            ChooseWarriorSelectCard(
+              name: 'Google Pixel 7',
+              selected: selected == 0,
+              child: const GooglePixel7(),
+              onTap: () {
+                setState(() {
+                  selected = 0;
+                  widget.onChange(0);
+                });
+              },
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Google Pixel 6',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Google Pixel 5',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Google Pixel 4',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Apple iPhone 14',
+              selected: selected == 1,
+              child: const IPhone14(),
+              onTap: () {
+                setState(() {
+                  selected = 1;
+                  widget.onChange(1);
+                });
+              },
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Apple iPhone 13',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Apple iPhone 12',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+            ChooseWarriorSelectCard(
+              name: 'Apple iPhone 11',
+              selected: false,
+              enabled: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Icon(
+                  Icons.no_cell_outlined,
+                  color: theme.colorScheme.tertiary,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ChooseWarriorSelectCard extends StatelessWidget {
+  const ChooseWarriorSelectCard({
+    Key? key,
+    required this.name,
+    required this.selected,
+    required this.child,
+    this.onTap,
+    this.enabled = true,
+  }) : super(key: key);
+
+  final String name;
+  final bool enabled;
+  final bool selected;
+  final Widget child;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
-      elevation: 3.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      clipBehavior: Clip.hardEdge,
+      elevation: enabled
+          ? selected
+              ? null
+              : 4.0
+          : 0.0,
+      child: InkWell(
+        focusColor: Colors.transparent,
+        onTap: enabled && !selected ? onTap : null,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(name),
-              icon,
-              Text(description),
+              Expanded(child: FittedBox(child: child)),
+              const SizedBox(height: 8.0),
+              Text(name, style: theme.textTheme.bodySmall),
             ],
           ),
         ),

@@ -18,7 +18,7 @@ class GooglePixel7 extends StatelessWidget {
     const externalFrameThickness = 2.0;
     const externalFrameHeight = frameHeight + externalFrameThickness * 2;
     const externalFrameWidth = frameWidth + externalFrameThickness * 2;
-    const externalFrameRadius = frameRadius + externalFrameThickness;
+    const externalFrameRadius = deviceRadius;
     const externalFrameColor = Colors.black;
 
     return Container(

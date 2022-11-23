@@ -1,4 +1,5 @@
 // import 'package:bubble_fight/ui/bubble.game.dart';
+import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:core/core.dart';
@@ -29,72 +30,86 @@ class HomeScreen extends StatelessWidget {
         children: [
           Rail(),
           Expanded(
-            child: FittedBox(
-              child: SizedBox(
-                width: 800,
-                height: 600,
-                child: Stack(
-                  children: [
-                    // GameWidget(game: game),
-                    const BubbleGame(),
-                    // const SelectingTableLayer(),
-                    NickWindowLayer(),
-                    // Container(
-                    //   margin: const EdgeInsets.all(8.0),
-                    //   alignment: Alignment.topLeft,
-                    //   child: LeaveButton(client: client),
-                    // ),
-                    Positioned(
-                      bottom: 20.0,
-                      right: 20.0,
-                      child: Row(
-                        children: [
-                          StreamBuilder<bool>(
-                            stream: client.cooldown$
-                                .where((cooldown) =>
-                                    cooldown.cooldownType == CooldownType.dash)
-                                .map((dto) => dto.isCooldown),
-                            builder: (context, snapshot) {
-                              final isCooldown = snapshot.data;
-                              if (isCooldown == null) {
-                                return const SizedBox();
-                              }
-                              return ElevatedButton(
-                                onPressed:
-                                    isCooldown ? null : () => client.dash(),
-                                child: const Icon(
-                                  Icons.rocket_launch,
-                                ),
-                              );
-                            },
-                          ),
-                          StreamBuilder<bool>(
-                            stream: client.cooldown$
-                                .where((cooldown) =>
-                                    cooldown.cooldownType ==
-                                    CooldownType.attack)
-                                .map((dto) => dto.isCooldown),
-                            builder: (context, snapshot) {
-                              final isCooldown = snapshot.data;
-                              if (isCooldown == null) {
-                                return const SizedBox();
-                              }
-
-                              return ElevatedButton(
-                                onPressed:
-                                    isCooldown ? null : () => client.attack(),
-                                child: const Icon(
-                                  Icons.sunny,
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+            child: Stack(
+              children: [
+                // GameWidget(game: game),
+                Center(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Container(
+                      width: 750,
+                      height: 550,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(16.0),
+                        ),
                       ),
+                      child: BubbleGame(),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                // const SelectingTableLayer(),
+                Center(
+                  child: Container(
+                    width: 600 * goldenRatio,
+                    height: 600,
+                    padding: const EdgeInsets.all(32.0),
+                    child: NickWindowLayer(),
+                  ),
+                ),
+                // Container(
+                //   margin: const EdgeInsets.all(8.0),
+                //   alignment: Alignment.topLeft,
+                //   child: LeaveButton(client: client),
+                // ),
+                Positioned(
+                  bottom: 20.0,
+                  right: 20.0,
+                  child: Row(
+                    children: [
+                      StreamBuilder<bool>(
+                        stream: client.cooldown$
+                            .where((cooldown) =>
+                                cooldown.cooldownType == CooldownType.dash)
+                            .map((dto) => dto.isCooldown),
+                        builder: (context, snapshot) {
+                          final isCooldown = snapshot.data;
+                          if (isCooldown == null) {
+                            return const SizedBox();
+                          }
+                          return ElevatedButton(
+                            onPressed: isCooldown ? null : () => client.dash(),
+                            child: const Icon(
+                              Icons.rocket_launch,
+                            ),
+                          );
+                        },
+                      ),
+                      StreamBuilder<bool>(
+                        stream: client.cooldown$
+                            .where((cooldown) =>
+                                cooldown.cooldownType == CooldownType.attack)
+                            .map((dto) => dto.isCooldown),
+                        builder: (context, snapshot) {
+                          final isCooldown = snapshot.data;
+                          if (isCooldown == null) {
+                            return const SizedBox();
+                          }
+
+                          return ElevatedButton(
+                            onPressed:
+                                isCooldown ? null : () => client.attack(),
+                            child: const Icon(
+                              Icons.sunny,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],

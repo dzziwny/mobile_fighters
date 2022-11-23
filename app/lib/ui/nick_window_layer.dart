@@ -18,12 +18,9 @@ class NickWindowLayer extends StatelessWidget {
       builder: (context, snapshot) {
         final isInGame = snapshot.data;
         if (isInGame == true) {
-          return const SizedBox();
+          return const SizedBox.shrink();
         }
-        return const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: NickWindow(),
-        );
+        return const NickWindow();
       },
     );
   }
