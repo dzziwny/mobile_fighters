@@ -77,7 +77,7 @@ class ServerClient implements Disposable {
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
-  final nick$ = ReplaySubject<String>(maxSize: 1);
+  final myPlayer$ = ReplaySubject<Player>(maxSize: 1);
 
   void dash() {
     final data = <int>[
@@ -123,9 +123,11 @@ class ServerClient implements Disposable {
   /*
   * Streams
   */
-  Future<int> createPlayer(String nick) async {
-    final dto = await createPlayer$(_guid, nick);
-    nick$.add(nick);
+  Future<int> createPlayer(String nick, Device device) async {
+    final dto = await createPlayer$(_guid, nick, device);
+    myPlayer$.add(
+      Player(id: dto.id, device: device, nick: nick, team: dto.team),
+    );
 
     final id = dto.id;
 
@@ -134,8 +136,8 @@ class ServerClient implements Disposable {
   }
 
   Future<int> backToTheGame() async {
-    final nick = await nick$.first;
-    return await createPlayer(nick);
+    final player = await myPlayer$.first;
+    return await createPlayer(player.nick, player.device);
   }
 
   Future<void> leaveGame() => leaveGame$(_guid).then((_) => id$.add(null));

@@ -12,26 +12,28 @@ Future<Response> createPlayerHandler(Request request) async {
   final body = await request.readAsString();
   final json = jsonDecode(body);
   final dto = CreatePlayerDtoRequest.fromJson(json);
-  final id = createPlayer(dto);
-  final response = CreatePlayerDtoResponse(id: id);
+  final player = createPlayer(dto);
+  final response = CreatePlayerDtoResponse(id: player.id, team: player.team);
 
   return Response.ok(jsonEncode(response.toJson()));
 }
 
 Future<Response> createTestPlayerHandler(_) async {
   final guid = Uuid().v4().hashCode;
-  createPlayer(CreatePlayerDtoRequest(guid: guid, nick: 'test'));
+  createPlayer(
+    CreatePlayerDtoRequest(guid: guid, nick: 'test', device: Device.pixel),
+  );
   return Response.ok(null);
 }
 
-int createPlayer(CreatePlayerDtoRequest dto) {
+Player createPlayer(CreatePlayerDtoRequest dto) {
   final guid = dto.guid;
-  var id = guids[guid];
-  if (id != null) {
-    return id;
+  var prevPlayer = players[guids[guid]];
+  if (prevPlayer != null) {
+    return prevPlayer;
   }
 
-  id = ++ids;
+  final id = ++ids;
   final randomX = minX + Random().nextInt((maxX - minX).toInt());
   final randomY = minY + Random().nextInt((maxY - minY).toInt());
   playerPositions[id] = [randomX, randomY, 0.0];
@@ -44,6 +46,7 @@ int createPlayer(CreatePlayerDtoRequest dto) {
     id: id,
     nick: dto.nick,
     team: team,
+    device: dto.device,
   );
 
   teams[team]?[id] = player;
@@ -54,7 +57,7 @@ int createPlayer(CreatePlayerDtoRequest dto) {
   sharePlayers();
   _sharePlayerCreated(id);
   shareTeams();
-  return id;
+  return player;
 }
 
 Team _selectTeam() {

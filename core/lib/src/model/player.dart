@@ -2,6 +2,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'device.dart';
 import 'team.dart';
 
 part 'player.freezed.dart';
@@ -14,6 +15,7 @@ class Player with _$Player {
     required int id,
     required String nick,
     required Team team,
+    required Device device,
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

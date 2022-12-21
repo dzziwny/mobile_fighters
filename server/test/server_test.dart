@@ -26,8 +26,8 @@ Leave game should work, return 200,
 Get all players should return 1 player,
 After leaving game, player should be removed,
 """, () async {
-    final createPlayerdto = await createPlayer$(100, 'test100');
-    final createPlayer2dto = await createPlayer$(100, 'test100');
+    final createPlayerdto = await createPlayer$(100, 'test100', Device.pixel);
+    final createPlayer2dto = await createPlayer$(100, 'test100', Device.pixel);
 
     expect(createPlayerdto.toString(), createPlayer2dto.toString());
 
@@ -35,7 +35,7 @@ After leaving game, player should be removed,
 
     expect(players.length, 1);
 
-    await createPlayer$(101, 'test101');
+    await createPlayer$(101, 'test101', Device.pixel);
     players = await getPlayers$();
 
     expect(players.length, 2);

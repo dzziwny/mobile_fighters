@@ -39,12 +39,10 @@ class PlayersLayer extends StatelessWidget {
                       left: position.x - 44.5,
                       child: Transform.rotate(
                         angle: position.angle,
-                        child: const SizedBox(
+                        child: SizedBox(
                           height: 144.0,
                           width: 89.0,
-                          // child: PlayerWidget(player: player),
-                          child: FittedBox(child: GooglePixel7()),
-                          // child: FittedBox(child: IPhone14()),
+                          child: FittedBox(child: deviceWidget(player.device)),
                         ),
                       ),
                     );
@@ -55,5 +53,16 @@ class PlayersLayer extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget deviceWidget(Device device) {
+    switch (device) {
+      case Device.pixel:
+        return const GooglePixel7();
+      case Device.iphone:
+        return const IPhone14();
+      default:
+        throw Exception('Unknown device.');
+    }
   }
 }

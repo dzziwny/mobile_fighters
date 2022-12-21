@@ -6,17 +6,22 @@ import 'endpoints.dart';
 import 'model/_model.dart';
 
 final port = '8080';
+// monte
 final host = '192.168.0.171';
+// strzeszyn
 // final host = '192.168.1.25';
 final base = 'http://$host:$port';
 
-Future<CreatePlayerDtoResponse> createPlayer$(int guid, String nick) async {
+Future<CreatePlayerDtoResponse> createPlayer$(
+  int guid,
+  String nick,
+  Device device,
+) async {
   final response = await post(
     Uri.parse('$base${Endpoint.createPlayer}'),
-    body: jsonEncode(CreatePlayerDtoRequest(
-      guid: guid,
-      nick: nick,
-    ).toJson()),
+    body: jsonEncode(
+      CreatePlayerDtoRequest(guid: guid, nick: nick, device: device).toJson(),
+    ),
   );
 
   final dto = CreatePlayerDtoResponse.fromJson(jsonDecode(response.body));

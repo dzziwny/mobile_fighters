@@ -26,7 +26,8 @@ class _NickWindowState extends State<NickWindow> {
   );
   // final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
-  int selected = 0;
+  int selectedIndex = 0;
+  var selectedDevice = Device.pixel;
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +83,10 @@ class _NickWindowState extends State<NickWindow> {
                           ),
                           const SizedBox(height: 16.0),
                           Expanded(child: WarriorChooser(
-                            onChange: (value) {
+                            onChange: (value, Device device) {
                               setState(() {
-                                selected = value;
+                                selectedDevice = device;
+                                selectedIndex = value;
                               });
                             },
                           )),
@@ -109,7 +111,7 @@ class _NickWindowState extends State<NickWindow> {
                               child: FittedBox(
                                 child: AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 200),
-                                  child: selected == 0
+                                  child: selectedIndex == 0
                                       ? const GooglePixel7()
                                       : const IPhone14(),
                                 ),
@@ -121,7 +123,10 @@ class _NickWindowState extends State<NickWindow> {
                               onPressed: nickController.text == ''
                                   ? null
                                   : () {
-                                      client.createPlayer(nickController.text);
+                                      client.createPlayer(
+                                        nickController.text,
+                                        selectedDevice,
+                                      );
                                     },
                               icon: const Icon(Icons.play_arrow_rounded),
                             ),
@@ -146,7 +151,7 @@ class WarriorChooser extends StatefulWidget {
     required this.onChange,
   }) : super(key: key);
 
-  final void Function(int) onChange;
+  final void Function(int, Device) onChange;
 
   @override
   State<WarriorChooser> createState() => _WarriorChooserState();
@@ -175,7 +180,7 @@ class _WarriorChooserState extends State<WarriorChooser> {
               onTap: () {
                 setState(() {
                   selected = 0;
-                  widget.onChange(0);
+                  widget.onChange(0, Device.pixel);
                 });
               },
             ),
@@ -222,7 +227,7 @@ class _WarriorChooserState extends State<WarriorChooser> {
               onTap: () {
                 setState(() {
                   selected = 1;
-                  widget.onChange(1);
+                  widget.onChange(1, Device.iphone);
                 });
               },
             ),

@@ -1,0 +1,4 @@
+enum Device {
+  pixel,
+  iphone,
+}

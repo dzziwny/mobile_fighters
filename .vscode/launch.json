@@ -59,12 +59,25 @@
             "program": "lib/main.dart",
             "cwd": "${workspaceFolder}/app"
         },
+        {
+            "name": "macOS",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "macos",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app"
+        },
         
     ],
     "compounds": [
         {
           "name": "app/server",
           "configurations": ["server", "app"],
+          "stopAll": true
+        },
+        {
+          "name": "chrome,macos/server",
+          "configurations": ["server", "macOS", "chrome"],
           "stopAll": true
         },
         {
