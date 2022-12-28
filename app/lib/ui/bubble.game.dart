@@ -172,7 +172,7 @@ class BubbleFlameGame extends FlameGame
     final paint = const PaletteEntry(Color.fromRGBO(160, 196, 255, 1)).paint()
       ..style = PaintingStyle.fill;
 
-    final frame = await client.gameFrame();
+    final frame = await client.gameFrame;
     final board = RectangleComponent(
       size: Vector2(frame.sizex, frame.sizey),
       position: Vector2(frame.positionx, frame.positiony),

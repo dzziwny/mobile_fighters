@@ -23,32 +23,41 @@ class HomeScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return StreamBuilder<Position>(
-                      stream: client.myPosition$,
+                  child: FutureBuilder<GameFrame>(
+                      future: client.gameFrame,
                       builder: (context, snapshot) {
-                        final position = snapshot.data;
-                        double x = 0.0;
-                        double y = 0.0;
-
-                        if (position != null) {
-                          x = -(position.x - 375.0) /
-                              ((constraints.maxWidth - 750.0) / 2);
-                          y = -(position.y - 275.0) /
-                              ((constraints.maxHeight - 550.0) / 2);
+                        final frame = snapshot.data;
+                        if (frame == null) {
+                          return const SizedBox.shrink();
                         }
 
-                        return Align(
-                          alignment: Alignment(x, y),
-                          child: const SizedBox(
-                            width: 750.0,
-                            height: 550.0,
-                            child: BubbleGame(),
-                          ),
-                        );
-                      },
-                    );
-                  }),
+                        return LayoutBuilder(builder: (context, constraints) {
+                          return StreamBuilder<Position>(
+                            stream: client.myPosition$,
+                            builder: (context, snapshot) {
+                              final position = snapshot.data;
+                              double x = 0.0;
+                              double y = 0.0;
+
+                              if (position != null) {
+                                x = -(position.x - frame.sizex / 2) /
+                                    ((constraints.maxWidth - frame.sizex) / 2);
+                                y = -(position.y - frame.sizey / 2) /
+                                    ((constraints.maxHeight - frame.sizey) / 2);
+                              }
+
+                              return Align(
+                                alignment: Alignment(x, y),
+                                child: SizedBox(
+                                  width: frame.sizex,
+                                  height: frame.sizey,
+                                  child: const BubbleGame(),
+                                ),
+                              );
+                            },
+                          );
+                        });
+                      }),
                 ),
                 // Center(
                 //     child: Container(
