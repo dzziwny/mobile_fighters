@@ -15,7 +15,7 @@ class DebugInfo extends StatelessWidget {
     return Container(
       color: Colors.black,
       child: StreamBuilder<List<Player>>(
-          stream: _client.players$(),
+          stream: _client.players$,
           builder: (context, snapshot) {
             final players = snapshot.data;
             if (players == null) {

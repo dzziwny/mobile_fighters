@@ -1,34 +1,24 @@
-import 'package:bubble_fight/server_client.dart';
-import 'package:bubble_fight/ui/controls_layer.dart';
 import 'package:bubble_fight/ui/players_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class BubbleGame extends StatelessWidget {
-  BubbleGame({super.key});
-
-  final client = GetIt.I<ServerClient>();
+  const BubbleGame({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // decoration: BoxDecoration(
-      //   border: Border.all(color: Colors.white),
-      // ),
+      width: 750.0,
+      height: 550.0,
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        border: Border.all(color: Colors.black),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(16.0),
+        ),
+      ),
       child: Stack(
-        children: [
-          // Container(color: Colors.grey),
+        children: const [
           PlayersLayer(),
-          StreamBuilder<bool>(
-            stream: client.isInGame(),
-            builder: (context, snapshot) {
-              final isInGame = snapshot.data;
-              if (isInGame != true) {
-                return const SizedBox.shrink();
-              }
-              return const ControlsLayer();
-            },
-          )
         ],
       ),
     );

@@ -60,7 +60,7 @@ class _JoysticState extends State<Joystic> {
       setState(() {
         knobPosition = offset;
       });
-      client.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
+      client.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
       return;
     }
 
@@ -71,20 +71,20 @@ class _JoysticState extends State<Joystic> {
       knobPosition = knob;
     });
 
-    client.updateKnob(angle, fixedRelative.dx, fixedRelative.dy);
+    client.updatePosition(angle, fixedRelative.dx, fixedRelative.dy);
   }
 
   void updateKnob(Offset offset) {
     const center = Offset(65.0, 65.0);
     final relativeOffset = offset - center;
     angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
-    client.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
+    client.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   void updateKnobButAngle(Offset offset) {
     const center = Offset(65.0, 65.0);
     final relativeOffset = offset - center;
-    client.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
+    client.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   double screenAngle(Vector2 x) =>

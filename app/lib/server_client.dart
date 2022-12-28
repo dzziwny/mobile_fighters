@@ -11,6 +11,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
+  final _positions = <int, Position>{};
 
   final rawDataChannel = WebSocketChannel.connect(
     Uri.parse(
@@ -79,6 +80,16 @@ class ServerClient implements Disposable {
 
   final myPlayer$ = ReplaySubject<Player>(maxSize: 1);
 
+  late final StreamSubscription positionsSubscription;
+  late final StreamSubscription myPositionSubscription;
+  late final StreamSubscription playersSubscription;
+
+  ServerClient() {
+    positionsSubscription = positions$.connect();
+    myPositionSubscription = myPosition$.connect();
+    playersSubscription = players$.connect();
+  }
+
   void dash() {
     final data = <int>[
       1,
@@ -97,7 +108,7 @@ class ServerClient implements Disposable {
     attackChannel.sink.add(data);
   }
 
-  void updateKnob(
+  void updatePosition(
     double angle,
     double deltaX,
     double deltaY,
@@ -146,15 +157,27 @@ class ServerClient implements Disposable {
 
   Future<GameFrame> gameFrame() => gameFrame$();
 
+  late final myPosition$ = id$
+      .switchMap(
+          (id) => position$().where((position) => position.playerId == id))
+      .publishReplay(maxSize: 1);
+
   Stream<Position> position$() =>
       positionsData$.asBroadcastStream().map((data) => _dataToPosition(data));
+
+  late final positions$ = position$().map((position) {
+    _positions[position.playerId] = position;
+    return _positions;
+  }).publishReplay(maxSize: 1);
 
   Stream<PlayerChangeDto> playerChange$() => playersChangeData$
       .asBroadcastStream()
       .map((data) => _dataToPlayerChange(data));
 
-  Stream<List<Player>> players$() =>
-      playersData$.asBroadcastStream().map((data) => _dataToPlayers(data));
+  late final players$ = playersData$
+      .asBroadcastStream()
+      .map((data) => _dataToPlayers(data))
+      .publishReplay(maxSize: 1);
 
   Stream<Position> attack$() =>
       attackData$.asBroadcastStream().map((data) => _dataToAttack(data));
@@ -231,11 +254,16 @@ class ServerClient implements Disposable {
 
   @override
   Future onDispose() async {
-    rawDataChannel.sink.close(status.goingAway);
-    playersChannel.sink.close(status.goingAway);
-    addOrRemovePlayerChannel.sink.close(status.goingAway);
-    attackChannel.sink.close(status.goingAway);
-    hitChannel.sink.close(status.goingAway);
+    await Future.wait([
+      rawDataChannel.sink.close(status.goingAway),
+      playersChannel.sink.close(status.goingAway),
+      addOrRemovePlayerChannel.sink.close(status.goingAway),
+      attackChannel.sink.close(status.goingAway),
+      hitChannel.sink.close(status.goingAway),
+      positionsSubscription.cancel(),
+      myPositionSubscription.cancel(),
+      playersSubscription.cancel(),
+    ]);
   }
 
   Stream<bool> isSelectingTeam$() {

@@ -1,15 +1,11 @@
-import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/server_client.dart';
-import 'package:bubble_fight/theme.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
 import 'google_pixel_7.dart';
 import 'iphone_14.dart';
-import 'player_widget.dart';
 
 class NickWindow extends StatefulWidget {
   const NickWindow({
@@ -24,7 +20,6 @@ class _NickWindowState extends State<NickWindow> {
   final nickController = TextEditingController(
     text: kDebugMode ? defaultTargetPlatform.name : null,
   );
-  // final nickController = TextEditingController();
   final client = GetIt.I<ServerClient>();
   int selectedIndex = 0;
   var selectedDevice = Device.pixel;

@@ -204,7 +204,7 @@ class BubbleFlameGame extends FlameGame
         background: CircleComponent(radius: 50, paint: backgroundPaint),
         margin: const EdgeInsets.only(left: 60, bottom: 60),
         updateFunc: (angle, delta) {
-          client.updateKnob(angle, delta.x, delta.y);
+          client.updatePosition(angle, delta.x, delta.y);
         });
 
     add(joystick);
