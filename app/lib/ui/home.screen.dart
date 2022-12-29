@@ -23,41 +23,54 @@ class HomeScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: FutureBuilder<GameFrame>(
-                      future: client.gameFrame,
-                      builder: (context, snapshot) {
-                        final frame = snapshot.data;
-                        if (frame == null) {
-                          return const SizedBox.shrink();
-                        }
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 1280,
+                      height: 720,
+                      child: FutureBuilder<GameFrame>(
+                          future: client.gameFrame,
+                          builder: (context, snapshot) {
+                            final frame = snapshot.data;
+                            if (frame == null) {
+                              return const SizedBox.shrink();
+                            }
 
-                        return LayoutBuilder(builder: (context, constraints) {
-                          return StreamBuilder<Position>(
-                            stream: client.myPosition$,
-                            builder: (context, snapshot) {
-                              final position = snapshot.data;
-                              double x = 0.0;
-                              double y = 0.0;
+                            return LayoutBuilder(
+                                builder: (context, constraints) {
+                              return StreamBuilder<Position>(
+                                stream: client.myPosition$,
+                                builder: (context, snapshot) {
+                                  final position = snapshot.data;
+                                  double x = 0.0;
+                                  double y = 0.0;
 
-                              if (position != null) {
-                                x = -(position.x - frame.sizex / 2) /
-                                    ((constraints.maxWidth - frame.sizex) / 2);
-                                y = -(position.y - frame.sizey / 2) /
-                                    ((constraints.maxHeight - frame.sizey) / 2);
-                              }
+                                  if (position != null) {
+                                    x = -(position.x - frame.sizex / 2) /
+                                        ((constraints.maxWidth - frame.sizex) /
+                                            2);
+                                    y = -(position.y - frame.sizey / 2) /
+                                        ((constraints.maxHeight - frame.sizey) /
+                                            2);
+                                  }
 
-                              return Align(
-                                alignment: Alignment(x, y),
-                                child: SizedBox(
-                                  width: frame.sizex,
-                                  height: frame.sizey,
-                                  child: const BubbleGame(),
-                                ),
+                                  return ClipRect(
+                                    child: Align(
+                                      alignment: Alignment(x, y),
+                                      child: SizedBox(
+                                        width: frame.sizex,
+                                        height: frame.sizey,
+                                        child: const BubbleGame(),
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        });
-                      }),
+                            });
+                          }),
+                    ),
+                  ),
                 ),
                 // Center(
                 //     child: Container(
