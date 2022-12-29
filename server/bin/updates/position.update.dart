@@ -4,12 +4,12 @@ import '../setup.dart';
 
 double _resolveX(double delta, double maxSpeed, int sliceTime, double oldX) {
   var newX = delta * maxSpeed * sliceTime + oldX;
-  if (newX > maxX) {
-    return maxX;
+  if (newX > frameWidth) {
+    return frameWidth;
   }
 
-  if (newX < minX) {
-    return minX;
+  if (newX < 0.0) {
+    return 0.0;
   }
 
   return newX;
@@ -17,12 +17,12 @@ double _resolveX(double delta, double maxSpeed, int sliceTime, double oldX) {
 
 double _resolveY(double delta, double maxSpeed, int sliceTime, double oldY) {
   var newY = delta * maxSpeed * sliceTime + oldY;
-  if (newY > maxY) {
-    return maxY;
+  if (newY > frameHeight) {
+    return frameHeight;
   }
 
-  if (newY < minY) {
-    return minY;
+  if (newY < 0.0) {
+    return 0.0;
   }
 
   return newY;

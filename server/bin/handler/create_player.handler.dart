@@ -34,8 +34,8 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   }
 
   final id = ++ids;
-  final randomX = minX + Random().nextInt((maxX - minX).toInt());
-  final randomY = minY + Random().nextInt((maxY - minY).toInt());
+  final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
+  final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
   playerPositions[id] = [randomX, randomY, 0.0];
   playerKnobs[id] = [0.0, 0.0, 0.0];
   playerSpeed[id] = normalSpeed;
