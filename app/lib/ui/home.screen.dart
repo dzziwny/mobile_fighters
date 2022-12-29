@@ -1,5 +1,6 @@
 import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,10 @@ class HomeScreen extends StatelessWidget {
                               return const SizedBox.shrink();
                             }
 
+                            double frameWidth =
+                                frame.sizex + borderHorizontalPadding * 2;
+                            double frameHeight =
+                                frame.sizey + borderVerticalPadding * 2;
                             return LayoutBuilder(
                                 builder: (context, constraints) {
                               return StreamBuilder<Position>(
@@ -48,10 +53,10 @@ class HomeScreen extends StatelessWidget {
 
                                   if (position != null) {
                                     x = -(position.x - frame.sizex / 2) /
-                                        ((constraints.maxWidth - frame.sizex) /
+                                        ((constraints.maxWidth - frameWidth) /
                                             2);
                                     y = -(position.y - frame.sizey / 2) /
-                                        ((constraints.maxHeight - frame.sizey) /
+                                        ((constraints.maxHeight - frameHeight) /
                                             2);
                                   }
 
@@ -59,9 +64,12 @@ class HomeScreen extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment(x, y),
                                       child: SizedBox(
-                                        width: frame.sizex,
-                                        height: frame.sizey,
-                                        child: const BubbleGame(),
+                                        width: frameWidth,
+                                        height: frameHeight,
+                                        child: BubbleGame(
+                                          boardWidth: frame.sizex,
+                                          boardHeight: frame.sizey,
+                                        ),
                                       ),
                                     ),
                                   );
