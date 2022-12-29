@@ -28,8 +28,8 @@ class HomeScreen extends StatelessWidget {
                     fit: BoxFit.contain,
                     alignment: Alignment.center,
                     child: SizedBox(
-                      width: 1280,
-                      height: 720,
+                      width: borderWidth,
+                      height: borderHeight,
                       child: FutureBuilder<GameFrame>(
                           future: client.gameFrame,
                           builder: (context, snapshot) {
@@ -42,9 +42,7 @@ class HomeScreen extends StatelessWidget {
                                 frame.sizex + borderHorizontalPadding * 2;
                             double frameHeight =
                                 frame.sizey + borderVerticalPadding * 2;
-                            return LayoutBuilder(
-                                builder: (context, constraints) {
-                              return StreamBuilder<Position>(
+                            return StreamBuilder<Position>(
                                 stream: client.myPosition$,
                                 builder: (context, snapshot) {
                                   final position = snapshot.data;
@@ -52,16 +50,16 @@ class HomeScreen extends StatelessWidget {
                                   double y = 0.0;
 
                                   if (position != null) {
-                                    x = -(position.x - frame.sizex / 2) /
-                                        ((constraints.maxWidth - frameWidth) /
-                                            2);
-                                    y = -(position.y - frame.sizey / 2) /
-                                        ((constraints.maxHeight - frameHeight) /
-                                            2);
+                                    x = (position.x - frame.sizex / 2) /
+                                        ((frameWidth - borderWidth) / 2);
+                                    y = (position.y - frame.sizey / 2) /
+                                        ((frameHeight - borderHeight) / 2);
                                   }
 
                                   return ClipRect(
-                                    child: Align(
+                                    child: OverflowBox(
+                                      maxWidth: double.infinity,
+                                      maxHeight: double.infinity,
                                       alignment: Alignment(x, y),
                                       child: SizedBox(
                                         width: frameWidth,
@@ -73,9 +71,7 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                },
-                              );
-                            });
+                                });
                           }),
                     ),
                   ),

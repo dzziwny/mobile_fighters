@@ -84,8 +84,10 @@ const int sliceTime = 5000;
 
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
-const double frameWidth = 750.0;
-const double frameHeight = 550.0;
+
+// Ultra HD xddddd
+const double frameWidth = 3840.0;
+const double frameHeight = 2160.0;
 const int attackCooldownSesconds = 2;
 const int dashCooldownSesconds = 1;
 
