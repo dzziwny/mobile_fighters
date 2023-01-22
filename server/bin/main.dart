@@ -32,9 +32,9 @@ void main(List<String> args) async {
     final dt = now - lastUpdateTime;
     lastUpdateTime = now;
     accumulatorTime += dt;
-    while (accumulatorTime > sliceTime) {
+    while (accumulatorTime > sliceTimeMicroseconds) {
       update();
-      accumulatorTime -= sliceTime;
+      accumulatorTime -= sliceTimeMicroseconds;
     }
     draw();
   });
@@ -48,7 +48,7 @@ void update() {
   }
 
   for (var playerId in players.keys) {
-    positionUpdate(playerId);
+    physicUpdate(playerId);
   }
 }
 

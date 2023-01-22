@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'model/player_physics.dart';
+
 /*
 * key   ->  guid
 * value ->  id
@@ -15,17 +17,23 @@ final guids = <int, int>{};
 final players = <int, Player>{};
 
 /*
+* physics
 * key   ->  playerId
 * value ->  [x, y, angle]
 */
-final playerPositions = <int, List<double>>{};
+final playerPhysics = <int, PlayerPhysics>{};
+const coefficientOfFriction = 0.8;
+const defaultMass = 1.0;
 
-final playerSpeed = <int, double>{};
+/*
+* cooldowns
+* key   ->  playerId
+* value ->  [x, y, angle]
+*/
 
-final playerKnobs = <int, List<double>>{};
-
-final Map<int, bool> attackCooldowns = {};
+final Map<int, bool> pushCooldowns = {};
 final Map<int, bool> dashCooldowns = {};
+final Map<int, bool> attackCooldowns = {};
 
 /*
 * key   ->  playerId
@@ -80,7 +88,8 @@ Map<int, WebSocketChannel> teamsWSChannels = {};
 Map<int, WebSocketChannel> gamePhaseWSChannels = {};
 
 // If there are lags, try make sliceTime smaller
-const int sliceTime = 5000;
+const int sliceTimeMicroseconds = 5000;
+const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
@@ -90,6 +99,7 @@ const double frameWidth = 3840.0;
 const double frameHeight = 2160.0;
 const int attackCooldownSesconds = 2;
 const int dashCooldownSesconds = 1;
+const int pushCooldownMilisesconds = 1;
 
 TeamsDto prepareTeams() => TeamsDto(
       material: materialTeam.values.map((e) => e.nick).toList(),
@@ -128,8 +138,7 @@ void sharePlayerRemoved(Player player) {
 }
 
 void removePlayer(int id) {
-  playerPositions.remove(id);
-  playerKnobs.remove(id);
+  playerPhysics.remove(id);
   spectatorsTeam.remove(id);
   materialTeam.remove(id);
   cupertinoTeam.remove(id);

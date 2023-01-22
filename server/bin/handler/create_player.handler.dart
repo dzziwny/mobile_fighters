@@ -5,7 +5,9 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vector_math/vector_math.dart';
 
+import '../model/player_physics.dart';
 import '../setup.dart';
 
 Future<Response> createPlayerHandler(Request request) async {
@@ -36,9 +38,9 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   final id = ++ids;
   final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
   final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
-  playerPositions[id] = [randomX, randomY, 0.0];
-  playerKnobs[id] = [0.0, 0.0, 0.0];
-  playerSpeed[id] = normalSpeed;
+  // final physic = PlayerPhysics(Point(randomX, randomY))..angle = 0.0;
+  final physic = PlayerPhysics(Vector2.zero());
+  playerPhysics[id] = physic;
   playerHp[id] = 100;
 
   final team = _selectTeam();

@@ -3,11 +3,12 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:vector_math/vector_math.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
 
-void rawDataSocketHandlerWeb(WebSocketChannel channel) {
+void movementSocketHandlerWeb(WebSocketChannel channel) {
   rawDataWSChannels.add(channel);
 
   channel.stream.listen((data) {
@@ -20,7 +21,7 @@ void rawDataSocketHandlerWeb(WebSocketChannel channel) {
   });
 }
 
-void rawDataSocketHandler(WebSocketChannel channel) {
+void movementSocketHandler(WebSocketChannel channel) {
   rawDataWSChannels.add(channel);
 
   channel.stream.listen((data) => _handler(data));
@@ -29,7 +30,7 @@ void rawDataSocketHandler(WebSocketChannel channel) {
 void _handler(List<int> data) {
   switch (data[0]) {
     case 0:
-      updateKnob(data);
+      push(data);
       break;
     case 1:
       dash(data);
@@ -39,27 +40,39 @@ void _handler(List<int> data) {
   }
 }
 
-void updateKnob(List<int> data) {
+// TODO change file name
+void push(List<int> data) {
   final playerId = data[1];
+  if (pushCooldowns[playerId] == true) {
+    return;
+  }
+  pushCooldowns[playerId] = true;
+
   double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(2, 6)))
       .getFloat32(0);
   if (angle > pi || angle < -pi) {
     return;
   }
 
-  double deltaX = ByteData.sublistView(Uint8List.fromList(data.sublist(6, 10)))
+  double dx = ByteData.sublistView(Uint8List.fromList(data.sublist(6, 10)))
       .getFloat32(0);
-  if (deltaX > 50 || deltaX < -50) {
+  if (dx > 1.0 || dx < -1.0) {
     return;
   }
 
-  double deltaY = ByteData.sublistView(Uint8List.fromList(data.sublist(10, 14)))
+  double dy = ByteData.sublistView(Uint8List.fromList(data.sublist(10, 14)))
       .getFloat32(0);
-  if (deltaY > 50 || deltaY < -50) {
+  if (dy > 1.0 || dy < -1.0) {
     return;
   }
 
-  playerKnobs[playerId] = [deltaX, deltaY, angle];
+  //TODO: simply calculation here and calculation on player joystic
+  playerPhysics[playerId]?.pushingForce = Vector2(dx, dy) * 5.0;
+  playerPhysics[playerId]?.angle = angle;
+
+  Timer(Duration(milliseconds: pushCooldownMilisesconds), () {
+    pushCooldowns[playerId] = false;
+  });
 }
 
 void dash(List<int> data) {
@@ -68,13 +81,10 @@ void dash(List<int> data) {
     return;
   }
 
+  // TODO
+  // playerPhysics[playerId]?.pushingForce = Vecto;
   gameUpdates.add(() => dashCooldownUpdate(playerId, true));
-  playerSpeed[playerId] = dashSpeed;
   dashCooldowns[playerId] = true;
-
-  Timer(Duration(milliseconds: 200), () {
-    playerSpeed[playerId] = normalSpeed;
-  });
 
   Timer(Duration(seconds: dashCooldownSesconds), () {
     gameUpdates.add(() => dashCooldownUpdate(playerId, false));
