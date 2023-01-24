@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
@@ -38,8 +39,8 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   final id = ++ids;
   final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
   final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
-  // final physic = PlayerPhysics(Point(randomX, randomY))..angle = 0.0;
-  final physic = PlayerPhysics(Vector2.zero());
+  final randomAngle = Random().nextInt(100) / 10.0;
+  final physic = PlayerPhysics(Vector2(randomX, randomY))..angle = randomAngle;
   playerPhysics[id] = physic;
   playerHp[id] = 100;
 
@@ -58,6 +59,7 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   guids[guid] = id;
   sharePlayers();
   _sharePlayerCreated(id);
+  _sharePlayerPosition(id, physic);
   shareTeams();
   return player;
 }
@@ -75,6 +77,21 @@ Team _selectTeam() {
   }
 
   return Team.material;
+}
+
+void _sharePlayerPosition(int id, PlayerPhysics physic) {
+  final data = <int>[
+    id,
+    ...(ByteData(4)..setFloat32(0, physic.position.x)).buffer.asUint8List(),
+    ...(ByteData(4)..setFloat32(0, physic.position.y)).buffer.asUint8List(),
+    ...(ByteData(4)..setFloat32(0, physic.angle)).buffer.asUint8List(),
+  ];
+
+  gameDraws.add(() {
+    for (var channel in rawDataWSChannels) {
+      channel.sink.add(data);
+    }
+  });
 }
 
 void _sharePlayerCreated(int id) {
