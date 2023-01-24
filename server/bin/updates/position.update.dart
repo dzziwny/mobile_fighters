@@ -66,6 +66,14 @@ void physicUpdate(int playerId) {
     ..roundToZero();
   physic.position = _resolvePosition(physic, dt);
 
+  /// Boundary bouncing
+  if (physic.position.y == frameHeight || physic.position.y == 0.0) {
+    physic.velocity.y = -physic.velocity.y;
+  }
+  if (physic.position.x == frameWidth || physic.position.x == 0.0) {
+    physic.velocity.x = -physic.velocity.x;
+  }
+
   final data = <int>[
     playerId,
     ...(ByteData(4)..setFloat32(0, physic.position.x)).buffer.asUint8List(),
