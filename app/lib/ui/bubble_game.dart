@@ -43,6 +43,10 @@ class BubbleGame extends StatelessWidget {
                   Color(0xffffb56b),
                 ],
               ),
+              image: DecorationImage(
+                image: AssetImage('assets/background.jpeg'),
+                fit: BoxFit.fitHeight,
+              ),
               borderRadius: BorderRadius.all(
                 Radius.circular(16.0),
               ),
