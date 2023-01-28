@@ -1,53 +1,63 @@
+import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../model/player_physics.dart';
 import '../setup.dart';
 
-void attackUpdate(List<int> data) {
-  final attackingPlayerId = data[0];
-  final targets = Map<int, PlayerPhysics>.from(playerPhysics);
-  final attackPhysic = targets.remove(attackingPlayerId);
-  if (attackPhysic == null) {
+void attackUpdate(int attackerId) {
+  final physic = playerPhysics[attackerId];
+  if (physic == null) {
     return;
   }
 
-  for (var entry in targets.entries) {
+  final target = calculateTarget(physic);
+  Timer(attackDelay, () {
+    gameUpdates.add(() => _completeAttackUpdate(attackerId, target));
+  });
+
+  final response = StartAttackResponse(attackerId, target.x, target.y);
+  final bytes = response.toBytes();
+
+  gameDraws.add((() {
+    for (var channel in attackWSChannels) {
+      channel.sink.add(bytes);
+    }
+  }));
+}
+
+void _completeAttackUpdate(int attackerId, Vector2 attackCenter) {
+  // final targets = Map<int, PlayerPhysics>.from(playerPhysics);
+  // final physic = targets.remove(attackerId);
+
+  for (final entry in playerPhysics.entries) {
     final targetId = entry.key;
     final targetPosition = entry.value.position;
 
-    final isHit = isInAttackArea(
-      attackPhysic.position,
-      attackPhysic.angle,
-      targetPosition,
-    );
+    final isHit =
+        targetPosition.distanceToSquared(attackCenter) < attackRangeSquared;
     if (isHit) {
       final hp = playerHp[targetId]! - 20;
       playerHp[targetId] = hp;
       if (hp <= 0) {
-        handlePlayerDead(targetId, attackingPlayerId);
+        // TODO dont remove position from playerPhysics
+        // handlePlayerDead(targetId, attackerId);
       } else {
         drawPlayerHit(targetId, hp);
       }
     }
   }
+}
 
-  final position = attackPhysic.position;
-  final angle = attackPhysic.angle;
-  final frame = <int>[
-    attackingPlayerId,
-    ...(ByteData(4)..setFloat32(0, position.x)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, position.y)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, angle)).buffer.asUint8List(),
-  ];
+Vector2 calculateTarget(PlayerPhysics physic) {
+  double x = attackLength * sin(physic.angle);
+  double y = attackLength * cos(physic.angle);
+  final update = Vector2(x, y);
 
-  gameDraws.add((() {
-    for (var channel in attackWSChannels) {
-      channel.sink.add(frame);
-    }
-  }));
+  final target = physic.position + update;
+  return target;
 }
 
 bool isInAttackArea(Vector2 attack, double attackAngle, Vector2 target) {

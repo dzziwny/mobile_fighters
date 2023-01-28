@@ -94,6 +94,11 @@ const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
 
+const double attackLength = 100.0;
+const double attackRange = 50.0;
+const double attackRangeSquared = attackRange * attackRange;
+const Duration attackDelay = Duration(milliseconds: 500);
+
 // Ultra HD xddddd
 const double frameWidth = 2160.0;
 const double frameHeight = 1620.0;

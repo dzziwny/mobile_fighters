@@ -4,11 +4,14 @@ class Endpoint {
   static const getAllPlayers = '/players';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
-  static const rawDataWs = '/positions/ws';
-  static const rawDataWsWeb = '/positions/web/ws';
+  static const pushWsTemplate = '/push/ws/<id>';
+  static pushWs(int playerId) => '/push/ws/$playerId';
+  static const pushWsWebTemplate = '/positions/web/ws/<id>';
+  static pushWsWeb(int playerId) => '/positions/web/ws/$playerId';
   static const playersWs = '/players/ws';
   static const playerChangeWs = '/playerChange/ws';
-  static const attackWs = '/attack/ws';
+  static attackWs(int playerId) => '/attack/ws/$playerId';
+  static const attackWsTemplate = '/attack/ws/<id>';
   static const hitWs = '/hit/ws';
   static const cooldownWsTemplate = '/cooldownWs/ws/<id>';
   static cooldownWs(int playerId) => '/cooldownWs/ws/$playerId';

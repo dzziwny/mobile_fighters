@@ -1,7 +1,6 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:get_it/get_it.dart';
 import 'package:vector_math/vector_math.dart';
 
 class Joystic extends StatefulWidget {
@@ -15,7 +14,6 @@ class Joystic extends StatefulWidget {
 
 class _JoysticState extends State<Joystic> {
   var knobPosition = const Offset(65.0, 65.0);
-  final client = GetIt.I<ServerClient>();
   double angle = 0.0;
 
   @override
@@ -60,7 +58,7 @@ class _JoysticState extends State<Joystic> {
       setState(() {
         knobPosition = offset;
       });
-      client.updatePosition(
+      serverClient.updatePosition(
         angle,
         relativeOffset.dx / 50.0,
         relativeOffset.dy / 50.0,
@@ -73,20 +71,20 @@ class _JoysticState extends State<Joystic> {
       knobPosition = fixedRelative * 50.0 + center;
     });
 
-    client.updatePosition(angle, fixedRelative.dx, fixedRelative.dy);
+    serverClient.updatePosition(angle, fixedRelative.dx, fixedRelative.dy);
   }
 
   void updateKnob(Offset offset) {
     const center = Offset(65.0, 65.0);
     final relativeOffset = (offset - center) / 50.0;
     angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
-    client.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
+    serverClient.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   void updateKnobButAngle(Offset offset) {
     const center = Offset(65.0, 65.0);
     final relativeOffset = (offset - center) / 50.0;
-    client.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
+    serverClient.updatePosition(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   double screenAngle(Vector2 x) =>

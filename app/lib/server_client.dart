@@ -9,26 +9,42 @@ import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'attack.dart';
+import 'di.dart';
+
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
   final _positions = <int, Position>{};
 
-  final rawDataChannel = WebSocketChannel.connect(
-    Uri.parse(
-        'ws://$host:$port${kIsWeb ? Endpoint.rawDataWsWeb : Endpoint.rawDataWs}'),
-  );
   final playersChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
   );
   final addOrRemovePlayerChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
   );
-  final attackChannel = WebSocketChannel.connect(
-    Uri.parse('ws://$host:$port${Endpoint.attackWs}'),
-  );
   final hitChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
   );
+
+  late final pushChannel = id$
+      .where((id) => id != null)
+      .map(
+        (id) => WebSocketChannel.connect(
+          Uri.parse(
+            'ws://$host:$port${kIsWeb ? Endpoint.pushWsWeb(id!) : Endpoint.pushWs(id!)}',
+          ),
+        ),
+      )
+      .shareReplay(maxSize: 1);
+
+  late final attackChannel = id$
+      .where((id) => id != null)
+      .map(
+        (id) => WebSocketChannel.connect(
+          Uri.parse('ws://$host:$port${Endpoint.attackWs(id!)}'),
+        ),
+      )
+      .shareReplay(maxSize: 1);
 
   late final cooldownChannel = id$
       .where((id) => id != null)
@@ -59,14 +75,14 @@ class ServerClient implements Disposable {
       .shareReplay(maxSize: 1);
 
   late final Stream<dynamic> positionsData$ =
-      rawDataChannel.stream.asBroadcastStream();
+      pushChannel.switchMap((channel) => channel.stream).asBroadcastStream();
   late final Stream<dynamic> playersData$ =
       playersChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersChangeData$ =
       addOrRemovePlayerChannel.stream.asBroadcastStream();
-  late final Stream<dynamic> attackData$ =
-      attackChannel.stream.asBroadcastStream();
   late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
+  late final Stream<dynamic> attackData$ =
+      attackChannel.switchMap((channel) => channel.stream).asBroadcastStream();
   late final Stream<dynamic> cooldownData$ = cooldownChannel
       .switchMap((channel) => channel.stream)
       .asBroadcastStream();
@@ -90,29 +106,22 @@ class ServerClient implements Disposable {
     playersSubscription = players$.connect();
   }
 
-  void dash() {
-    final data = <int>[
-      1,
-      // TODO: user can't just update position for someone else
-      id$.value!,
-    ];
-
-    rawDataChannel.sink.add(data);
+  Future<void> dash() async {
+    final data = <int>[1];
+    final channel = await pushChannel.first;
+    channel.sink.add(data);
   }
 
-  void attack() {
-    final data = <int>[
-      id$.value!,
-    ];
-
-    attackChannel.sink.add(data);
+  Future<void> attack() async {
+    final channel = await attackChannel.first;
+    channel.sink.add(<int>[]);
   }
 
-  void updatePosition(
+  Future<void> updatePosition(
     double angle,
     double deltaX,
     double deltaY,
-  ) {
+  ) async {
     final angleBytes = (ByteData(4)..setFloat32(0, angle)).buffer.asUint8List();
     final deltaXBytes =
         (ByteData(4)..setFloat32(0, deltaX)).buffer.asUint8List();
@@ -121,14 +130,13 @@ class ServerClient implements Disposable {
 
     final frame = <int>[
       0,
-      // TODO: user can't just update position for someone else
-      id$.value!,
       ...angleBytes,
       ...deltaXBytes,
       ...deltaYBytes,
     ];
 
-    rawDataChannel.sink.add(frame);
+    final channel = await pushChannel.first;
+    channel.sink.add(frame);
   }
 
   /*
@@ -179,8 +187,25 @@ class ServerClient implements Disposable {
       .map((data) => _dataToPlayers(data))
       .publishReplay(maxSize: 1);
 
-  Stream<Position> attack$() =>
-      attackData$.asBroadcastStream().map((data) => _dataToAttack(data));
+  Stream<List<Attack>> attacks$() =>
+      attackData$.asBroadcastStream().map((bytes) {
+        final response = StartAttackResponse.fromBytes(bytes);
+        final attack = toAttack(response);
+        attacks.add(attack);
+        return attacks;
+      });
+
+  Attack toAttack(StartAttackResponse response) {
+    final startPosition = _positions[response.attackerId];
+    final attack = Attack(
+      startPosition?.x ?? 0.0,
+      startPosition?.y ?? 0.0,
+      response.targetX,
+      response.targetY,
+    );
+
+    return attack;
+  }
 
   Stream<HitDto> hit$() =>
       hitData$.asBroadcastStream().map((data) => _dataToHit(data));
@@ -226,11 +251,6 @@ class ServerClient implements Disposable {
     return dto;
   }
 
-  Position _dataToAttack(List<int> data) {
-    final position = _dataToPosition(data);
-    return position;
-  }
-
   HitDto _dataToHit(List<int> data) {
     final dto = HitDto(playerId: data[0], hp: data[1]);
     return dto;
@@ -255,10 +275,8 @@ class ServerClient implements Disposable {
   @override
   Future onDispose() async {
     await Future.wait([
-      rawDataChannel.sink.close(status.goingAway),
       playersChannel.sink.close(status.goingAway),
       addOrRemovePlayerChannel.sink.close(status.goingAway),
-      attackChannel.sink.close(status.goingAway),
       hitChannel.sink.close(status.goingAway),
       positionsSubscription.cancel(),
       myPositionSubscription.cancel(),

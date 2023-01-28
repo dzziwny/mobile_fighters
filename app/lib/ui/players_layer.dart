@@ -1,9 +1,8 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/google_pixel_7.dart';
 import 'package:bubble_fight/ui/iphone_14.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayersLayer extends StatelessWidget {
@@ -11,11 +10,10 @@ class PlayersLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final client = GetIt.I<ServerClient>();
     return StreamBuilder<Widget>(
       stream: Rx.combineLatest2(
-        client.players$,
-        client.positions$,
+        serverClient.players$,
+        serverClient.positions$,
         (List<Player> players, Map<int, Position> positions) {
           return Stack(
             children: players.map(

@@ -8,7 +8,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
 
-void movementSocketHandlerWeb(WebSocketChannel channel) {
+void pushSocketHandlerWeb(WebSocketChannel channel, int playerId) {
   rawDataWSChannels.add(channel);
 
   channel.stream.listen((data) {
@@ -17,56 +17,54 @@ void movementSocketHandlerWeb(WebSocketChannel channel) {
     }
 
     final intData = data.split(',').map((e) => int.parse(e)).toList();
-    return _handler(intData);
+    return _handler(intData, playerId);
   });
 }
 
-void movementSocketHandler(WebSocketChannel channel) {
+void pushSocketHandler(WebSocketChannel channel, int playerId) {
   rawDataWSChannels.add(channel);
 
-  channel.stream.listen((data) => _handler(data));
+  channel.stream.listen((data) => _handler(data, playerId));
 }
 
-void _handler(List<int> data) {
+void _handler(List<int> data, int playerId) {
   switch (data[0]) {
     case 0:
-      push(data);
+      push(data, playerId);
       break;
     case 1:
-      dash(data);
+      dash(data, playerId);
       break;
     default:
       assert(false);
   }
 }
 
-// TODO change file name
-void push(List<int> data) {
-  final playerId = data[1];
+void push(List<int> data, int playerId) {
   if (pushCooldowns[playerId] == true) {
     return;
   }
   pushCooldowns[playerId] = true;
 
-  double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(2, 6)))
+  double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
       .getFloat32(0);
   if (angle > pi || angle < -pi) {
     return;
   }
 
-  double dx = ByteData.sublistView(Uint8List.fromList(data.sublist(6, 10)))
+  double dx = ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
       .getFloat32(0);
   if (dx > 1.0 || dx < -1.0) {
     return;
   }
 
-  double dy = ByteData.sublistView(Uint8List.fromList(data.sublist(10, 14)))
+  double dy = ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
       .getFloat32(0);
   if (dy > 1.0 || dy < -1.0) {
     return;
   }
 
-  //TODO: simply calculation here and calculation on player joystic
+  //TODO: simplify calculations here and calculation on player joystic
   playerPhysics[playerId]?.pushingForce = Vector2(dx, dy) * 5.0;
   playerPhysics[playerId]?.angle = angle;
 
@@ -75,14 +73,19 @@ void push(List<int> data) {
   });
 }
 
-void dash(List<int> data) {
-  final playerId = data[1];
+void dash(List<int> data, int playerId) {
   if (dashCooldowns[playerId] == true) {
     return;
   }
 
-  // TODO
-  // playerPhysics[playerId]?.pushingForce = Vecto;
+  final physic = playerPhysics[playerId];
+  if (physic == null) {
+    return;
+  }
+
+  final update = physic.velocity.normalized() * 50.0;
+  physic.velocity.add(update);
+
   gameUpdates.add(() => dashCooldownUpdate(playerId, true));
   dashCooldowns[playerId] = true;
 
@@ -92,7 +95,7 @@ void dash(List<int> data) {
   });
 }
 
-dashCooldownUpdate(int playerId, bool isCooldown) {
+void dashCooldownUpdate(int playerId, bool isCooldown) {
   final channel = cooldownWSChannels[playerId];
   if (channel == null) {
     return;

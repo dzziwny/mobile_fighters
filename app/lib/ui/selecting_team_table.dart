@@ -1,18 +1,15 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class SelectingTeamTable extends StatelessWidget {
-  SelectingTeamTable({
+  const SelectingTeamTable({
     Key? key,
   }) : super(key: key);
-
-  final client = GetIt.I<ServerClient>();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: client.isSelectingTeam$(),
+      stream: serverClient.isSelectingTeam$(),
       builder: (context, snapshot) {
         if (snapshot.data != true) {
           return const SizedBox();
@@ -41,7 +38,7 @@ class SelectingTeamTable extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         StreamBuilder<List<String>>(
-                            stream: client.materialTeam$(),
+                            stream: serverClient.materialTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -72,7 +69,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: client.fluentTeam$(),
+                            stream: serverClient.fluentTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -103,7 +100,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: client.cupertinoTeam$(),
+                            stream: serverClient.cupertinoTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -134,7 +131,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: client.spectatorsTeam$(),
+                            stream: serverClient.spectatorsTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(

@@ -1,13 +1,10 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class Rail extends StatelessWidget {
-  Rail({
+  const Rail({
     Key? key,
   }) : super(key: key);
-
-  final client = GetIt.I<ServerClient>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +12,7 @@ class Rail extends StatelessWidget {
       destinations: [
         NavigationRailDestination(
           icon: IconButton(
-            onPressed: () => client.leaveGame(),
+            onPressed: () => serverClient.leaveGame(),
             icon: const Icon(Icons.logout_rounded),
           ),
           label: const Text('Leave'),

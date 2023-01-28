@@ -2,6 +2,8 @@ import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/players_layer.dart';
 import 'package:flutter/material.dart';
 
+import 'attacks_layer.dart';
+
 class BubbleGame extends StatelessWidget {
   const BubbleGame({
     super.key,
@@ -53,6 +55,7 @@ class BubbleGame extends StatelessWidget {
             ),
             child: Stack(
               children: const [
+                AttacksLayer(),
                 PlayersLayer(),
               ],
             ),

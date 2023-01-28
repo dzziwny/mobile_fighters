@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'leave_game.dto.dart';
 
@@ -32,29 +32,32 @@ mixin _$LeaveGameDtoRequest {
 abstract class $LeaveGameDtoRequestCopyWith<$Res> {
   factory $LeaveGameDtoRequestCopyWith(
           LeaveGameDtoRequest value, $Res Function(LeaveGameDtoRequest) then) =
-      _$LeaveGameDtoRequestCopyWithImpl<$Res>;
+      _$LeaveGameDtoRequestCopyWithImpl<$Res, LeaveGameDtoRequest>;
+  @useResult
   $Res call({int guid});
 }
 
 /// @nodoc
-class _$LeaveGameDtoRequestCopyWithImpl<$Res>
+class _$LeaveGameDtoRequestCopyWithImpl<$Res, $Val extends LeaveGameDtoRequest>
     implements $LeaveGameDtoRequestCopyWith<$Res> {
   _$LeaveGameDtoRequestCopyWithImpl(this._value, this._then);
 
-  final LeaveGameDtoRequest _value;
   // ignore: unused_field
-  final $Res Function(LeaveGameDtoRequest) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? guid = freezed,
+    Object? guid = null,
   }) {
     return _then(_value.copyWith(
-      guid: guid == freezed
+      guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -65,26 +68,25 @@ abstract class _$$_LeaveGameDtoRequestCopyWith<$Res>
           $Res Function(_$_LeaveGameDtoRequest) then) =
       __$$_LeaveGameDtoRequestCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int guid});
 }
 
 /// @nodoc
 class __$$_LeaveGameDtoRequestCopyWithImpl<$Res>
-    extends _$LeaveGameDtoRequestCopyWithImpl<$Res>
+    extends _$LeaveGameDtoRequestCopyWithImpl<$Res, _$_LeaveGameDtoRequest>
     implements _$$_LeaveGameDtoRequestCopyWith<$Res> {
   __$$_LeaveGameDtoRequestCopyWithImpl(_$_LeaveGameDtoRequest _value,
       $Res Function(_$_LeaveGameDtoRequest) _then)
-      : super(_value, (v) => _then(v as _$_LeaveGameDtoRequest));
+      : super(_value, _then);
 
-  @override
-  _$_LeaveGameDtoRequest get _value => super._value as _$_LeaveGameDtoRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? guid = freezed,
+    Object? guid = null,
   }) {
     return _then(_$_LeaveGameDtoRequest(
-      guid: guid == freezed
+      guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
@@ -114,16 +116,16 @@ class _$_LeaveGameDtoRequest implements _LeaveGameDtoRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LeaveGameDtoRequest &&
-            const DeepCollectionEquality().equals(other.guid, guid));
+            (identical(other.guid, guid) || other.guid == guid));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(guid));
+  int get hashCode => Object.hash(runtimeType, guid);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_LeaveGameDtoRequestCopyWith<_$_LeaveGameDtoRequest> get copyWith =>
       __$$_LeaveGameDtoRequestCopyWithImpl<_$_LeaveGameDtoRequest>(
           this, _$identity);

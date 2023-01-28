@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'create_player.dto.dart';
 
@@ -35,39 +35,43 @@ mixin _$CreatePlayerDtoRequest {
 abstract class $CreatePlayerDtoRequestCopyWith<$Res> {
   factory $CreatePlayerDtoRequestCopyWith(CreatePlayerDtoRequest value,
           $Res Function(CreatePlayerDtoRequest) then) =
-      _$CreatePlayerDtoRequestCopyWithImpl<$Res>;
+      _$CreatePlayerDtoRequestCopyWithImpl<$Res, CreatePlayerDtoRequest>;
+  @useResult
   $Res call({int guid, String nick, Device device});
 }
 
 /// @nodoc
-class _$CreatePlayerDtoRequestCopyWithImpl<$Res>
+class _$CreatePlayerDtoRequestCopyWithImpl<$Res,
+        $Val extends CreatePlayerDtoRequest>
     implements $CreatePlayerDtoRequestCopyWith<$Res> {
   _$CreatePlayerDtoRequestCopyWithImpl(this._value, this._then);
 
-  final CreatePlayerDtoRequest _value;
   // ignore: unused_field
-  final $Res Function(CreatePlayerDtoRequest) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? guid = freezed,
-    Object? nick = freezed,
-    Object? device = freezed,
+    Object? guid = null,
+    Object? nick = null,
+    Object? device = null,
   }) {
     return _then(_value.copyWith(
-      guid: guid == freezed
+      guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      device: device == freezed
+      device: null == device
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
-    ));
+    ) as $Val);
   }
 }
 
@@ -78,37 +82,36 @@ abstract class _$$_CreatePlayerDtoRequestCopyWith<$Res>
           $Res Function(_$_CreatePlayerDtoRequest) then) =
       __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int guid, String nick, Device device});
 }
 
 /// @nodoc
 class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
-    extends _$CreatePlayerDtoRequestCopyWithImpl<$Res>
+    extends _$CreatePlayerDtoRequestCopyWithImpl<$Res,
+        _$_CreatePlayerDtoRequest>
     implements _$$_CreatePlayerDtoRequestCopyWith<$Res> {
   __$$_CreatePlayerDtoRequestCopyWithImpl(_$_CreatePlayerDtoRequest _value,
       $Res Function(_$_CreatePlayerDtoRequest) _then)
-      : super(_value, (v) => _then(v as _$_CreatePlayerDtoRequest));
+      : super(_value, _then);
 
-  @override
-  _$_CreatePlayerDtoRequest get _value =>
-      super._value as _$_CreatePlayerDtoRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? guid = freezed,
-    Object? nick = freezed,
-    Object? device = freezed,
+    Object? guid = null,
+    Object? nick = null,
+    Object? device = null,
   }) {
     return _then(_$_CreatePlayerDtoRequest(
-      guid: guid == freezed
+      guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
               as int,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      device: device == freezed
+      device: null == device
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
@@ -143,21 +146,18 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CreatePlayerDtoRequest &&
-            const DeepCollectionEquality().equals(other.guid, guid) &&
-            const DeepCollectionEquality().equals(other.nick, nick) &&
-            const DeepCollectionEquality().equals(other.device, device));
+            (identical(other.guid, guid) || other.guid == guid) &&
+            (identical(other.nick, nick) || other.nick == nick) &&
+            (identical(other.device, device) || other.device == device));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(guid),
-      const DeepCollectionEquality().hash(nick),
-      const DeepCollectionEquality().hash(device));
+  int get hashCode => Object.hash(runtimeType, guid, nick, device);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_CreatePlayerDtoRequestCopyWith<_$_CreatePlayerDtoRequest> get copyWith =>
       __$$_CreatePlayerDtoRequestCopyWithImpl<_$_CreatePlayerDtoRequest>(
           this, _$identity);
@@ -211,34 +211,38 @@ mixin _$CreatePlayerDtoResponse {
 abstract class $CreatePlayerDtoResponseCopyWith<$Res> {
   factory $CreatePlayerDtoResponseCopyWith(CreatePlayerDtoResponse value,
           $Res Function(CreatePlayerDtoResponse) then) =
-      _$CreatePlayerDtoResponseCopyWithImpl<$Res>;
+      _$CreatePlayerDtoResponseCopyWithImpl<$Res, CreatePlayerDtoResponse>;
+  @useResult
   $Res call({int id, Team team});
 }
 
 /// @nodoc
-class _$CreatePlayerDtoResponseCopyWithImpl<$Res>
+class _$CreatePlayerDtoResponseCopyWithImpl<$Res,
+        $Val extends CreatePlayerDtoResponse>
     implements $CreatePlayerDtoResponseCopyWith<$Res> {
   _$CreatePlayerDtoResponseCopyWithImpl(this._value, this._then);
 
-  final CreatePlayerDtoResponse _value;
   // ignore: unused_field
-  final $Res Function(CreatePlayerDtoResponse) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? team = freezed,
+    Object? id = null,
+    Object? team = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
-    ));
+    ) as $Val);
   }
 }
 
@@ -249,32 +253,31 @@ abstract class _$$_CreatePlayerDtoResponseCopyWith<$Res>
           $Res Function(_$_CreatePlayerDtoResponse) then) =
       __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int id, Team team});
 }
 
 /// @nodoc
 class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
-    extends _$CreatePlayerDtoResponseCopyWithImpl<$Res>
+    extends _$CreatePlayerDtoResponseCopyWithImpl<$Res,
+        _$_CreatePlayerDtoResponse>
     implements _$$_CreatePlayerDtoResponseCopyWith<$Res> {
   __$$_CreatePlayerDtoResponseCopyWithImpl(_$_CreatePlayerDtoResponse _value,
       $Res Function(_$_CreatePlayerDtoResponse) _then)
-      : super(_value, (v) => _then(v as _$_CreatePlayerDtoResponse));
+      : super(_value, _then);
 
-  @override
-  _$_CreatePlayerDtoResponse get _value =>
-      super._value as _$_CreatePlayerDtoResponse;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? team = freezed,
+    Object? id = null,
+    Object? team = null,
   }) {
     return _then(_$_CreatePlayerDtoResponse(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
@@ -306,19 +309,17 @@ class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CreatePlayerDtoResponse &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.team, team));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.team, team) || other.team == team));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(team));
+  int get hashCode => Object.hash(runtimeType, id, team);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_CreatePlayerDtoResponseCopyWith<_$_CreatePlayerDtoResponse>
       get copyWith =>
           __$$_CreatePlayerDtoResponseCopyWithImpl<_$_CreatePlayerDtoResponse>(

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'player_change.dto.dart';
 
@@ -35,44 +35,47 @@ mixin _$PlayerChangeDto {
 abstract class $PlayerChangeDtoCopyWith<$Res> {
   factory $PlayerChangeDtoCopyWith(
           PlayerChangeDto value, $Res Function(PlayerChangeDto) then) =
-      _$PlayerChangeDtoCopyWithImpl<$Res>;
+      _$PlayerChangeDtoCopyWithImpl<$Res, PlayerChangeDto>;
+  @useResult
   $Res call({int id, PlayerChangeType type, String nick, Team team});
 }
 
 /// @nodoc
-class _$PlayerChangeDtoCopyWithImpl<$Res>
+class _$PlayerChangeDtoCopyWithImpl<$Res, $Val extends PlayerChangeDto>
     implements $PlayerChangeDtoCopyWith<$Res> {
   _$PlayerChangeDtoCopyWithImpl(this._value, this._then);
 
-  final PlayerChangeDto _value;
   // ignore: unused_field
-  final $Res Function(PlayerChangeDto) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? type = freezed,
-    Object? nick = freezed,
-    Object? team = freezed,
+    Object? id = null,
+    Object? type = null,
+    Object? nick = null,
+    Object? team = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      type: type == freezed
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as PlayerChangeType,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
-    ));
+    ) as $Val);
   }
 }
 
@@ -83,41 +86,40 @@ abstract class _$$_PlayerChangeDtoCopyWith<$Res>
           _$_PlayerChangeDto value, $Res Function(_$_PlayerChangeDto) then) =
       __$$_PlayerChangeDtoCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int id, PlayerChangeType type, String nick, Team team});
 }
 
 /// @nodoc
 class __$$_PlayerChangeDtoCopyWithImpl<$Res>
-    extends _$PlayerChangeDtoCopyWithImpl<$Res>
+    extends _$PlayerChangeDtoCopyWithImpl<$Res, _$_PlayerChangeDto>
     implements _$$_PlayerChangeDtoCopyWith<$Res> {
   __$$_PlayerChangeDtoCopyWithImpl(
       _$_PlayerChangeDto _value, $Res Function(_$_PlayerChangeDto) _then)
-      : super(_value, (v) => _then(v as _$_PlayerChangeDto));
+      : super(_value, _then);
 
-  @override
-  _$_PlayerChangeDto get _value => super._value as _$_PlayerChangeDto;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? type = freezed,
-    Object? nick = freezed,
-    Object? team = freezed,
+    Object? id = null,
+    Object? type = null,
+    Object? nick = null,
+    Object? team = null,
   }) {
     return _then(_$_PlayerChangeDto(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      type: type == freezed
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as PlayerChangeType,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
@@ -157,23 +159,19 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlayerChangeDto &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.type, type) &&
-            const DeepCollectionEquality().equals(other.nick, nick) &&
-            const DeepCollectionEquality().equals(other.team, team));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.nick, nick) || other.nick == nick) &&
+            (identical(other.team, team) || other.team == team));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(type),
-      const DeepCollectionEquality().hash(nick),
-      const DeepCollectionEquality().hash(team));
+  int get hashCode => Object.hash(runtimeType, id, type, nick, team);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlayerChangeDtoCopyWith<_$_PlayerChangeDto> get copyWith =>
       __$$_PlayerChangeDtoCopyWithImpl<_$_PlayerChangeDto>(this, _$identity);
 

@@ -9,5 +9,5 @@ export 'hit.socket_handler.dart';
 export 'leave_game.handler.dart';
 export 'player_change.socket_handler.dart';
 export 'players.socket_handler.dart';
-export 'raw_data.socket_handler.dart';
+export 'push.socket_handler.dart';
 export 'selecting_team.socket_handler.dart';

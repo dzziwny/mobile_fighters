@@ -1,12 +1,9 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class DebugInfo extends StatelessWidget {
-  final _client = GetIt.I<ServerClient>();
-
-  DebugInfo({
+  const DebugInfo({
     Key? key,
   }) : super(key: key);
 
@@ -15,7 +12,7 @@ class DebugInfo extends StatelessWidget {
     return Container(
       color: Colors.black,
       child: StreamBuilder<List<Player>>(
-          stream: _client.players$,
+          stream: serverClient.players$,
           builder: (context, snapshot) {
             final players = snapshot.data;
             if (players == null) {

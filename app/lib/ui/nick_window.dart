@@ -1,8 +1,7 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 import 'google_pixel_7.dart';
 import 'iphone_14.dart';
@@ -20,7 +19,7 @@ class _NickWindowState extends State<NickWindow> {
   final nickController = TextEditingController(
     text: kDebugMode ? defaultTargetPlatform.name : null,
   );
-  final client = GetIt.I<ServerClient>();
+
   int selectedIndex = 0;
   var selectedDevice = Device.pixel;
 
@@ -118,7 +117,7 @@ class _NickWindowState extends State<NickWindow> {
                               onPressed: nickController.text == ''
                                   ? null
                                   : () {
-                                      client.createPlayer(
+                                      serverClient.createPlayer(
                                         nickController.text,
                                         selectedDevice,
                                       );

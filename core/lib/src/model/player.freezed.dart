@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'player.dart';
 
@@ -33,43 +33,47 @@ mixin _$Player {
 /// @nodoc
 abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
-      _$PlayerCopyWithImpl<$Res>;
+      _$PlayerCopyWithImpl<$Res, Player>;
+  @useResult
   $Res call({int id, String nick, Team team, Device device});
 }
 
 /// @nodoc
-class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
+class _$PlayerCopyWithImpl<$Res, $Val extends Player>
+    implements $PlayerCopyWith<$Res> {
   _$PlayerCopyWithImpl(this._value, this._then);
 
-  final Player _value;
   // ignore: unused_field
-  final $Res Function(Player) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? nick = freezed,
-    Object? team = freezed,
-    Object? device = freezed,
+    Object? id = null,
+    Object? nick = null,
+    Object? team = null,
+    Object? device = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
-      device: device == freezed
+      device: null == device
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
-    ));
+    ) as $Val);
   }
 }
 
@@ -78,39 +82,39 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
       __$$_PlayerCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int id, String nick, Team team, Device device});
 }
 
 /// @nodoc
-class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
+class __$$_PlayerCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$_Player>
     implements _$$_PlayerCopyWith<$Res> {
   __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then)
-      : super(_value, (v) => _then(v as _$_Player));
+      : super(_value, _then);
 
-  @override
-  _$_Player get _value => super._value as _$_Player;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? nick = freezed,
-    Object? team = freezed,
-    Object? device = freezed,
+    Object? id = null,
+    Object? nick = null,
+    Object? team = null,
+    Object? device = null,
   }) {
     return _then(_$_Player(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      nick: nick == freezed
+      nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
               as String,
-      team: team == freezed
+      team: null == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as Team,
-      device: device == freezed
+      device: null == device
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
@@ -150,23 +154,19 @@ class _$_Player implements _Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Player &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.nick, nick) &&
-            const DeepCollectionEquality().equals(other.team, team) &&
-            const DeepCollectionEquality().equals(other.device, device));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.nick, nick) || other.nick == nick) &&
+            (identical(other.team, team) || other.team == team) &&
+            (identical(other.device, device) || other.device == device));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(nick),
-      const DeepCollectionEquality().hash(team),
-      const DeepCollectionEquality().hash(device));
+  int get hashCode => Object.hash(runtimeType, id, nick, team, device);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlayerCopyWith<_$_Player> get copyWith =>
       __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
 

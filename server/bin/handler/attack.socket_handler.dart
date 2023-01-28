@@ -6,27 +6,27 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../setup.dart';
 import '../updates/_updates.dart';
 
-void attackSocketHandler(WebSocketChannel channel) {
+void attackSocketConnection(WebSocketChannel channel, int playerId) {
   attackWSChannels.add(channel);
-  channel.stream.listen((data) => _attack(data));
+  channel.stream.listen((_) => _attack(playerId));
 }
 
-void _attack(List<int> data) {
-  final playerId = data[0];
+void _attack(int playerId) {
   if (attackCooldowns[playerId] == true) {
     return;
   }
 
-  gameUpdates.add(() => attackCooldownUpdate(playerId, true));
-  gameUpdates.add(() => attackUpdate(data));
+  gameUpdates.add(() => attackUpdate(playerId));
+  gameUpdates.add(() => _attackCooldownUpdate(playerId, true));
   attackCooldowns[playerId] = true;
+
   Timer(Duration(seconds: attackCooldownSesconds), () {
-    gameUpdates.add(() => attackCooldownUpdate(playerId, false));
+    gameUpdates.add(() => _attackCooldownUpdate(playerId, false));
     attackCooldowns[playerId] = false;
   });
 }
 
-attackCooldownUpdate(int playerId, bool isCooldown) {
+void _attackCooldownUpdate(int playerId, bool isCooldown) {
   final channel = cooldownWSChannels[playerId];
   if (channel == null) {
     return;

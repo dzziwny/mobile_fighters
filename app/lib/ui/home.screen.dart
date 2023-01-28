@@ -1,10 +1,9 @@
 import 'package:bubble_fight/consts.dart';
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 import 'controls_layer.dart';
 import 'nick_window_layer.dart';
@@ -15,11 +14,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final client = GetIt.I<ServerClient>();
     return Scaffold(
       body: Row(
         children: [
-          Rail(),
+          const Rail(),
           Expanded(
             child: Stack(
               children: [
@@ -31,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                       width: borderWidth,
                       height: borderHeight,
                       child: FutureBuilder<GameFrame>(
-                          future: client.gameFrame,
+                          future: serverClient.gameFrame,
                           builder: (context, snapshot) {
                             final frame = snapshot.data;
                             if (frame == null) {
@@ -43,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                             double frameHeight =
                                 frame.sizey + borderVerticalPadding * 2;
                             return StreamBuilder<Position>(
-                                stream: client.myPosition$,
+                                stream: serverClient.myPosition$,
                                 builder: (context, snapshot) {
                                   final position = snapshot.data;
                                   double x = 0.0;
@@ -83,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                 //   width: 5.0,
                 // )),
                 StreamBuilder<bool>(
-                  stream: client.isInGame(),
+                  stream: serverClient.isInGame(),
                   builder: (context, snapshot) {
                     final isInGame = snapshot.data;
                     if (isInGame != true) {
@@ -97,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                     width: 600 * goldenRatio,
                     height: 600,
                     padding: const EdgeInsets.all(32.0),
-                    child: NickWindowLayer(),
+                    child: const NickWindowLayer(),
                   ),
                 ),
                 Positioned(
@@ -106,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       StreamBuilder<bool>(
-                        stream: client.cooldown$
+                        stream: serverClient.cooldown$
                             .where((cooldown) =>
                                 cooldown.cooldownType == CooldownType.dash)
                             .map((dto) => dto.isCooldown),
@@ -116,7 +114,8 @@ class HomeScreen extends StatelessWidget {
                             return const SizedBox();
                           }
                           return ElevatedButton(
-                            onPressed: isCooldown ? null : () => client.dash(),
+                            onPressed:
+                                isCooldown ? null : () => serverClient.dash(),
                             child: const Icon(
                               Icons.rocket_launch,
                             ),
@@ -124,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                       StreamBuilder<bool>(
-                        stream: client.cooldown$
+                        stream: serverClient.cooldown$
                             .where((cooldown) =>
                                 cooldown.cooldownType == CooldownType.attack)
                             .map((dto) => dto.isCooldown),
@@ -136,7 +135,7 @@ class HomeScreen extends StatelessWidget {
 
                           return ElevatedButton(
                             onPressed:
-                                isCooldown ? null : () => client.attack(),
+                                isCooldown ? null : () => serverClient.attack(),
                             child: const Icon(
                               Icons.sunny,
                             ),
