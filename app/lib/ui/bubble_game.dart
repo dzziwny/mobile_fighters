@@ -55,8 +55,8 @@ class BubbleGame extends StatelessWidget {
             ),
             child: Stack(
               children: const [
-                AttacksLayer(),
                 PlayersLayer(),
+                AttacksLayer(),
               ],
             ),
           ),

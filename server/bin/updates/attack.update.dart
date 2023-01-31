@@ -53,7 +53,7 @@ void _completeAttackUpdate(int attackerId, Vector2 attackCenter) {
 
 Vector2 calculateTarget(PlayerPhysics physic) {
   double x = attackLength * sin(physic.angle);
-  double y = attackLength * cos(physic.angle);
+  double y = -attackLength * cos(physic.angle);
   final update = Vector2(x, y);
 
   final target = physic.position + update;
