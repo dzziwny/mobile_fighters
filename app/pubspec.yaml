@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.0 <=4.0.0'
+  sdk: '>=3.0.0-185.0.dev <=4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,9 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   core:
     path: ../core
-  flame: ^1.1.1
-  rive: ^0.9.1
-  flame_rive: ^1.2.0
   uuid: ^3.0.6
   rxdart: ^0.27.3
   get_it: ^7.2.0
