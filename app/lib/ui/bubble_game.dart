@@ -2,7 +2,8 @@ import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/players_layer.dart';
 import 'package:flutter/material.dart';
 
-import 'attacks_layer.dart';
+import 'attacks_bottom_layer.dart';
+import 'attacks_upper_layer.dart';
 
 class BubbleGame extends StatelessWidget {
   const BubbleGame({
@@ -31,20 +32,20 @@ class BubbleGame extends StatelessWidget {
             width: boardWidth,
             height: boardHeight,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment(0.8, 1),
-                colors: <Color>[
-                  Color(0xff1f005c),
-                  Color(0xff5b0060),
-                  Color(0xff870160),
-                  Color(0xffac255e),
-                  Color(0xffca485c),
-                  Color(0xffe16b5c),
-                  Color(0xfff39060),
-                  Color(0xffffb56b),
-                ],
-              ),
+              // gradient: LinearGradient(
+              //   begin: Alignment.topLeft,
+              //   end: Alignment(0.8, 1),
+              //   colors: <Color>[
+              //     Color(0xff1f005c),
+              //     Color(0xff5b0060),
+              //     Color(0xff870160),
+              //     Color(0xffac255e),
+              //     Color(0xffca485c),
+              //     Color(0xffe16b5c),
+              //     Color(0xfff39060),
+              //     Color(0xffffb56b),
+              //   ],
+              // ),
               image: DecorationImage(
                 image: AssetImage('assets/background.jpeg'),
                 fit: BoxFit.fitHeight,
@@ -53,10 +54,11 @@ class BubbleGame extends StatelessWidget {
                 Radius.circular(16.0),
               ),
             ),
-            child: Stack(
-              children: const [
+            child: const Stack(
+              children: [
+                AttacksBottomLayer(),
                 PlayersLayer(),
-                AttacksLayer(),
+                AttacksUpperLayer(),
               ],
             ),
           ),

@@ -9,7 +9,7 @@ class SelectingTableLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return const Positioned(
       right: 0,
       top: 0,
       child: SizedBox(

@@ -1,24 +1,30 @@
 import 'dart:typed_data';
 
-class StartAttackResponse {
+class AttackResponse {
+  final int id;
   final int attackerId;
   final double targetX;
   final double targetY;
+  final AttackPhase phase;
 
-  const StartAttackResponse(
+  const AttackResponse(
+    this.id,
     this.attackerId,
     this.targetX,
     this.targetY,
+    this.phase,
   );
 
-  factory StartAttackResponse.fromBytes(dynamic data) {
+  factory AttackResponse.fromBytes(dynamic data) {
     List<int> bytes = data;
-    final instance = StartAttackResponse(
+    final instance = AttackResponse(
       bytes[0],
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(1, 5)))
+      bytes[1],
+      ByteData.sublistView(Uint8List.fromList(bytes.sublist(2, 6)))
           .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(5, 9)))
+      ByteData.sublistView(Uint8List.fromList(bytes.sublist(6, 10)))
           .getFloat32(0),
+      AttackPhase.values[bytes[10]],
     );
 
     return instance;
@@ -26,11 +32,18 @@ class StartAttackResponse {
 
   List<int> toBytes() {
     final bytes = <int>[
+      id,
       attackerId,
       ...(ByteData(4)..setFloat32(0, targetX)).buffer.asUint8List(),
       ...(ByteData(4)..setFloat32(0, targetY)).buffer.asUint8List(),
+      phase.index,
     ];
 
     return bytes;
   }
+}
+
+enum AttackPhase {
+  start,
+  boom,
 }

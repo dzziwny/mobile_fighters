@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 
-class AttacksLayer extends StatelessWidget {
-  const AttacksLayer({super.key});
+class AttacksUpperLayer extends StatelessWidget {
+  const AttacksUpperLayer({super.key});
 
   @override
   Widget build(BuildContext context) {
