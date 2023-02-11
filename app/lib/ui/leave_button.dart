@@ -1,20 +1,13 @@
-import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 
 class LeaveButton extends StatelessWidget {
-  const LeaveButton({
-    Key? key,
-    required this.client,
-  }) : super(key: key);
-
-  final ServerClient client;
+  const LeaveButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      onPressed: () {
-        client.leaveGame();
-      },
+      onPressed: () => serverClient.leaveGame(),
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Leave'),
     );

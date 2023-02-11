@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bubble_fight/rxdart.extension.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -9,13 +10,9 @@ import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'attack.dart';
-
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
-  final _positions = <int, Position>{};
-
-  final attacks = <Attack>[];
+  final positions = <int, Position>{};
 
   final playersChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
@@ -34,15 +31,6 @@ class ServerClient implements Disposable {
           Uri.parse(
             'ws://$host:$port${kIsWeb ? Endpoint.pushWsWeb(id!) : Endpoint.pushWs(id!)}',
           ),
-        ),
-      )
-      .shareReplay(maxSize: 1);
-
-  late final attackChannel = id$
-      .where((id) => id != null)
-      .map(
-        (id) => WebSocketChannel.connect(
-          Uri.parse('ws://$host:$port${Endpoint.attackWs(id!)}'),
         ),
       )
       .shareReplay(maxSize: 1);
@@ -82,8 +70,6 @@ class ServerClient implements Disposable {
   late final Stream<dynamic> playersChangeData$ =
       addOrRemovePlayerChannel.stream.asBroadcastStream();
   late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
-  late final Stream<dynamic> attackData$ =
-      attackChannel.switchMap((channel) => channel.stream).asBroadcastStream();
   late final Stream<dynamic> cooldownData$ = cooldownChannel
       .switchMap((channel) => channel.stream)
       .asBroadcastStream();
@@ -96,29 +82,21 @@ class ServerClient implements Disposable {
   final id$ = BehaviorSubject<int?>.seeded(null);
 
   final myPlayer$ = ReplaySubject<Player>(maxSize: 1);
-  late final Stream<List<Attack>> attacksSource;
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
   late final StreamSubscription playersSubscription;
-  late final StreamSubscription attacksSubscription;
 
   ServerClient() {
     positionsSubscription = positions$.connect();
     myPositionSubscription = myPosition$.connect();
     playersSubscription = players$.connect();
-    attacksSubscription = _attacks$.connect();
   }
 
   Future<void> dash() async {
     final data = <int>[1];
     final channel = await pushChannel.first;
     channel.sink.add(data);
-  }
-
-  Future<void> attack() async {
-    final channel = await attackChannel.first;
-    channel.sink.add(<int>[]);
   }
 
   Future<void> updatePosition(
@@ -178,8 +156,8 @@ class ServerClient implements Disposable {
       positionsData$.asBroadcastStream().map((data) => _dataToPosition(data));
 
   late final positions$ = position$().map((position) {
-    _positions[position.playerId] = position;
-    return _positions;
+    positions[position.playerId] = position;
+    return positions;
   }).publishReplay(maxSize: 1);
 
   Stream<PlayerChangeDto> playerChange$() => playersChangeData$
@@ -190,38 +168,6 @@ class ServerClient implements Disposable {
       .asBroadcastStream()
       .map((data) => _dataToPlayers(data))
       .publishReplay(maxSize: 1);
-
-  late final ReplayConnectableStream<List<Attack>> _attacks$ =
-      attackData$.asBroadcastStream().map((bytes) {
-    final response = AttackResponse.fromBytes(bytes);
-    switch (response.phase) {
-      case AttackPhase.start:
-        final attack = toAttack(response);
-        attacks.add(attack);
-        return attacks;
-      case AttackPhase.boom:
-        final index = attacks.indexWhere((a) => a.serverId == response.id);
-        attacks.removeAt(index);
-        return attacks;
-      default:
-        return attacks;
-    }
-  }).publishReplay(maxSize: 1);
-
-  Stream<List<Attack>> attacks$() => _attacks$.asBroadcastStream();
-
-  Attack toAttack(AttackResponse response) {
-    final startPosition = _positions[response.attackerId];
-    final attack = Attack(
-      response.id,
-      startPosition?.x ?? 0.0,
-      startPosition?.y ?? 0.0,
-      response.targetX,
-      response.targetY,
-    );
-
-    return attack;
-  }
 
   Stream<HitDto> hit$() =>
       hitData$.asBroadcastStream().map((data) => _dataToHit(data));
@@ -297,7 +243,6 @@ class ServerClient implements Disposable {
       positionsSubscription.cancel(),
       myPositionSubscription.cancel(),
       playersSubscription.cancel(),
-      attacksSubscription.cancel(),
     ]);
   }
 
@@ -333,5 +278,11 @@ class ServerClient implements Disposable {
     channel.sink.add(data);
   }
 
-  removeAttack(Attack attack) {}
+  Stream<WebSocketChannel> channel(String Function(int) uriBuilder) {
+    return id$.skipNull().map((id) {
+      final uri = Uri.parse('ws://$host:$port${uriBuilder(id)}');
+      final channel = WebSocketChannel.connect(uri);
+      return channel;
+    });
+  }
 }

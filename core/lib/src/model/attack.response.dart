@@ -15,8 +15,7 @@ class AttackResponse {
     this.phase,
   );
 
-  factory AttackResponse.fromBytes(dynamic data) {
-    List<int> bytes = data;
+  factory AttackResponse.fromBytes(List<int> bytes) {
     final instance = AttackResponse(
       bytes[0],
       bytes[1],

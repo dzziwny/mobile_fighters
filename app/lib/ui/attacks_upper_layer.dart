@@ -9,7 +9,7 @@ class AttacksUpperLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: serverClient.attacks$(),
+      stream: attackService.attacks$(),
       builder: (context, snapshot) {
         final attacks = snapshot.data;
         if (attacks == null) {
