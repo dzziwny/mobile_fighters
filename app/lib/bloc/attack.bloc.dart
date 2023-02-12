@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 class AttackBloc implements Disposable {
   final _attacks$ = BehaviorSubject.seeded(<Attack>[]);
 
-  late final _handler = attackService.data().withLatestFrom(
+  late final _handler = attackWs.data().withLatestFrom(
     positionService.positions$(),
     (AttackResponse response, Map<int, Position> positions) {
       final attacks = _attacks$.value;
@@ -42,6 +42,8 @@ class AttackBloc implements Disposable {
   }
 
   Stream<List<Attack>> attacks$() => _attacks$.asBroadcastStream();
+
+  Future<void> attack() => attackWs.send(<int>[]);
 
   @override
   Future onDispose() async {

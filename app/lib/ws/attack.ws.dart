@@ -5,26 +5,26 @@ import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-class AttackService implements Disposable {
+class AttackWs implements Disposable {
   late final _channel =
       serverClient.channel(Endpoint.attackWs).publishReplay(maxSize: 1);
 
-  late final _data =
-      _channel.switchMap((channel) => channel.stream).map((data) {
-    return AttackResponse.fromBytes(data as List<int>);
-  }).publishReplay(maxSize: 1);
+  late final _data = _channel
+      .switchMap((channel) => channel.stream)
+      .map((data) => AttackResponse.fromBytes(data as List<int>))
+      .publishReplay(maxSize: 1);
 
   late final StreamSubscription _onDataSubscription;
   late final StreamSubscription _channelSubscription;
 
-  AttackService() {
+  AttackWs() {
     _channelSubscription = _channel.connect();
     _onDataSubscription = _data.connect();
   }
 
-  Future<void> attack() async {
+  Future<void> send(List<int> bytes) async {
     final channel = await _channel.first;
-    channel.sink.add(<int>[]);
+    channel.sink.add(bytes);
   }
 
   Stream<AttackResponse> data() => _data.asBroadcastStream();

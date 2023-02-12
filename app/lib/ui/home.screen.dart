@@ -135,12 +135,9 @@ class HomeScreen extends StatelessWidget {
                           }
 
                           return ElevatedButton(
-                            onPressed: isCooldown
-                                ? null
-                                : () => attackService.attack(),
-                            child: const Icon(
-                              Icons.sunny,
-                            ),
+                            onPressed:
+                                isCooldown ? null : () => attackBloc.attack(),
+                            child: const Icon(Icons.sunny),
                           );
                         },
                       ),
