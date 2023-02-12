@@ -1,23 +1,27 @@
 import 'dart:async';
 
 import 'package:bubble_fight/di.dart';
-import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-class AttackWs implements Disposable {
-  late final _channel =
-      serverClient.channel(Endpoint.attackWs).publishReplay(maxSize: 1);
-
-  late final _data = _channel
-      .switchMap((channel) => channel.stream)
-      .map((data) => AttackResponse.fromBytes(data as List<int>))
-      .publishReplay(maxSize: 1);
+class Ws<T> implements Disposable {
+  late final ReplayConnectableStream<WebSocketChannel> _channel;
+  late final ReplayConnectableStream<T> _data;
 
   late final StreamSubscription _onDataSubscription;
   late final StreamSubscription _channelSubscription;
 
-  AttackWs() {
+  Ws(
+    String Function(int) uriBuilder,
+    T Function(List<int>) instanceBuilder,
+  ) {
+    _channel = serverClient.channel(uriBuilder).publishReplay(maxSize: 1);
+    _data = _channel
+        .switchMap((channel) => channel.stream)
+        .map((data) => instanceBuilder(data as List<int>))
+        .publishReplay(maxSize: 1);
+
     _channelSubscription = _channel.connect();
     _onDataSubscription = _data.connect();
   }
@@ -27,7 +31,7 @@ class AttackWs implements Disposable {
     channel.sink.add(bytes);
   }
 
-  Stream<AttackResponse> data() => _data.asBroadcastStream();
+  Stream<T> data() => _data.asBroadcastStream();
 
   @override
   Future<void> onDispose() async {
