@@ -13,7 +13,7 @@ class AttacksBottomLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return StreamBuilder(
-      stream: attackService.attacks$(),
+      stream: attackBloc.attacks$(),
       builder: (context, snapshot) {
         final attacks = snapshot.data;
         if (attacks == null) {

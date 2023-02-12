@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:bubble_fight/rxdart.extension.dart';
 import 'package:core/core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
@@ -12,7 +11,6 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
-  final positions = <int, Position>{};
 
   final playersChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
@@ -23,17 +21,6 @@ class ServerClient implements Disposable {
   final hitChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
   );
-
-  late final pushChannel = id$
-      .where((id) => id != null)
-      .map(
-        (id) => WebSocketChannel.connect(
-          Uri.parse(
-            'ws://$host:$port${kIsWeb ? Endpoint.pushWsWeb(id!) : Endpoint.pushWs(id!)}',
-          ),
-        ),
-      )
-      .shareReplay(maxSize: 1);
 
   late final cooldownChannel = id$
       .where((id) => id != null)
@@ -53,7 +40,6 @@ class ServerClient implements Disposable {
       )
       .shareReplay(maxSize: 1);
 
-  // TODO add .shareReplay(maxSize: 1); to others
   late final selectTeamChannel = id$
       .where((id) => id != null)
       .map(
@@ -63,8 +49,6 @@ class ServerClient implements Disposable {
       )
       .shareReplay(maxSize: 1);
 
-  late final Stream<dynamic> positionsData$ =
-      pushChannel.switchMap((channel) => channel.stream).asBroadcastStream();
   late final Stream<dynamic> playersData$ =
       playersChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersChangeData$ =
@@ -88,37 +72,7 @@ class ServerClient implements Disposable {
   late final StreamSubscription playersSubscription;
 
   ServerClient() {
-    positionsSubscription = positions$.connect();
-    myPositionSubscription = myPosition$.connect();
     playersSubscription = players$.connect();
-  }
-
-  Future<void> dash() async {
-    final data = <int>[1];
-    final channel = await pushChannel.first;
-    channel.sink.add(data);
-  }
-
-  Future<void> updatePosition(
-    double angle,
-    double deltaX,
-    double deltaY,
-  ) async {
-    final angleBytes = (ByteData(4)..setFloat32(0, angle)).buffer.asUint8List();
-    final deltaXBytes =
-        (ByteData(4)..setFloat32(0, deltaX)).buffer.asUint8List();
-    final deltaYBytes =
-        (ByteData(4)..setFloat32(0, deltaY)).buffer.asUint8List();
-
-    final frame = <int>[
-      0,
-      ...angleBytes,
-      ...deltaXBytes,
-      ...deltaYBytes,
-    ];
-
-    final channel = await pushChannel.first;
-    channel.sink.add(frame);
   }
 
   /*
@@ -146,19 +100,6 @@ class ServerClient implements Disposable {
   Stream<bool> isInGame() => id$.map((id) => id != null);
 
   final Future<GameFrame> gameFrame = gameFrame$();
-
-  late final myPosition$ = id$
-      .switchMap(
-          (id) => position$().where((position) => position.playerId == id))
-      .publishReplay(maxSize: 1);
-
-  Stream<Position> position$() =>
-      positionsData$.asBroadcastStream().map((data) => _dataToPosition(data));
-
-  late final positions$ = position$().map((position) {
-    positions[position.playerId] = position;
-    return positions;
-  }).publishReplay(maxSize: 1);
 
   Stream<PlayerChangeDto> playerChange$() => playersChangeData$
       .asBroadcastStream()
@@ -190,21 +131,6 @@ class ServerClient implements Disposable {
     final List list = json;
     final players = list.map((e) => Player.fromJson(e)).toList();
     return players;
-  }
-
-  Position _dataToPosition(List<int> data) {
-    final playerId = data[0];
-    final position = Position(
-      playerId,
-      ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(data.sublist(5, 9)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(data.sublist(9, 13)))
-          .getFloat32(0),
-    );
-
-    return position;
   }
 
   PlayerChangeDto _dataToPlayerChange(String data) {

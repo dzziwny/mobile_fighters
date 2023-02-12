@@ -13,7 +13,7 @@ class PlayersLayer extends StatelessWidget {
     return StreamBuilder<Widget>(
       stream: Rx.combineLatest2(
         serverClient.players$,
-        serverClient.positions$,
+        positionService.positions$(),
         (List<Player> players, Map<int, Position> positions) {
           return Stack(
             children: players.map(
