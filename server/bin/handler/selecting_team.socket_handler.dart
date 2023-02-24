@@ -4,29 +4,28 @@ import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
+import 'on_connection.dart';
 
-selectingTeamSocketHandler(String playerId) => (WebSocketChannel channel) {
-      final id = int.tryParse(playerId);
-      if (id == null) {
-        return;
-      }
+class TeamConnection extends OnConnection {
+  @override
+  void handler(
+    WebSocketChannel channel,
+    int playerId,
+    List<int> Function(dynamic data) dataParser,
+  ) {
+    teamsWSChannels[playerId] = channel;
 
-      final player = players[id];
-      if (player == null) {
-        return;
-      }
+    final dto = prepareTeams();
+    final data = jsonEncode(dto);
+    channel.sink.add(data);
 
-      teamsWSChannels[id] = channel;
+    channel.stream.listen((data) => _onData(playerId, data));
+  }
+}
 
-      final dto = prepareTeams();
-      final data = jsonEncode(dto);
-      channel.sink.add(data);
-
-      channel.stream.listen((data) => onData(player, data));
-    };
-
-void onData(Player player, dynamic data) {
-  if (data is! List<int>) {
+void _onData(int playerId, List<int> data) {
+  final player = players[playerId];
+  if (player == null) {
     return;
   }
 

@@ -1,8 +1,15 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
+import 'on_connection.dart';
 
-deadSocketHandler(String playerId) => (WebSocketChannel channel) {
-      final id = int.parse(playerId);
-      deadWSChannels[id] = channel;
-    };
+class DeadConnection extends OnConnection {
+  @override
+  void handler(
+    WebSocketChannel channel,
+    int playerId,
+    List<int> Function(dynamic data) dataParser,
+  ) {
+    deadWSChannels[playerId] = channel;
+  }
+}

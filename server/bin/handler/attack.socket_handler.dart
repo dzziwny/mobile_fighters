@@ -5,37 +5,45 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
 import '../updates/_updates.dart';
+import 'on_connection.dart';
 
-void attackSocketConnection(WebSocketChannel channel, int playerId) {
-  attackWSChannels.add(channel);
-  channel.stream.listen((_) => _attack(playerId));
-}
-
-void _attack(int playerId) {
-  if (attackCooldowns[playerId] == true) {
-    return;
+class AttackConnection extends OnConnection {
+  @override
+  void handler(
+    WebSocketChannel channel,
+    int playerId,
+    List<int> Function(dynamic data) dataParser,
+  ) {
+    attackWSChannels.add(channel);
+    channel.stream.listen((data) => _attack(dataParser(data), playerId));
   }
 
-  gameUpdates.add(() => attackUpdate(playerId));
-  gameUpdates.add(() => _attackCooldownUpdate(playerId, true));
-  attackCooldowns[playerId] = true;
+  void _attack(List<int> data, int playerId) {
+    if (attackCooldowns[playerId] == true) {
+      return;
+    }
 
-  Timer(Duration(seconds: attackCooldownSesconds), () {
-    gameUpdates.add(() => _attackCooldownUpdate(playerId, false));
-    attackCooldowns[playerId] = false;
-  });
-}
+    gameUpdates.add(() => attackUpdate(playerId));
+    gameUpdates.add(() => _attackCooldownUpdate(playerId, true));
+    attackCooldowns[playerId] = true;
 
-void _attackCooldownUpdate(int playerId, bool isCooldown) {
-  final channel = cooldownWSChannels[playerId];
-  if (channel == null) {
-    return;
+    Timer(Duration(seconds: attackCooldownSesconds), () {
+      gameUpdates.add(() => _attackCooldownUpdate(playerId, false));
+      attackCooldowns[playerId] = false;
+    });
   }
 
-  final frame = CooldownDto(
-    isCooldown: isCooldown,
-    cooldownType: CooldownType.attack,
-  ).toData();
+  void _attackCooldownUpdate(int playerId, bool isCooldown) {
+    final channel = cooldownWSChannels[playerId];
+    if (channel == null) {
+      return;
+    }
 
-  channel.sink.add(frame);
+    final frame = CooldownDto(
+      isCooldown: isCooldown,
+      cooldownType: CooldownType.attack,
+    ).toData();
+
+    channel.sink.add(frame);
+  }
 }

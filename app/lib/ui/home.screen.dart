@@ -104,10 +104,7 @@ class HomeScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       StreamBuilder<bool>(
-                        stream: serverClient.cooldown$
-                            .where((cooldown) =>
-                                cooldown.cooldownType == CooldownType.dash)
-                            .map((dto) => dto.isCooldown),
+                        stream: cooldownService.dash(),
                         builder: (context, snapshot) {
                           final isCooldown = snapshot.data;
                           if (isCooldown == null) {
@@ -124,10 +121,7 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                       StreamBuilder<bool>(
-                        stream: serverClient.cooldown$
-                            .where((cooldown) =>
-                                cooldown.cooldownType == CooldownType.attack)
-                            .map((dto) => dto.isCooldown),
+                        stream: cooldownService.attack(),
                         builder: (context, snapshot) {
                           final isCooldown = snapshot.data;
                           if (isCooldown == null) {

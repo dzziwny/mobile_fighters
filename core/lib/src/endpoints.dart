@@ -4,21 +4,17 @@ class Endpoint {
   static const getAllPlayers = '/players';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
-  static const pushWsTemplate = '/push/ws/<id>';
-  static String pushWs(int playerId) => '/push/ws/$playerId';
-  static const pushWsWebTemplate = '/positions/web/ws/<id>';
-  static String pushWsWeb(int playerId) => '/positions/web/ws/$playerId';
+  static var pushWsTemplate = _builder('/push/ws');
+  static var cooldownWsTemplate = _builder('/cooldownWs/ws');
+  static var attackWsTemplate = _builder('/attack/ws');
+  static var deadWsTemplate = _builder('/deadWs/ws');
+  static var selectTeamWsTemplate = _builder('/selectTeamWs/ws');
+  static var gamePhaseWsTemplate = _builder('/gamePhaseWs/ws');
   static const playersWs = '/players/ws';
   static const playerChangeWs = '/playerChange/ws';
-  static String attackWs(int playerId) => '/attack/ws/$playerId';
-  static const attackWsTemplate = '/attack/ws/<id>';
   static const hitWs = '/hit/ws';
-  static const cooldownWsTemplate = '/cooldownWs/ws/<id>';
-  static String cooldownWs(int playerId) => '/cooldownWs/ws/$playerId';
-  static const deadWsTemplate = '/deadWs/ws/<id>';
-  static String deadWs(int playerId) => '/deadWs/ws/$playerId';
-  static const selectTeamWsTemplate = '/selectTeamWs/ws/<id>';
-  static String selectTeamWs(int playerId) => '/selectTeamWs/ws/$playerId';
-  static const gamePhaseWsTemplate = '/gamePhaseWs/ws/<id>';
-  static gamePhaseWs(int playerId) => '/gamePhaseWs/ws/$playerId';
+
+  static String Function({String id, bool isWeb}) _builder(String base) =>
+      ({String id = '<id>', bool isWeb = false}) =>
+          '${isWeb ? '/web' : ''}$base/$id';
 }

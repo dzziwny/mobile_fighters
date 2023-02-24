@@ -12,7 +12,7 @@ class CooldownDto {
     required this.cooldownType,
   });
 
-  factory CooldownDto.fromData(List<int> data) => CooldownDto(
+  factory CooldownDto.fromBytes(List<int> data) => CooldownDto(
         cooldownType: CooldownType.values[data[0]],
         isCooldown: data[1] == 1,
       );

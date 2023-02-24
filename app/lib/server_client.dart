@@ -9,6 +9,8 @@ import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'endpoints.dart';
+
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
@@ -22,29 +24,11 @@ class ServerClient implements Disposable {
     Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
   );
 
-  late final cooldownChannel = id$
-      .where((id) => id != null)
-      .map(
-        (id) => WebSocketChannel.connect(
-          Uri.parse('ws://$host:$port${Endpoint.cooldownWs(id!)}'),
-        ),
-      )
-      .shareReplay(maxSize: 1);
-
-  late final deadChannel = id$
-      .where((id) => id != null)
-      .map(
-        (id) => WebSocketChannel.connect(
-          Uri.parse('ws://$host:$port${Endpoint.deadWs(id!)}'),
-        ),
-      )
-      .shareReplay(maxSize: 1);
-
   late final selectTeamChannel = id$
       .where((id) => id != null)
       .map(
         (id) => WebSocketChannel.connect(
-          Uri.parse('ws://$host:$port${Endpoint.selectTeamWs(id!)}'),
+          Uri.parse('ws://$host:$port${Route.selectTeamWs(id!)}'),
         ),
       )
       .shareReplay(maxSize: 1);
@@ -54,11 +38,6 @@ class ServerClient implements Disposable {
   late final Stream<dynamic> playersChangeData$ =
       addOrRemovePlayerChannel.stream.asBroadcastStream();
   late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
-  late final Stream<dynamic> cooldownData$ = cooldownChannel
-      .switchMap((channel) => channel.stream)
-      .asBroadcastStream();
-  late final Stream<dynamic> deadData$ =
-      deadChannel.switchMap((channel) => channel.stream).asBroadcastStream();
   late final Stream<dynamic> teamsData$ = selectTeamChannel
       .switchMap((channel) => channel.stream)
       .asBroadcastStream();
@@ -113,12 +92,6 @@ class ServerClient implements Disposable {
   Stream<HitDto> hit$() =>
       hitData$.asBroadcastStream().map((data) => _dataToHit(data));
 
-  late Stream<CooldownDto> cooldown$ =
-      cooldownData$.asBroadcastStream().map((data) => _dataToCooldown(data));
-
-  late Stream<int> dead$ =
-      deadData$.asBroadcastStream().map((data) => _dataToDead(data));
-
   late Stream<TeamsDto> teams$ = teamsData$.asBroadcastStream().map((data) {
     return _dataToTeams(data);
   });
@@ -144,16 +117,12 @@ class ServerClient implements Disposable {
     return dto;
   }
 
-  CooldownDto _dataToCooldown(List<int> data) {
-    final dto = CooldownDto.fromData(data);
-    return dto;
-  }
-
-  int _dataToDead(List<int> data) {
-    leaveGame();
-    final attackingPlayerId = data[0];
-    return attackingPlayerId;
-  }
+  // TODO add leaving game after dead
+  // int _dataToDead(List<int> data) {
+  //   leaveGame();
+  //   final attackingPlayerId = data[0];
+  //   return attackingPlayerId;
+  // }
 
   TeamsDto _dataToTeams(data) {
     final teams = TeamsDto.fromJson(jsonDecode(data));

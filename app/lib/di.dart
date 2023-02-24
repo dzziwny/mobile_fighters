@@ -1,21 +1,21 @@
 import 'package:core/core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'bloc/attack.bloc.dart';
+import 'endpoints.dart';
 import 'server_client.dart';
 import 'service/_service.dart';
 import 'ws.dart';
 
 final serverClient = ServerClient();
 
-final attackWs = Ws(Endpoint.attackWs, AttackResponse.fromBytes);
-final positionWs = Ws(
-  kIsWeb ? Endpoint.pushWsWeb : Endpoint.pushWs,
-  Position.fromBytes,
-);
+final positionWs = Ws(Route.pushWs, Position.fromBytes);
+final attackWs = Ws(Route.attackWs, AttackResponse.fromBytes);
+final cooldownWs = Ws(Route.cooldownWs, CooldownDto.fromBytes);
+final deadWs = Ws(Route.deadWs, (bytes) => bytes[0]);
 
 final positionService = PositionService();
+final cooldownService = CooldownService();
 
 final attackBloc = AttackBloc();
 

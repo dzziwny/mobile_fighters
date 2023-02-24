@@ -2,24 +2,31 @@ import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../setup.dart';
+import 'on_connection.dart';
 
-cooldownSocketHandler(String playerId) => (WebSocketChannel channel) {
-      final id = int.parse(playerId);
-      final attackCooldown = attackCooldowns[id];
-      channel.sink.add(
-        CooldownDto(
-          isCooldown: attackCooldown == true,
-          cooldownType: CooldownType.attack,
-        ).toData(),
-      );
+class CooldownConnection extends OnConnection {
+  @override
+  void handler(
+    WebSocketChannel channel,
+    int playerId,
+    List<int> Function(dynamic data) dataParser,
+  ) {
+    cooldownWSChannels[playerId] = channel;
 
-      final dashCooldown = dashCooldowns[id];
-      channel.sink.add(
-        CooldownDto(
-          isCooldown: dashCooldown == true,
-          cooldownType: CooldownType.dash,
-        ).toData(),
-      );
+    final attackCooldown = attackCooldowns[playerId];
+    channel.sink.add(
+      CooldownDto(
+        isCooldown: attackCooldown == true,
+        cooldownType: CooldownType.attack,
+      ).toData(),
+    );
 
-      cooldownWSChannels[id] = channel;
-    };
+    final dashCooldown = dashCooldowns[playerId];
+    channel.sink.add(
+      CooldownDto(
+        isCooldown: dashCooldown == true,
+        cooldownType: CooldownType.dash,
+      ).toData(),
+    );
+  }
+}
