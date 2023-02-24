@@ -43,7 +43,6 @@ class _ShakeWidgetState extends State<ShakeWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _translateAnimation;
-  late Animation<double> _opacityAnimation;
   late Animation<double> _rotateAnimation;
 
   int _tempEnterSecond = 0;
@@ -84,37 +83,6 @@ class _ShakeWidgetState extends State<ShakeWidget>
         }),
       ).animate(_controller);
     }
-    // opacity
-    // if (widget.shakeConstant.opacity.isEmpty) {
-    //   _opacityAnimation = ConstantTween(1.0).animate(_controller);
-    // } else if (widget.shakeConstant.opacity.length == 1) {
-    //   _opacityAnimation = ConstantTween(widget.shakeConstant.opacity.first)
-    //       .animate(_controller);
-    // } else {
-    //   _opacityAnimation = TweenSequence(
-    //     List.generate(widget.shakeConstant.opacity.length - 1, (index) {
-    //       final beginOpacity = widget.shakeConstant.opacity[index];
-    //       final endOpacity = widget.shakeConstant.opacity[index + 1];
-
-    //       double weight = 0;
-    //       if (widget.shakeConstant.interval.length == 1) {
-    //         weight = widget.shakeConstant.interval.first * 1.0;
-    //       } else if (widget.shakeConstant.interval.length > 1 &&
-    //           widget.shakeConstant.interval.length ==
-    //               widget.shakeConstant.opacity.length) {
-    //         final beginWeight = widget.shakeConstant.interval[index];
-    //         final endWeight = widget.shakeConstant.interval[index + 1];
-    //         weight = (endWeight - beginWeight) * 1.0;
-    //       } else {
-    //         weight =
-    //             100 / math.max((widget.shakeConstant.translate.length - 1), 1);
-    //       }
-    //       return TweenSequenceItem(
-    //           tween: Tween(begin: beginOpacity, end: endOpacity),
-    //           weight: weight);
-    //     }),
-    //   ).animate(_controller);
-    // }
 
     // rotate
     if (widget.shakeConstant.rotate.isEmpty) {

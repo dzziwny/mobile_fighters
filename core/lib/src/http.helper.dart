@@ -38,18 +38,6 @@ Future<GameFrame> gameFrame$() async {
   return frame;
 }
 
-Future<Response> getPlayersResponse$() => get(
-      Uri.parse('$base${Endpoint.getAllPlayers}'),
-    );
-
-Future<List<Player>> getPlayers$() async {
-  final response = await getPlayersResponse$();
-  final List list = jsonDecode(response.body);
-  final players = list.map((json) => Player.fromJson(json)).toList();
-
-  return players;
-}
-
 Future<void> leaveGame$(int guid) => post(
       Uri.parse('$base${Endpoint.leaveGame}'),
       body: jsonEncode(

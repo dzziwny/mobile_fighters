@@ -30,20 +30,5 @@ After leaving game, player should be removed,
     final createPlayer2dto = await createPlayer$(100, 'test100', Device.pixel);
 
     expect(createPlayerdto.toString(), createPlayer2dto.toString());
-
-    var players = await getPlayers$();
-
-    expect(players.length, 1);
-
-    await createPlayer$(101, 'test101', Device.pixel);
-    players = await getPlayers$();
-
-    expect(players.length, 2);
-
-    await leaveGame$(100);
-
-    players = await getPlayers$();
-
-    expect(players.length, 1);
   });
 }

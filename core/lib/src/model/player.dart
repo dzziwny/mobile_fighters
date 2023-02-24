@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'device.dart';
@@ -19,4 +21,10 @@ class Player with _$Player {
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
+
+  static List<Player> parseToList(String data) {
+    final json = jsonDecode(data);
+    final players = (json as List).map((e) => Player.fromJson(e)).toList();
+    return players;
+  }
 }

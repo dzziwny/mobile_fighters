@@ -14,9 +14,6 @@ import 'endpoints.dart';
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
 
-  final playersChannel = WebSocketChannel.connect(
-    Uri.parse('ws://$host:$port${Endpoint.playersWs}'),
-  );
   final addOrRemovePlayerChannel = WebSocketChannel.connect(
     Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
   );
@@ -33,8 +30,6 @@ class ServerClient implements Disposable {
       )
       .shareReplay(maxSize: 1);
 
-  late final Stream<dynamic> playersData$ =
-      playersChannel.stream.asBroadcastStream();
   late final Stream<dynamic> playersChangeData$ =
       addOrRemovePlayerChannel.stream.asBroadcastStream();
   late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
@@ -48,11 +43,6 @@ class ServerClient implements Disposable {
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
-  late final StreamSubscription playersSubscription;
-
-  ServerClient() {
-    playersSubscription = players$.connect();
-  }
 
   /*
   * Streams
@@ -84,11 +74,6 @@ class ServerClient implements Disposable {
       .asBroadcastStream()
       .map((data) => _dataToPlayerChange(data));
 
-  late final players$ = playersData$
-      .asBroadcastStream()
-      .map((data) => _dataToPlayers(data))
-      .publishReplay(maxSize: 1);
-
   Stream<HitDto> hit$() =>
       hitData$.asBroadcastStream().map((data) => _dataToHit(data));
 
@@ -99,12 +84,6 @@ class ServerClient implements Disposable {
   /*
   * Converters
   */
-  List<Player> _dataToPlayers(String data) {
-    final json = jsonDecode(data);
-    final List list = json;
-    final players = list.map((e) => Player.fromJson(e)).toList();
-    return players;
-  }
 
   PlayerChangeDto _dataToPlayerChange(String data) {
     final json = jsonDecode(data);
@@ -132,12 +111,10 @@ class ServerClient implements Disposable {
   @override
   Future onDispose() async {
     await Future.wait([
-      playersChannel.sink.close(status.goingAway),
       addOrRemovePlayerChannel.sink.close(status.goingAway),
       hitChannel.sink.close(status.goingAway),
       positionsSubscription.cancel(),
       myPositionSubscription.cancel(),
-      playersSubscription.cancel(),
     ]);
   }
 

@@ -12,7 +12,7 @@ class DebugInfo extends StatelessWidget {
     return Container(
       color: Colors.black,
       child: StreamBuilder<List<Player>>(
-          stream: serverClient.players$,
+          stream: playersWs.data(),
           builder: (context, snapshot) {
             final players = snapshot.data;
             if (players == null) {

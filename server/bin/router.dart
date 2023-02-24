@@ -15,17 +15,33 @@ extension WithWeb on Router {
     OnConnection onConnection,
   ) {
     final mobileRoute = routeBuilder(isWeb: false);
-    get(mobileRoute, _onConnection(onConnection, false));
+    get(mobileRoute, _handler(onConnection, false));
 
     final webRoute = routeBuilder(isWeb: true);
-    get(webRoute, _onConnection(onConnection, true));
+    get(webRoute, _handler(onConnection, true));
   }
+
+  Function _handler(OnConnection onConnection, bool isWeb) =>
+      (Request request, String id) async {
+        final intId = int.tryParse(id);
+        if (intId == null) {
+          return Response(HttpStatus.badRequest);
+        }
+
+        final method =
+            isWeb ? onConnection.handleWeb : onConnection.handleMobile;
+        final handler = webSocketHandler(
+          (WebSocketChannel channel) => method(channel, intId),
+        );
+
+        final response = await handler(request);
+        return response;
+      };
 }
 
 final router = Router()
   ..post(Endpoint.createPlayer, createPlayerHandler)
   ..post(Endpoint.createTestPlayer, createTestPlayerHandler)
-  ..get(Endpoint.getAllPlayers, getPlayersHandler)
   ..get(Endpoint.gameFrame, gameFrameHandler)
   ..post(Endpoint.leaveGame, leaveGameHandler)
   ..ws(Endpoint.pushWsTemplate, PushConnection())
@@ -34,37 +50,6 @@ final router = Router()
   ..ws(Endpoint.deadWsTemplate, DeadConnection())
   ..ws(Endpoint.selectTeamWsTemplate, TeamConnection())
   ..ws(Endpoint.gamePhaseWsTemplate, GamePhaseConnection())
-  ..get(Endpoint.playersWs, webSocketHandler(playersSocketHandler))
+  ..ws(Endpoint.playersWs, PlayersConnection())
   ..get(Endpoint.playerChangeWs, webSocketHandler(playerChangeSocketHandler))
   ..get(Endpoint.hitWs, webSocketHandler(hitSocketHandler));
-
-_id(void Function(WebSocketChannel, int) onConnection) =>
-    (Request request, String id) async {
-      final intId = int.tryParse(id);
-      if (intId == null) {
-        return Response(HttpStatus.badRequest);
-      }
-
-      final handler = webSocketHandler(
-        (WebSocketChannel channel) => onConnection(channel, intId),
-      );
-
-      final response = await handler(request);
-      return response;
-    };
-
-_onConnection(OnConnection onConnection, bool isWeb) =>
-    (Request request, String id) async {
-      final intId = int.tryParse(id);
-      if (intId == null) {
-        return Response(HttpStatus.badRequest);
-      }
-
-      final method = isWeb ? onConnection.handleWeb : onConnection.handleMobile;
-      final handler = webSocketHandler(
-        (WebSocketChannel channel) => method(channel, intId),
-      );
-
-      final response = await handler(request);
-      return response;
-    };

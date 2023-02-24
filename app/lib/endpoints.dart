@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 
 class Route {
+  static var playersWs = _builder(Endpoint.playersWs);
   static var pushWs = _builder(Endpoint.pushWsTemplate);
   static var cooldownWs = _builder(Endpoint.cooldownWsTemplate);
   static var attackWs = _builder(Endpoint.attackWsTemplate);
