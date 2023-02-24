@@ -9,16 +9,12 @@ import 'on_connection.dart';
 
 class AttackConnection extends OnConnection {
   @override
-  void handler(
-    WebSocketChannel channel,
-    int playerId,
-    List<int> Function(dynamic data) dataParser,
-  ) {
+  void onInit(int playerId, WebSocketChannel channel) {
     attackWSChannels.add(channel);
-    channel.stream.listen((data) => _attack(dataParser(data), playerId));
   }
 
-  void _attack(List<int> data, int playerId) {
+  @override
+  void onData(int playerId, List<int> data) {
     if (attackCooldowns[playerId] == true) {
       return;
     }

@@ -10,6 +10,8 @@ final port = '8080';
 final host = '192.168.0.171';
 // strzeszyn
 // final host = '192.168.1.25';
+// sii warszawa
+// final host = '10.254.33.55';
 final base = 'http://$host:$port';
 
 Future<CreatePlayerDtoResponse> createPlayer$(

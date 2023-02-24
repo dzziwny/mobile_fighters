@@ -6,11 +6,7 @@ import 'on_connection.dart';
 
 class CooldownConnection extends OnConnection {
   @override
-  void handler(
-    WebSocketChannel channel,
-    int playerId,
-    List<int> Function(dynamic data) dataParser,
-  ) {
+  void onInit(int playerId, WebSocketChannel channel) {
     cooldownWSChannels[playerId] = channel;
 
     final attackCooldown = attackCooldowns[playerId];
@@ -29,4 +25,7 @@ class CooldownConnection extends OnConnection {
       ).toData(),
     );
   }
+
+  @override
+  void onData(int playerId, List<int> data) {}
 }

@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:core/core.dart';
-import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:shelf_web_socket/shelf_web_socket.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'handler/_handler.dart';
 import 'handler/on_connection.dart';
@@ -15,28 +10,11 @@ extension WithWeb on Router {
     OnConnection onConnection,
   ) {
     final mobileRoute = routeBuilder(isWeb: false);
-    get(mobileRoute, _handler(onConnection, false));
+    get(mobileRoute, onConnection.handler(false));
 
     final webRoute = routeBuilder(isWeb: true);
-    get(webRoute, _handler(onConnection, true));
+    get(webRoute, onConnection.handler(true));
   }
-
-  Function _handler(OnConnection onConnection, bool isWeb) =>
-      (Request request, String id) async {
-        final intId = int.tryParse(id);
-        if (intId == null) {
-          return Response(HttpStatus.badRequest);
-        }
-
-        final method =
-            isWeb ? onConnection.handleWeb : onConnection.handleMobile;
-        final handler = webSocketHandler(
-          (WebSocketChannel channel) => method(channel, intId),
-        );
-
-        final response = await handler(request);
-        return response;
-      };
 }
 
 final router = Router()
@@ -52,4 +30,4 @@ final router = Router()
   ..ws(Endpoint.gamePhaseWsTemplate, GamePhaseConnection())
   ..ws(Endpoint.playersWs, PlayersConnection())
   ..ws(Endpoint.playerChangeWs, PlayerChangeConnection())
-  ..ws(Endpoint.hitWs, PlayerChangeConnection());
+  ..ws(Endpoint.hitWs, HitConnection());

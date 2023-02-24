@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
@@ -11,16 +12,13 @@ import 'on_connection.dart';
 
 class PushConnection extends OnConnection {
   @override
-  void handler(
-    WebSocketChannel channel,
-    int playerId,
-    List<int> Function(dynamic data) dataParser,
-  ) {
+  void onInit(int playerId, WebSocketChannel channel) {
     rawDataWSChannels.add(channel);
-    channel.stream.listen((data) => _handler(dataParser(data), playerId));
   }
 
-  void _handler(List<int> data, int playerId) {
+  @override
+  void onData(int playerId, List<int> data) {
+    // TODO: distinguish this operations
     switch (data[0]) {
       case 0:
         push(data, playerId);

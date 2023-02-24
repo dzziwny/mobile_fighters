@@ -11,6 +11,7 @@ dependencies:
   args: ^2.0.0
   core:
     path: ../core
+  get_it: ^7.2.0
   shelf: ^1.1.0
   shelf_cors_headers: ^0.1.4
   shelf_router: ^1.0.0

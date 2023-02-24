@@ -5,11 +5,10 @@ import 'on_connection.dart';
 
 class PlayerChangeConnection extends OnConnection {
   @override
-  void handler(
-    WebSocketChannel channel,
-    int playerId,
-    List<int> Function(dynamic data) dataParser,
-  ) {
+  void onInit(int playerId, WebSocketChannel channel) {
     playerChangeWSChannels.add(channel);
   }
+
+  @override
+  void onData(int playerId, List<int> data) {}
 }
