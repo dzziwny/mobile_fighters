@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bubble_fight/rxdart.extension.dart';
 import 'package:core/core.dart';
@@ -8,23 +7,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'endpoints.dart';
-
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
-
-  late final selectTeamChannel = id$
-      .where((id) => id != null)
-      .map(
-        (id) => WebSocketChannel.connect(
-          Uri.parse('ws://$host:$port${Route.selectTeamWs(id!)}'),
-        ),
-      )
-      .shareReplay(maxSize: 1);
-
-  late final Stream<dynamic> teamsData$ = selectTeamChannel
-      .switchMap((channel) => channel.stream)
-      .asBroadcastStream();
 
   final id$ = BehaviorSubject<int?>.seeded(null);
 
@@ -59,10 +43,6 @@ class ServerClient implements Disposable {
 
   final Future<GameFrame> gameFrame = gameFrame$();
 
-  late Stream<TeamsDto> teams$ = teamsData$.asBroadcastStream().map((data) {
-    return _dataToTeams(data);
-  });
-
   /*
   * Converters
   */
@@ -74,49 +54,12 @@ class ServerClient implements Disposable {
   //   return attackingPlayerId;
   // }
 
-  TeamsDto _dataToTeams(data) {
-    final teams = TeamsDto.fromJson(jsonDecode(data));
-    return teams;
-  }
-
   @override
   Future onDispose() async {
     await Future.wait([
       positionsSubscription.cancel(),
       myPositionSubscription.cancel(),
     ]);
-  }
-
-  Stream<bool> isSelectingTeam$() {
-    return Stream.value(true);
-  }
-
-  Stream<List<String>> fluentTeam$() {
-    return teams$.map((teams) => teams.fluent);
-  }
-
-  Stream<List<String>> cupertinoTeam$() {
-    return teams$.map((teams) => teams.cupertino);
-  }
-
-  Stream<List<String>> materialTeam$() {
-    return teams$.map((teams) => teams.material);
-  }
-
-  Stream<List<String>> spectatorsTeam$() {
-    return teams$.map((teams) => teams.spectators);
-  }
-
-  Future<void> selectBlueTeam() async {
-    final channel = await selectTeamChannel.first;
-    final data = [0, 0];
-    channel.sink.add(data);
-  }
-
-  Future<void> selectRedTeam() async {
-    final channel = await selectTeamChannel.first;
-    final data = [0, 1];
-    channel.sink.add(data);
   }
 
   Stream<WebSocketChannel> channel(String Function(int) uriBuilder) {

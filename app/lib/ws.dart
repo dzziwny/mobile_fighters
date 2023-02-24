@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bubble_fight/di.dart';
+import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -13,10 +15,13 @@ class Ws<DtoType, DataType> implements Disposable {
   late final StreamSubscription _channelSubscription;
 
   Ws(
-    String Function(int) uriBuilder,
+    Endpoint endpoint,
     DtoType Function(DataType) instanceBuilder,
   ) {
-    _channel = serverClient.channel(uriBuilder).publishReplay(maxSize: 1);
+    _channel = serverClient
+        .channel((int id) => endpoint.build(id: id.toString(), isWeb: kIsWeb))
+        .publishReplay(maxSize: 1);
+
     _data = _channel
         .switchMap((channel) => channel.stream)
         .map((data) => instanceBuilder(data as DataType))

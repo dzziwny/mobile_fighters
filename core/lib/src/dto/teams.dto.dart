@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'teams.dto.freezed.dart';
@@ -17,4 +19,6 @@ class TeamsDto with _$TeamsDto {
 
   factory TeamsDto.fromJson(Map<String, dynamic> json) =>
       _$TeamsDtoFromJson(json);
+
+  factory TeamsDto.parse(String data) => TeamsDto.fromJson(jsonDecode(data));
 }

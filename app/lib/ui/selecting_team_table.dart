@@ -9,7 +9,7 @@ class SelectingTeamTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: serverClient.isSelectingTeam$(),
+      stream: teamService.isSelectingTeam$(),
       builder: (context, snapshot) {
         if (snapshot.data != true) {
           return const SizedBox();
@@ -38,7 +38,7 @@ class SelectingTeamTable extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         StreamBuilder<List<String>>(
-                            stream: serverClient.materialTeam$(),
+                            stream: teamService.materialTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -69,7 +69,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: serverClient.fluentTeam$(),
+                            stream: teamService.fluentTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -100,7 +100,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: serverClient.cupertinoTeam$(),
+                            stream: teamService.cupertinoTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -131,7 +131,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: serverClient.spectatorsTeam$(),
+                            stream: teamService.spectatorsTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
