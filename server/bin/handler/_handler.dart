@@ -6,7 +6,6 @@ export 'game_phase.socket_handler.dart';
 export 'get_game_frame.handler.dart';
 export 'hit.socket_handler.dart';
 export 'leave_game.handler.dart';
-export 'player_change.socket_handler.dart';
 export 'players.connection.dart';
 export 'push.socket_handler.dart';
 export 'selecting_team.socket_handler.dart';

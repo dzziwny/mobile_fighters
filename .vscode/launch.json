@@ -82,12 +82,17 @@
         },
         {
           "name": "all",
-          "configurations": ["server", "chrome","iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29"],
+          "configurations": ["server", "chrome","iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29", "macOS"],
           "stopAll": true
         },
         {
           "name": "all apps",
           "configurations": ["chrome", "iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29"],
+          "stopAll": true
+        },
+        {
+          "name": "3 mac 2 chrome",
+          "configurations": ["macOS", "macOS", "macOS", "chrome", "chrome"],
           "stopAll": true
         },
       ]

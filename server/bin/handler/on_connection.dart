@@ -14,11 +14,16 @@ abstract class OnConnection {
         throw Exception('unknown data');
       }
 
+      if (data == '') {
+        return [];
+      }
+
       final intData = data.split(',').map((e) => int.parse(e)).toList();
       return intData;
     });
   }
 
+  // TODO: remove parser
   void handler(
     WebSocketChannel channel,
     int playerId,

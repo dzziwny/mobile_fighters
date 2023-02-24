@@ -6,20 +6,12 @@ import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'endpoints.dart';
 
 class ServerClient implements Disposable {
   final _guid = const Uuid().v4().hashCode;
-
-  final addOrRemovePlayerChannel = WebSocketChannel.connect(
-    Uri.parse('ws://$host:$port${Endpoint.playerChangeWs}'),
-  );
-  final hitChannel = WebSocketChannel.connect(
-    Uri.parse('ws://$host:$port${Endpoint.hitWs}'),
-  );
 
   late final selectTeamChannel = id$
       .where((id) => id != null)
@@ -30,9 +22,6 @@ class ServerClient implements Disposable {
       )
       .shareReplay(maxSize: 1);
 
-  late final Stream<dynamic> playersChangeData$ =
-      addOrRemovePlayerChannel.stream.asBroadcastStream();
-  late final Stream<dynamic> hitData$ = hitChannel.stream.asBroadcastStream();
   late final Stream<dynamic> teamsData$ = selectTeamChannel
       .switchMap((channel) => channel.stream)
       .asBroadcastStream();
@@ -70,13 +59,6 @@ class ServerClient implements Disposable {
 
   final Future<GameFrame> gameFrame = gameFrame$();
 
-  Stream<PlayerChangeDto> playerChange$() => playersChangeData$
-      .asBroadcastStream()
-      .map((data) => _dataToPlayerChange(data));
-
-  Stream<HitDto> hit$() =>
-      hitData$.asBroadcastStream().map((data) => _dataToHit(data));
-
   late Stream<TeamsDto> teams$ = teamsData$.asBroadcastStream().map((data) {
     return _dataToTeams(data);
   });
@@ -84,17 +66,6 @@ class ServerClient implements Disposable {
   /*
   * Converters
   */
-
-  PlayerChangeDto _dataToPlayerChange(String data) {
-    final json = jsonDecode(data);
-    final dto = PlayerChangeDto.fromJson(json);
-    return dto;
-  }
-
-  HitDto _dataToHit(List<int> data) {
-    final dto = HitDto(playerId: data[0], hp: data[1]);
-    return dto;
-  }
 
   // TODO add leaving game after dead
   // int _dataToDead(List<int> data) {
@@ -111,8 +82,6 @@ class ServerClient implements Disposable {
   @override
   Future onDispose() async {
     await Future.wait([
-      addOrRemovePlayerChannel.sink.close(status.goingAway),
-      hitChannel.sink.close(status.goingAway),
       positionsSubscription.cancel(),
       myPositionSubscription.cancel(),
     ]);

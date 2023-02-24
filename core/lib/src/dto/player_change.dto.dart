@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'dart:convert';
+
 import 'package:core/src/model/_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,4 +20,7 @@ class PlayerChangeDto with _$PlayerChangeDto {
 
   factory PlayerChangeDto.fromJson(Map<String, dynamic> json) =>
       _$PlayerChangeDtoFromJson(json);
+
+  factory PlayerChangeDto.parse(String data) =>
+      PlayerChangeDto.fromJson(jsonDecode(data));
 }

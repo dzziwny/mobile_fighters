@@ -51,5 +51,5 @@ final router = Router()
   ..ws(Endpoint.selectTeamWsTemplate, TeamConnection())
   ..ws(Endpoint.gamePhaseWsTemplate, GamePhaseConnection())
   ..ws(Endpoint.playersWs, PlayersConnection())
-  ..get(Endpoint.playerChangeWs, webSocketHandler(playerChangeSocketHandler))
-  ..get(Endpoint.hitWs, webSocketHandler(hitSocketHandler));
+  ..ws(Endpoint.playerChangeWs, PlayerChangeConnection())
+  ..ws(Endpoint.hitWs, PlayerChangeConnection());

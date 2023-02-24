@@ -10,9 +10,11 @@ import 'ws.dart';
 final serverClient = ServerClient();
 
 final playersWs = Ws(Route.playersWs, Player.parseToList);
+final playerChangeWs = Ws(Route.playerChangeWs, PlayerChangeDto.parse);
 final positionWs = Ws(Route.pushWs, Position.fromBytes);
 final attackWs = Ws(Route.attackWs, AttackResponse.fromBytes);
 final cooldownWs = Ws(Route.cooldownWs, CooldownDto.fromBytes);
+final hitWs = Ws(Route.hitWs, HitDto.fromBytes);
 final deadWs = Ws(Route.deadWs, (List<int> bytes) => bytes[0]);
 
 final positionService = PositionService();
