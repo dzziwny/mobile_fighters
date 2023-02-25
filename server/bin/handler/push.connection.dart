@@ -1,9 +1,7 @@
-
 import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -13,25 +11,11 @@ import 'on_connection.dart';
 class PushConnection extends OnConnection {
   @override
   void onInit(int playerId, WebSocketChannel channel) {
-    rawDataWSChannels.add(channel);
+    pushChannels.add(channel);
   }
 
   @override
   void onData(int playerId, List<int> data) {
-    // TODO: distinguish this operations
-    switch (data[0]) {
-      case 0:
-        push(data, playerId);
-        break;
-      case 1:
-        dash(data, playerId);
-        break;
-      default:
-        assert(false);
-    }
-  }
-
-  void push(List<int> data, int playerId) {
     if (pushCooldowns[playerId] == true) {
       return;
     }
@@ -62,41 +46,5 @@ class PushConnection extends OnConnection {
     Timer(Duration(milliseconds: pushCooldownMilisesconds), () {
       pushCooldowns[playerId] = false;
     });
-  }
-
-  void dash(List<int> data, int playerId) {
-    if (dashCooldowns[playerId] == true) {
-      return;
-    }
-
-    final physic = playerPhysics[playerId];
-    if (physic == null) {
-      return;
-    }
-
-    final update = physic.velocity.normalized() * 50.0;
-    physic.velocity.add(update);
-
-    gameUpdates.add(() => dashCooldownUpdate(playerId, true));
-    dashCooldowns[playerId] = true;
-
-    Timer(Duration(seconds: dashCooldownSesconds), () {
-      gameUpdates.add(() => dashCooldownUpdate(playerId, false));
-      dashCooldowns[playerId] = false;
-    });
-  }
-
-  void dashCooldownUpdate(int playerId, bool isCooldown) {
-    final channel = cooldownWSChannels[playerId];
-    if (channel == null) {
-      return;
-    }
-
-    final frame = CooldownDto(
-      isCooldown: isCooldown,
-      cooldownType: CooldownType.dash,
-    ).toData();
-
-    channel.sink.add(frame);
   }
 }

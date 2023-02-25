@@ -12,7 +12,4 @@ class PlayersConnection extends OnConnection {
     final data = jsonEncode(players.values.toList());
     channel.sink.add(data);
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

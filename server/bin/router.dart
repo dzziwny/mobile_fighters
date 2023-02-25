@@ -18,11 +18,12 @@ extension WithWeb on Router {
 }
 
 final router = Router()
+  ..get(Endpoint.gameFrame, gameFrameHandler)
   ..post(Endpoint.createPlayer, createPlayerHandler)
   ..post(Endpoint.createTestPlayer, createTestPlayerHandler)
-  ..get(Endpoint.gameFrame, gameFrameHandler)
   ..post(Endpoint.leaveGame, leaveGameHandler)
   ..ws(Endpoint.pushWs, PushConnection())
+  ..ws(Endpoint.dashWs, DashConnection())
   ..ws(Endpoint.cooldownWs, CooldownConnection())
   ..ws(Endpoint.attackWs, AttackConnection())
   ..ws(Endpoint.deadWs, DeadConnection())

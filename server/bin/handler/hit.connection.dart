@@ -8,7 +8,4 @@ class HitConnection extends OnConnection {
   void onInit(int playerId, WebSocketChannel channel) {
     hitWSChannels.add(channel);
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

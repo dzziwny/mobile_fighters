@@ -10,9 +10,9 @@ abstract class OnConnection implements Disposable {
   StreamSubscription? _mobileSubscription;
   StreamSubscription? _webSubscription;
 
-  void onInit(int playerId, WebSocketChannel channel);
+  void onInit(int playerId, WebSocketChannel channel) {}
 
-  void onData(int playerId, List<int> data);
+  void onData(int playerId, List<int> data) {}
 
   void _handleMobile(WebSocketChannel channel, int playerId) {
     _mobileSubscription = _handler(channel, playerId, (data) => data);

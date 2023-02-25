@@ -8,7 +8,4 @@ class PlayerChangeConnection extends OnConnection {
   void onInit(int playerId, WebSocketChannel channel) {
     playerChangeWSChannels.add(channel);
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

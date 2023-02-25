@@ -88,7 +88,7 @@ void _sharePlayerPosition(int id, PlayerPhysics physic) {
   ];
 
   gameDraws.add(() {
-    for (var channel in rawDataWSChannels) {
+    for (var channel in pushChannels) {
       channel.sink.add(data);
     }
   });

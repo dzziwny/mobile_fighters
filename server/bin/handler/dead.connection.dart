@@ -8,7 +8,4 @@ class DeadConnection extends OnConnection {
   void onInit(int playerId, WebSocketChannel channel) {
     deadWSChannels[playerId] = channel;
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

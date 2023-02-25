@@ -77,7 +77,7 @@ GamePhase phase = GamePhase.selectingTeam;
 
 Player? gameHost;
 
-List<WebSocketChannel> rawDataWSChannels = [];
+List<WebSocketChannel> pushChannels = [];
 List<WebSocketChannel> playersWSChannels = [];
 List<WebSocketChannel> playerChangeWSChannels = [];
 List<WebSocketChannel> attackWSChannels = [];
@@ -86,6 +86,7 @@ Map<int, WebSocketChannel> cooldownWSChannels = {};
 Map<int, WebSocketChannel> deadWSChannels = {};
 Map<int, WebSocketChannel> teamsWSChannels = {};
 Map<int, WebSocketChannel> gamePhaseWSChannels = {};
+Map<int, WebSocketChannel> dashChannels = {};
 
 // If there are lags, try make sliceTime smaller
 const int sliceTimeMicroseconds = 5000;

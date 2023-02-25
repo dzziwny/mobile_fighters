@@ -58,7 +58,7 @@ void physicUpdate(int playerId) {
     return;
   }
 
-  final friction = calculateFriction(physic.velocity);
+  final friction = calculateFriction(physic);
   final netForce = physic.pushingForce + friction;
 
   physic.velocity
@@ -82,30 +82,13 @@ void physicUpdate(int playerId) {
   ];
 
   gameDraws.add(() {
-    for (var channel in rawDataWSChannels) {
+    for (var channel in pushChannels) {
       channel.sink.add(data);
     }
   });
 }
 
-Vector2 calculateFriction(Vector2 velocity) {
-  /// Proportionality constant that relates the friction force to the velocity
-  /// of the object. Its value is determined by the properties of the materials
-  /// in contact, such as the surface roughness, and the density of the fluid
-  /// or gas
-  double k = 0.1;
-
-  /// depends on the nature of the surfaces in contact, and it can be different
-  /// for different materials. For example, when an object moves through a
-  /// fluid, the value of "n" can be different for laminar and turbulent
-  /// flows. Also can be different for different types of materials,
-  /// such as rubber or steel.
-  double n = 0.25;
-
-  Vector2 normalizedVelocity = velocity.normalized();
-  Vector2 scaledVelocity = normalizedVelocity.scaled(
-    -k * pow(velocity.length2, n),
-  );
-
-  return scaledVelocity;
+Vector2 calculateFriction(PlayerPhysics physics) {
+  final scale = -physics.k * pow(physics.velocity.length2, physics.n);
+  return physics.velocity.normalized().scaled(scale);
 }

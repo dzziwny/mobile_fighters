@@ -7,9 +7,14 @@ import 'model/_model.dart';
 
 final port = '8080';
 // monte
-final host = '192.168.0.171';
+// final host = '192.168.0.171';
+
+// no internet
+final host = '0.0.0.0';
+
 // strzeszyn
 // final host = '192.168.1.25';
+
 // sii warszawa
 // final host = '10.254.33.55';
 final base = 'http://$host:$port';

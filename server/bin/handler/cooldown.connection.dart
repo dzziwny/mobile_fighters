@@ -25,7 +25,4 @@ class CooldownConnection extends OnConnection {
       ).toData(),
     );
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

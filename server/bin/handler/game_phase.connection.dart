@@ -9,7 +9,4 @@ class GamePhaseConnection extends OnConnection {
     gamePhaseWSChannels[playerId] = channel;
     channel.sink.add([phase.index]);
   }
-
-  @override
-  void onData(int playerId, List<int> data) {}
 }

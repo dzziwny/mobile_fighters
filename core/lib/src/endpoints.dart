@@ -5,6 +5,7 @@ class Endpoint {
   static const gameFrame = '/gameFrame';
   static var playersWs = Endpoint('/players/ws');
   static var pushWs = Endpoint('/push/ws');
+  static var dashWs = Endpoint('/dash/ws');
   static var cooldownWs = Endpoint('/cooldownWs/ws');
   static var attackWs = Endpoint('/attack/ws');
   static var deadWs = Endpoint('/deadWs/ws');
