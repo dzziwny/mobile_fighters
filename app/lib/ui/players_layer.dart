@@ -28,7 +28,18 @@ class PlayersLayer extends StatelessWidget {
                   left: position.x - 44.5,
                   child: Transform.rotate(
                     angle: position.angle,
-                    child: SizedBox(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          // TODO different color for different team
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.4),
+                            spreadRadius: 10.0,
+                            blurRadius: 25.0,
+                            blurStyle: BlurStyle.normal,
+                          )
+                        ],
+                      ),
                       height: 144.0,
                       width: 89.0,
                       child: FittedBox(child: deviceWidget(player.device)),
