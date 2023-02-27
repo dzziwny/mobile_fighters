@@ -10,6 +10,7 @@ part 'create_player.dto.g.dart';
 class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
   @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoRequest({
+    required int id,
     required int guid,
     required String nick,
     required Device device,

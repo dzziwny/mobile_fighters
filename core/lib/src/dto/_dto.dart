@@ -1,3 +1,4 @@
+export 'connect.dto.dart';
 export 'cooldown.dto.dart';
 export 'create_player.dto.dart';
 export 'dash.dto.dart';

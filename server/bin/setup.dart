@@ -22,8 +22,6 @@ final players = <int, Player>{};
 * value ->  [x, y, angle]
 */
 final playerPhysics = <int, PlayerPhysics>{};
-const coefficientOfFriction = 0.8;
-const defaultMass = 1.0;
 
 /*
 * cooldowns

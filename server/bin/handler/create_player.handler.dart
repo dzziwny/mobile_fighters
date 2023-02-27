@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
-import 'package:uuid/uuid.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../model/player_physics.dart';
@@ -18,25 +17,20 @@ Future<Response> createPlayerHandler(Request request) async {
   final player = createPlayer(dto);
   final response = CreatePlayerDtoResponse(id: player.id, team: player.team);
 
-  return Response.ok(jsonEncode(response.toJson()));
-}
-
-Future<Response> createTestPlayerHandler(_) async {
-  final guid = Uuid().v4().hashCode;
-  createPlayer(
-    CreatePlayerDtoRequest(guid: guid, nick: 'test', device: Device.pixel),
-  );
-  return Response.ok(null);
+  return Response.ok(jsonEncode(response));
 }
 
 Player createPlayer(CreatePlayerDtoRequest dto) {
-  final guid = dto.guid;
-  var prevPlayer = players[guids[guid]];
+  final id = guids[dto.guid];
+  if (id == null || id != dto.id) {
+    throw Exception();
+  }
+
+  var prevPlayer = players[id];
   if (prevPlayer != null) {
     return prevPlayer;
   }
 
-  final id = ++ids;
   final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
   final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
   final randomAngle = Random().nextInt(100) / 10.0;
@@ -56,7 +50,6 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
 
   players[id] = player;
 
-  guids[guid] = id;
   sharePlayers();
   _sharePlayerCreated(id);
   _sharePlayerPosition(id, physic);

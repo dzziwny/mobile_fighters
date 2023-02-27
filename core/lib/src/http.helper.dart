@@ -19,18 +19,40 @@ final host = '0.0.0.0';
 // final host = '10.254.33.55';
 final base = 'http://$host:$port';
 
+Future<ConnectFromServerDto> connect$(int guid) async {
+  final response = await post(
+    Uri.parse('$base${Endpoint.connect}'),
+    body: jsonEncode(
+      ConnectToServerDto(guid: guid).toJson(),
+    ),
+  );
+
+  final dto = ConnectFromServerDto.fromJson(jsonDecode(response.body));
+  return dto;
+}
+
 Future<CreatePlayerDtoResponse> createPlayer$(
   int guid,
+  int id,
   String nick,
   Device device,
 ) async {
   final response = await post(
-    Uri.parse('$base${Endpoint.createPlayer}'),
+    Uri.parse('$base${Endpoint.startGame}'),
     body: jsonEncode(
       // TODO check if jsonEncode is needed - in other methods too
-      CreatePlayerDtoRequest(guid: guid, nick: nick, device: device).toJson(),
+      CreatePlayerDtoRequest(
+        guid: guid,
+        id: id,
+        nick: nick,
+        device: device,
+      ),
     ),
   );
+
+  if (response.statusCode != 200) {
+    throw Exception('Cannot create player');
+  }
 
   final dto = CreatePlayerDtoResponse.fromJson(jsonDecode(response.body));
   return dto;
@@ -45,9 +67,9 @@ Future<GameFrame> gameFrame$() async {
   return frame;
 }
 
-Future<void> leaveGame$(int guid) => post(
+Future<void> leaveGame$(int guid, int id) => post(
       Uri.parse('$base${Endpoint.leaveGame}'),
       body: jsonEncode(
-        LeaveGameDtoRequest(guid: guid).toJson(),
+        LeaveGameDtoRequest(guid: guid, id: id).toJson(),
       ),
     );

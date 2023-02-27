@@ -6,7 +6,7 @@ import 'handler/on_connection.dart';
 
 extension WithWeb on Router {
   void ws(
-    Endpoint endpoint,
+    Socket endpoint,
     OnConnection onConnection,
   ) {
     final mobileRoute = endpoint.build(isWeb: false);
@@ -19,16 +19,16 @@ extension WithWeb on Router {
 
 final router = Router()
   ..get(Endpoint.gameFrame, gameFrameHandler)
-  ..post(Endpoint.createPlayer, createPlayerHandler)
-  ..post(Endpoint.createTestPlayer, createTestPlayerHandler)
+  ..post(Endpoint.connect, connectHandler)
+  ..post(Endpoint.startGame, createPlayerHandler)
   ..post(Endpoint.leaveGame, leaveGameHandler)
-  ..ws(Endpoint.pushWs, PushConnection())
-  ..ws(Endpoint.dashWs, DashConnection())
-  ..ws(Endpoint.cooldownWs, CooldownConnection())
-  ..ws(Endpoint.attackWs, AttackConnection())
-  ..ws(Endpoint.deadWs, DeadConnection())
-  ..ws(Endpoint.selectTeamWs, TeamConnection())
-  ..ws(Endpoint.gamePhaseWsTemplate, GamePhaseConnection())
-  ..ws(Endpoint.playersWs, PlayersConnection())
-  ..ws(Endpoint.playerChangeWs, PlayerChangeConnection())
-  ..ws(Endpoint.hitWs, HitConnection());
+  ..ws(Socket.pushWs, PushConnection())
+  ..ws(Socket.dashWs, DashConnection())
+  ..ws(Socket.cooldownWs, CooldownConnection())
+  ..ws(Socket.attackWs, AttackConnection())
+  ..ws(Socket.deadWs, DeadConnection())
+  ..ws(Socket.selectTeamWs, TeamConnection())
+  ..ws(Socket.gamePhaseWsTemplate, GamePhaseConnection())
+  ..ws(Socket.playersWs, PlayersConnection())
+  ..ws(Socket.playerChangeWs, PlayerChangeConnection())
+  ..ws(Socket.hitWs, HitConnection());

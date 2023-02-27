@@ -9,6 +9,7 @@ part of 'create_player.dto.dart';
 _$_CreatePlayerDtoRequest _$$_CreatePlayerDtoRequestFromJson(
         Map<String, dynamic> json) =>
     _$_CreatePlayerDtoRequest(
+      id: json['id'] as int,
       guid: json['guid'] as int,
       nick: json['nick'] as String,
       device: $enumDecode(_$DeviceEnumMap, json['device']),
@@ -17,6 +18,7 @@ _$_CreatePlayerDtoRequest _$$_CreatePlayerDtoRequestFromJson(
 Map<String, dynamic> _$$_CreatePlayerDtoRequestToJson(
         _$_CreatePlayerDtoRequest instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'guid': instance.guid,
       'nick': instance.nick,
       'device': _$DeviceEnumMap[instance.device]!,

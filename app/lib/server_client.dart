@@ -8,44 +8,46 @@ import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ServerClient implements Disposable {
+  // TODO leave a String here
   final _guid = const Uuid().v4().hashCode;
 
-  final id$ = BehaviorSubject<int?>.seeded(null);
+  final id$ = ReplaySubject<int>(maxSize: 1);
 
-  final myPlayer$ = ReplaySubject<Player>(maxSize: 1);
+  final myPlayer$ = BehaviorSubject<Player?>.seeded(null);
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
 
-  /*
-  * Streams
-  */
-  Future<int> createPlayer(String nick, Device device) async {
-    final dto = await createPlayer$(_guid, nick, device);
+  Future<void> connect() async {
+    final response = await connect$(_guid);
+    id$.add(response.id);
+  }
+
+  Future<void> createPlayer(String nick, Device device) async {
+    final id = await id$.first;
+    final dto = await createPlayer$(_guid, id, nick, device);
     myPlayer$.add(
       Player(id: dto.id, device: device, nick: nick, team: dto.team),
     );
-
-    final id = dto.id;
-
-    id$.add(id);
-    return id;
   }
 
-  Future<int> backToTheGame() async {
+  Future<void> backToTheGame() async {
     final player = await myPlayer$.first;
-    return await createPlayer(player.nick, player.device);
+    if (player == null) {
+      throw Exception('Cannot back to the game without a player.. i think xd');
+    }
+
+    await createPlayer(player.nick, player.device);
   }
 
-  Future<void> leaveGame() => leaveGame$(_guid).then((_) => id$.add(null));
+  Future<void> leaveGame() async {
+    final id = await id$.first;
+    await leaveGame$(_guid, id).then((_) => myPlayer$.add(null));
+  }
 
-  Stream<bool> isInGame() => id$.map((id) => id != null);
+  Stream<bool> isInGame() => myPlayer$.map((player) => player != null);
 
   final Future<GameFrame> gameFrame = gameFrame$();
-
-  /*
-  * Converters
-  */
 
   // TODO add leaving game after dead
   // int _dataToDead(List<int> data) {

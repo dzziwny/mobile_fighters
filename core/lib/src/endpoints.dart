@@ -1,20 +1,23 @@
 class Endpoint {
-  static const createPlayer = '/createPlayer';
-  static const createTestPlayer = '/createTestPlayer';
+  static const connect = '/connect';
+  static const startGame = '/startGame';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
-  static var playersWs = Endpoint('/players/ws');
-  static var pushWs = Endpoint('/push/ws');
-  static var dashWs = Endpoint('/dash/ws');
-  static var cooldownWs = Endpoint('/cooldownWs/ws');
-  static var attackWs = Endpoint('/attack/ws');
-  static var deadWs = Endpoint('/deadWs/ws');
-  static var selectTeamWs = Endpoint('/selectTeamWs/ws');
-  static var gamePhaseWsTemplate = Endpoint('/gamePhaseWs/ws');
-  static var playerChangeWs = Endpoint('/playerChange/ws');
-  static var hitWs = Endpoint('/hit/ws');
+}
 
-  Endpoint(this._base);
+class Socket {
+  static var playersWs = Socket('players');
+  static var pushWs = Socket('push');
+  static var dashWs = Socket('dash');
+  static var cooldownWs = Socket('cooldownWs');
+  static var attackWs = Socket('attack');
+  static var deadWs = Socket('deadWs');
+  static var selectTeamWs = Socket('selectTeamWs');
+  static var gamePhaseWsTemplate = Socket('gamePhaseWs');
+  static var playerChangeWs = Socket('playerChange');
+  static var hitWs = Socket('hit');
+
+  Socket(String name) : _base = '/$name/ws';
 
   final String _base;
 

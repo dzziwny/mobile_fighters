@@ -10,6 +10,7 @@ class LeaveGameDtoRequest with _$LeaveGameDtoRequest {
   @JsonSerializable(explicitToJson: true)
   const factory LeaveGameDtoRequest({
     required int guid,
+    required int id,
   }) = _LeaveGameDtoRequest;
 
   factory LeaveGameDtoRequest.fromJson(Map<String, dynamic> json) =>

@@ -1,3 +1,4 @@
+import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/home.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  registerServices();
   runApp(const App());
 }
 

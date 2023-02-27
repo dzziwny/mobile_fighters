@@ -6,17 +6,22 @@ import 'server_client.dart';
 import 'service/_service.dart';
 import 'ws.dart';
 
+// TODO use GetIt
+Future<void> registerServices() async {
+  await serverClient.connect();
+}
+
 final serverClient = ServerClient();
 
-final playersWs = Ws(Endpoint.playersWs, Player.parseToList);
-final playerChangeWs = Ws(Endpoint.playerChangeWs, PlayerChangeDto.parse);
-final positionWs = Ws(Endpoint.pushWs, Position.fromBytes);
-final dashWs = Ws(Endpoint.dashWs, DashDto.fromBytes);
-final attackWs = Ws(Endpoint.attackWs, AttackResponse.fromBytes);
-final cooldownWs = Ws(Endpoint.cooldownWs, CooldownDto.fromBytes);
-final hitWs = Ws(Endpoint.hitWs, HitDto.fromBytes);
-final deadWs = Ws(Endpoint.deadWs, (List<int> bytes) => bytes[0]);
-final teamWs = Ws(Endpoint.selectTeamWs, TeamsDto.parse);
+final playersWs = Ws(Socket.playersWs, Player.parseToList);
+final playerChangeWs = Ws(Socket.playerChangeWs, PlayerChangeDto.parse);
+final positionWs = Ws(Socket.pushWs, Position.fromBytes);
+final dashWs = Ws(Socket.dashWs, DashDto.fromBytes);
+final attackWs = Ws(Socket.attackWs, AttackResponse.fromBytes);
+final cooldownWs = Ws(Socket.cooldownWs, CooldownDto.fromBytes);
+final hitWs = Ws(Socket.hitWs, HitDto.fromBytes);
+final deadWs = Ws(Socket.deadWs, (List<int> bytes) => bytes[0]);
+final teamWs = Ws(Socket.selectTeamWs, TeamsDto.parse);
 
 final positionService = PositionService();
 final cooldownService = CooldownService();

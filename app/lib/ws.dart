@@ -15,7 +15,7 @@ class Ws<DtoType, DataType> implements Disposable {
   late final StreamSubscription _channelSubscription;
 
   Ws(
-    Endpoint endpoint,
+    Socket endpoint,
     DtoType Function(DataType) instanceBuilder,
   ) {
     _channel = serverClient

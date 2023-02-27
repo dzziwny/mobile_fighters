@@ -21,6 +21,7 @@ CreatePlayerDtoRequest _$CreatePlayerDtoRequestFromJson(
 
 /// @nodoc
 mixin _$CreatePlayerDtoRequest {
+  int get id => throw _privateConstructorUsedError;
   int get guid => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
   Device get device => throw _privateConstructorUsedError;
@@ -37,7 +38,7 @@ abstract class $CreatePlayerDtoRequestCopyWith<$Res> {
           $Res Function(CreatePlayerDtoRequest) then) =
       _$CreatePlayerDtoRequestCopyWithImpl<$Res, CreatePlayerDtoRequest>;
   @useResult
-  $Res call({int guid, String nick, Device device});
+  $Res call({int id, int guid, String nick, Device device});
 }
 
 /// @nodoc
@@ -54,11 +55,16 @@ class _$CreatePlayerDtoRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? guid = null,
     Object? nick = null,
     Object? device = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
@@ -83,7 +89,7 @@ abstract class _$$_CreatePlayerDtoRequestCopyWith<$Res>
       __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int guid, String nick, Device device});
+  $Res call({int id, int guid, String nick, Device device});
 }
 
 /// @nodoc
@@ -98,11 +104,16 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? guid = null,
     Object? nick = null,
     Object? device = null,
   }) {
     return _then(_$_CreatePlayerDtoRequest(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
@@ -124,11 +135,16 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
   const _$_CreatePlayerDtoRequest(
-      {required this.guid, required this.nick, required this.device});
+      {required this.id,
+      required this.guid,
+      required this.nick,
+      required this.device});
 
   factory _$_CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =>
       _$$_CreatePlayerDtoRequestFromJson(json);
 
+  @override
+  final int id;
   @override
   final int guid;
   @override
@@ -138,7 +154,7 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
 
   @override
   String toString() {
-    return 'CreatePlayerDtoRequest(guid: $guid, nick: $nick, device: $device)';
+    return 'CreatePlayerDtoRequest(id: $id, guid: $guid, nick: $nick, device: $device)';
   }
 
   @override
@@ -146,6 +162,7 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CreatePlayerDtoRequest &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.guid, guid) || other.guid == guid) &&
             (identical(other.nick, nick) || other.nick == nick) &&
             (identical(other.device, device) || other.device == device));
@@ -153,7 +170,7 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, guid, nick, device);
+  int get hashCode => Object.hash(runtimeType, id, guid, nick, device);
 
   @JsonKey(ignore: true)
   @override
@@ -172,13 +189,16 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
 
 abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
   const factory _CreatePlayerDtoRequest(
-      {required final int guid,
+      {required final int id,
+      required final int guid,
       required final String nick,
       required final Device device}) = _$_CreatePlayerDtoRequest;
 
   factory _CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =
       _$_CreatePlayerDtoRequest.fromJson;
 
+  @override
+  int get id;
   @override
   int get guid;
   @override
