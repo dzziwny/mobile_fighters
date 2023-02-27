@@ -19,7 +19,7 @@ final host = '0.0.0.0';
 // final host = '10.254.33.55';
 final base = 'http://$host:$port';
 
-Future<ConnectFromServerDto> connect$(int guid) async {
+Future<ConnectFromServerDto> connect$(String guid) async {
   final response = await post(
     Uri.parse('$base${Endpoint.connect}'),
     body: jsonEncode(
@@ -32,7 +32,7 @@ Future<ConnectFromServerDto> connect$(int guid) async {
 }
 
 Future<CreatePlayerDtoResponse> createPlayer$(
-  int guid,
+  String guid,
   int id,
   String nick,
   Device device,
@@ -66,7 +66,7 @@ Future<GameFrame> gameFrame$() async {
   return frame;
 }
 
-Future<void> leaveGame$(int guid, int id) => post(
+Future<void> leaveGame$(String guid, int id) => post(
       Uri.parse('$base${Endpoint.leaveGame}'),
       body: jsonEncode(
         LeaveGameDtoRequest(guid: guid, id: id).toJson(),

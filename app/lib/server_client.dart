@@ -9,8 +9,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'di.dart';
 
 class ServerClient implements Disposable {
-  // TODO leave a String here
-  final _guid = uuid.v4().hashCode;
+  final _guid = uuid.v4();
 
   final id$ = ReplaySubject<int>(maxSize: 1);
 

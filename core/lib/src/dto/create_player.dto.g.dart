@@ -10,7 +10,7 @@ _$_CreatePlayerDtoRequest _$$_CreatePlayerDtoRequestFromJson(
         Map<String, dynamic> json) =>
     _$_CreatePlayerDtoRequest(
       id: json['id'] as int,
-      guid: json['guid'] as int,
+      guid: json['guid'] as String,
       nick: json['nick'] as String,
       device: $enumDecode(_$DeviceEnumMap, json['device']),
     );

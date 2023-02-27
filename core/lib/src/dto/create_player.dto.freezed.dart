@@ -22,7 +22,7 @@ CreatePlayerDtoRequest _$CreatePlayerDtoRequestFromJson(
 /// @nodoc
 mixin _$CreatePlayerDtoRequest {
   int get id => throw _privateConstructorUsedError;
-  int get guid => throw _privateConstructorUsedError;
+  String get guid => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
   Device get device => throw _privateConstructorUsedError;
 
@@ -38,7 +38,7 @@ abstract class $CreatePlayerDtoRequestCopyWith<$Res> {
           $Res Function(CreatePlayerDtoRequest) then) =
       _$CreatePlayerDtoRequestCopyWithImpl<$Res, CreatePlayerDtoRequest>;
   @useResult
-  $Res call({int id, int guid, String nick, Device device});
+  $Res call({int id, String guid, String nick, Device device});
 }
 
 /// @nodoc
@@ -68,7 +68,7 @@ class _$CreatePlayerDtoRequestCopyWithImpl<$Res,
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
@@ -89,7 +89,7 @@ abstract class _$$_CreatePlayerDtoRequestCopyWith<$Res>
       __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, int guid, String nick, Device device});
+  $Res call({int id, String guid, String nick, Device device});
 }
 
 /// @nodoc
@@ -117,7 +117,7 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       nick: null == nick
           ? _value.nick
           : nick // ignore: cast_nullable_to_non_nullable
@@ -146,7 +146,7 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
   @override
   final int id;
   @override
-  final int guid;
+  final String guid;
   @override
   final String nick;
   @override
@@ -190,7 +190,7 @@ class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
 abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
   const factory _CreatePlayerDtoRequest(
       {required final int id,
-      required final int guid,
+      required final String guid,
       required final String nick,
       required final Device device}) = _$_CreatePlayerDtoRequest;
 
@@ -200,7 +200,7 @@ abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
   @override
   int get id;
   @override
-  int get guid;
+  String get guid;
   @override
   String get nick;
   @override

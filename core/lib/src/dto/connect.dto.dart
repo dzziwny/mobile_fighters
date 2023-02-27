@@ -6,7 +6,7 @@ part 'connect.dto.g.dart';
 @freezed
 class ConnectToServerDto with _$ConnectToServerDto {
   const factory ConnectToServerDto({
-    required int guid,
+    required String guid,
   }) = _ConnectToServerDto;
 
   factory ConnectToServerDto.fromJson(Map<String, dynamic> json) =>

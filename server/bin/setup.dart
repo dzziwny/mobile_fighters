@@ -9,7 +9,7 @@ import 'model/player_physics.dart';
 * key   ->  guid
 * value ->  id
 */
-final guids = <int, int>{};
+final guids = <String, int>{};
 /*
 * key   ->  id
 * value ->  Player

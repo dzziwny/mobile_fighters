@@ -9,7 +9,7 @@ part 'leave_game.dto.g.dart';
 class LeaveGameDtoRequest with _$LeaveGameDtoRequest {
   @JsonSerializable(explicitToJson: true)
   const factory LeaveGameDtoRequest({
-    required int guid,
+    required String guid,
     required int id,
   }) = _LeaveGameDtoRequest;
 

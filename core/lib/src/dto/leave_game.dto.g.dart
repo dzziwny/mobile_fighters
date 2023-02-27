@@ -9,7 +9,7 @@ part of 'leave_game.dto.dart';
 _$_LeaveGameDtoRequest _$$_LeaveGameDtoRequestFromJson(
         Map<String, dynamic> json) =>
     _$_LeaveGameDtoRequest(
-      guid: json['guid'] as int,
+      guid: json['guid'] as String,
       id: json['id'] as int,
     );
 

@@ -20,7 +20,7 @@ LeaveGameDtoRequest _$LeaveGameDtoRequestFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LeaveGameDtoRequest {
-  int get guid => throw _privateConstructorUsedError;
+  String get guid => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $LeaveGameDtoRequestCopyWith<$Res> {
           LeaveGameDtoRequest value, $Res Function(LeaveGameDtoRequest) then) =
       _$LeaveGameDtoRequestCopyWithImpl<$Res, LeaveGameDtoRequest>;
   @useResult
-  $Res call({int guid, int id});
+  $Res call({String guid, int id});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$LeaveGameDtoRequestCopyWithImpl<$Res, $Val extends LeaveGameDtoRequest>
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,7 @@ abstract class _$$_LeaveGameDtoRequestCopyWith<$Res>
       __$$_LeaveGameDtoRequestCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int guid, int id});
+  $Res call({String guid, int id});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$_LeaveGameDtoRequestCopyWithImpl<$Res>
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -115,7 +115,7 @@ class _$_LeaveGameDtoRequest implements _LeaveGameDtoRequest {
       _$$_LeaveGameDtoRequestFromJson(json);
 
   @override
-  final int guid;
+  final String guid;
   @override
   final int id;
 
@@ -154,14 +154,14 @@ class _$_LeaveGameDtoRequest implements _LeaveGameDtoRequest {
 
 abstract class _LeaveGameDtoRequest implements LeaveGameDtoRequest {
   const factory _LeaveGameDtoRequest(
-      {required final int guid,
+      {required final String guid,
       required final int id}) = _$_LeaveGameDtoRequest;
 
   factory _LeaveGameDtoRequest.fromJson(Map<String, dynamic> json) =
       _$_LeaveGameDtoRequest.fromJson;
 
   @override
-  int get guid;
+  String get guid;
   @override
   int get id;
   @override

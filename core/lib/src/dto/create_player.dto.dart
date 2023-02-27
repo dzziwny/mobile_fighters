@@ -11,7 +11,7 @@ class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
   @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoRequest({
     required int id,
-    required int guid,
+    required String guid,
     required String nick,
     required Device device,
   }) = _CreatePlayerDtoRequest;
