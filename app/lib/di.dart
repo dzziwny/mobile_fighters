@@ -6,11 +6,6 @@ import 'server_client.dart';
 import 'service/_service.dart';
 import 'ws.dart';
 
-// TODO use GetIt
-Future<void> registerServices() async {
-  await serverClient.connect();
-}
-
 final serverClient = ServerClient();
 
 final playersWs = Ws(Socket.playersWs, Player.parseToList);

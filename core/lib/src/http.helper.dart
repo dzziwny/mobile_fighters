@@ -40,7 +40,6 @@ Future<CreatePlayerDtoResponse> createPlayer$(
   final response = await post(
     Uri.parse('$base${Endpoint.startGame}'),
     body: jsonEncode(
-      // TODO check if jsonEncode is needed - in other methods too
       CreatePlayerDtoRequest(
         guid: guid,
         id: id,

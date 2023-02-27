@@ -4,12 +4,13 @@ import 'package:bubble_fight/rxdart.extension.dart';
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'di.dart';
 
 class ServerClient implements Disposable {
   // TODO leave a String here
-  final _guid = const Uuid().v4().hashCode;
+  final _guid = uuid.v4().hashCode;
 
   final id$ = ReplaySubject<int>(maxSize: 1);
 
