@@ -13,16 +13,26 @@ class PositionBloc implements Disposable {
 
   late final _playersHandler = playersWs.data().map((players) {
     final subjects = _playersPositions.value;
+
+    // remove players
+    for (var id in subjects.keys) {
+      if (players[id] != null) {
+        continue;
+      }
+
+      subjects.remove(id)?.close();
+    }
+
+    // add players
     for (var player in players.values) {
       if (subjects.containsKey(player.id)) {
-        return;
+        continue;
       }
 
       subjects[player.id] = BehaviorSubject.seeded(player.position);
-      _playersPositions.add(subjects);
-
-      // TODO remove also
     }
+
+    _playersPositions.add(subjects);
   }).publish();
 
   late final _positionHandler = positionWs.data().map((position) {
