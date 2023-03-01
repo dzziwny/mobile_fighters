@@ -16,6 +16,7 @@ dependencies:
   shelf_cors_headers: ^0.1.4
   shelf_router: ^1.0.0
   shelf_web_socket: ^1.0.2
+  synchronized: ^3.0.1
   uuid: ^3.0.6
   vector_math: ^2.1.2
   web_socket_channel: ^2.2.0

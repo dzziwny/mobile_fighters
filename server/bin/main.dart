@@ -42,6 +42,7 @@ void main(List<String> args) async {
 
 void update() {
   // TODO: add attack, add position
+  // TODO use package:synchronized to synchronize operations
   for (var i = 0; i < gameUpdates.length; i++) {
     final func = gameUpdates.removeAt(0);
     func();

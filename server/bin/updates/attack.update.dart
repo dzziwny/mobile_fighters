@@ -3,21 +3,42 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../model/player_physics.dart';
 import '../setup.dart';
 
-// TODO
-int attackIds = 0;
+var _attackIdLock = Lock();
+final _bits = List<int>.generate(256, (i) => i);
+final _idsInUsage = <int, bool>{};
 
-void attackUpdate(int attackerId) {
+Future<int> _generateAttackId() => _attackIdLock.synchronized(() {
+      for (var id in _bits) {
+        if (_idsInUsage[id] != null) {
+          continue;
+        }
+
+        _idsInUsage[id] = true;
+        return id;
+      }
+
+      throw Exception('Attacks stack overflow xd');
+    });
+
+Future<void> _releaseAttackId(int id) => _attackIdLock.synchronized(() {
+      _idsInUsage.remove(id);
+    });
+
+void attackUpdate(int attackerId) async {
   final physic = playerPhysics[attackerId];
   if (physic == null) {
     return;
   }
 
-  final attackId = attackIds++;
+  final attackId = await _generateAttackId();
+  print('use id $attackId');
+
   final target = calculateTarget(physic);
   Timer(attackUntilBoomDuration, () {
     gameUpdates.add(() => _completeAttackUpdate(attackId, attackerId, target));
@@ -70,6 +91,7 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
     for (var channel in attackWSChannels) {
       channel.sink.add(bytes);
     }
+    _releaseAttackId(attackId);
   }));
 }
 
