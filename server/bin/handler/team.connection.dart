@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -17,7 +18,7 @@ class TeamConnection extends OnConnection {
   }
 
   @override
-  void onData(int playerId, List<int> data) {
+  void onData(int playerId, Uint8List data) {
     final player = players[playerId];
     if (player == null) {
       return;
@@ -36,7 +37,7 @@ class TeamConnection extends OnConnection {
     }
   }
 
-  void _selectTeam(Player player, List<int> data) {
+  void _selectTeam(Player player, Uint8List data) {
     final team = data[1];
     switch (team) {
       case 0:
@@ -60,7 +61,7 @@ class TeamConnection extends OnConnection {
     }
   }
 
-  void _startGame(Player player, List<int> data) {
+  void _startGame(Player player, Uint8List data) {
     // final isHost = player.id == gameHost?.id;
     // if (!isHost) {
     //   return;
@@ -73,7 +74,7 @@ class TeamConnection extends OnConnection {
     }
   }
 
-  void _endGame(Player player, List<int> data) {
+  void _endGame(Player player, Uint8List data) {
     // final isHost = player.id == gameHost?.id;
     // if (!isHost) {
     //   return;

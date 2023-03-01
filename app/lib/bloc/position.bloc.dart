@@ -60,26 +60,19 @@ class PositionBloc implements Disposable {
   Stream<Position> myPosition$() =>
       serverClient.id$.switchMap((id) => position(id));
 
-  // TODO check if there is a quicker solution
   Future<void> updateKnob(double angle, double deltaX, double deltaY) async {
-    final angleBytes = (ByteData(4)..setFloat32(0, angle)).buffer.asUint8List();
-    final deltaXBytes =
-        (ByteData(4)..setFloat32(0, deltaX)).buffer.asUint8List();
-    final deltaYBytes =
-        (ByteData(4)..setFloat32(0, deltaY)).buffer.asUint8List();
-
-    final bytes = <int>[
+    final bytes = Uint8List.fromList([
       0,
-      ...angleBytes,
-      ...deltaXBytes,
-      ...deltaYBytes,
-    ];
+      ...angle.toBytes(),
+      ...deltaX.toBytes(),
+      ...deltaY.toBytes(),
+    ]);
 
     await positionWs.send(bytes);
   }
 
   Future<void> dash() async {
-    final bytes = <int>[1];
+    final bytes = [1].toBytes();
     await positionWs.send(bytes);
   }
 

@@ -22,7 +22,7 @@ class Position with _$Position {
     return "position: [id: $playerId, x: $x, y: $y, angle: $angle]";
   }
 
-  factory Position.fromBytes(List<int> bytes) => Position(
+  factory Position.fromBytes(Uint8List bytes) => Position(
         playerId: bytes[0],
         x: ByteData.sublistView(Uint8List.fromList(bytes.sublist(1, 5)))
             .getFloat32(0),

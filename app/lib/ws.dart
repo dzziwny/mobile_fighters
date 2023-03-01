@@ -15,12 +15,10 @@ class Ws<DtoType, DataType> implements Disposable {
   late final StreamSubscription _channelSubscription;
 
   Ws(
-    Socket endpoint,
+    Socket socket,
     DtoType Function(DataType) instanceBuilder,
   ) {
-    _channel = serverClient
-        .channel((int id) => endpoint.build(id: id.toString(), isWeb: kIsWeb))
-        .publishReplay(maxSize: 1);
+    _channel = serverClient.channel(socket).publishReplay(maxSize: 1);
 
     _data = _channel
         .switchMap((channel) => channel.stream)
@@ -31,7 +29,7 @@ class Ws<DtoType, DataType> implements Disposable {
     _onDataSubscription = _data.connect();
   }
 
-  Future<void> send(List<int> bytes) async {
+  Future<void> send(Uint8List bytes) async {
     final channel = await _channel.first;
     channel.sink.add(bytes);
   }

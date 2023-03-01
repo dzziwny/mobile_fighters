@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../model/player_physics.dart';
@@ -76,9 +76,9 @@ void physicUpdate(int playerId) {
 
   final data = <int>[
     playerId,
-    ...(ByteData(4)..setFloat32(0, physic.position.x)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, physic.position.y)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, physic.angle)).buffer.asUint8List(),
+    ...physic.position.x.toBytes(),
+    ...physic.position.y.toBytes(),
+    ...physic.angle.toBytes(),
   ];
 
   gameDraws.add(() {

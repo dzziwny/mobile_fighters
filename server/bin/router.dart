@@ -5,16 +5,8 @@ import 'handler/_handler.dart';
 import 'handler/on_connection.dart';
 
 extension WithWeb on Router {
-  void ws(
-    Socket endpoint,
-    OnConnection onConnection,
-  ) {
-    final mobileRoute = endpoint.build(isWeb: false);
-    get(mobileRoute, onConnection.handler(false));
-
-    final webRoute = endpoint.build(isWeb: true);
-    get(webRoute, onConnection.handler(true));
-  }
+  void ws(Socket endpoint, OnConnection onConnection) =>
+      get(endpoint.route(), onConnection.handler());
 }
 
 final router = Router()

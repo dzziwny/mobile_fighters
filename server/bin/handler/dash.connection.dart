@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:web_socket_channel/src/channel.dart';
@@ -8,7 +9,7 @@ import 'on_connection.dart';
 
 class DashConnection extends OnConnection {
   @override
-  void onData(int playerId, List<int> data) {
+  void onData(int playerId, Uint8List data) {
     if (dashCooldowns[playerId] == true) {
       return;
     }
@@ -44,7 +45,7 @@ class DashConnection extends OnConnection {
     final frame = CooldownDto(
       isCooldown: isCooldown,
       cooldownType: CooldownType.dash,
-    ).toData();
+    ).toBytes();
 
     channel.sink.add(frame);
   }

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
+
 class AttackResponse {
   final int id;
   final int attackerId;
@@ -19,34 +21,30 @@ class AttackResponse {
     this.sourceY,
   );
 
-  factory AttackResponse.fromBytes(List<int> bytes) {
+  factory AttackResponse.fromBytes(Uint8List bytes) {
     final instance = AttackResponse(
       bytes[0],
       bytes[1],
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(2, 6)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(6, 10)))
-          .getFloat32(0),
+      bytes.toDouble(2, 6),
+      bytes.toDouble(6, 10),
       AttackPhase.values[bytes[10]],
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(11, 15)))
-          .getFloat32(0),
-      ByteData.sublistView(Uint8List.fromList(bytes.sublist(15, 19)))
-          .getFloat32(0),
+      bytes.toDouble(11, 15),
+      bytes.toDouble(15, 19),
     );
 
     return instance;
   }
 
-  List<int> toBytes() {
+  Uint8List toBytes() {
     final bytes = <int>[
       id,
       attackerId,
-      ...(ByteData(4)..setFloat32(0, targetX)).buffer.asUint8List(),
-      ...(ByteData(4)..setFloat32(0, targetY)).buffer.asUint8List(),
+      ...targetX.toBytes(),
+      ...targetY.toBytes(),
       phase.index,
-      ...(ByteData(4)..setFloat32(0, sourceX)).buffer.asUint8List(),
-      ...(ByteData(4)..setFloat32(0, sourceY)).buffer.asUint8List(),
-    ];
+      ...sourceX.toBytes(),
+      ...sourceY.toBytes(),
+    ].toBytes();
 
     return bytes;
   }

@@ -1,4 +1,5 @@
 import 'package:bubble_fight/di.dart';
+import 'package:core/core.dart';
 
 class TeamService {
   // TODO
@@ -16,6 +17,6 @@ class TeamService {
   Stream<List<String>> spectatorsTeam$() =>
       teamWs.data().map((teams) => teams.spectators);
 
-  Future<void> selectBlueTeam() => teamWs.send([0, 0]);
-  Future<void> selectRedTeam() => teamWs.send([0, 1]);
+  Future<void> selectBlueTeam() => teamWs.send([0, 0].toBytes());
+  Future<void> selectRedTeam() => teamWs.send([0, 1].toBytes());
 }

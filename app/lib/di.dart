@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:core/core.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,7 +17,7 @@ final dashWs = Ws(Socket.dashWs, DashDto.fromBytes);
 final attackWs = Ws(Socket.attackWs, AttackResponse.fromBytes);
 final cooldownWs = Ws(Socket.cooldownWs, CooldownDto.fromBytes);
 final hitWs = Ws(Socket.hitWs, HitDto.fromBytes);
-final deadWs = Ws(Socket.deadWs, (List<int> bytes) => bytes[0]);
+final deadWs = Ws(Socket.deadWs, (Uint8List bytes) => bytes[0]);
 final teamWs = Ws(Socket.selectTeamWs, TeamsDto.parse);
 
 final cooldownService = CooldownService();

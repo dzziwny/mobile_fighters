@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bubble_fight/attack.dart';
 import 'package:bubble_fight/di.dart';
@@ -41,7 +42,7 @@ class AttackBloc implements Disposable {
 
   Stream<List<Attack>> attacks$() => _attacks$.asBroadcastStream();
 
-  Future<void> attack() => attackWs.send(<int>[]);
+  Future<void> attack() => attackWs.send(Uint8List(0));
 
   @override
   Future onDispose() async {

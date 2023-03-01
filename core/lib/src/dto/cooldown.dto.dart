@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:core/core.dart';
+
 enum CooldownType {
   dash,
   attack,
@@ -12,15 +16,15 @@ class CooldownDto {
     required this.cooldownType,
   });
 
-  factory CooldownDto.fromBytes(List<int> data) => CooldownDto(
+  factory CooldownDto.fromBytes(Uint8List data) => CooldownDto(
         cooldownType: CooldownType.values[data[0]],
         isCooldown: data[1] == 1,
       );
 
-  List<int> toData() {
+  Uint8List toBytes() {
     return [
       cooldownType.index,
       isCooldown ? 1 : 0,
-    ];
+    ].toBytes();
   }
 }

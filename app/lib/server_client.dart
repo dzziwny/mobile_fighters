@@ -56,7 +56,7 @@ class ServerClient implements Disposable {
   final Future<GameFrame> gameFrame = gameFrame$();
 
   // TODO add leaving game after dead
-  // int _dataToDead(List<int> data) {
+  // int _dataToDead(Uint8List data) {
   //   leaveGame();
   //   final attackingPlayerId = data[0];
   //   return attackingPlayerId;
@@ -70,9 +70,9 @@ class ServerClient implements Disposable {
     ]);
   }
 
-  Stream<WebSocketChannel> channel(String Function(int) uriBuilder) {
+  Stream<WebSocketChannel> channel(Socket socket) {
     return id$.skipNull().map((id) {
-      final uri = Uri.parse('ws://$host:$port${uriBuilder(id)}');
+      final uri = Uri.parse('ws://$host:$port${socket.route(id: id)}');
       final channel = WebSocketChannel.connect(uri);
       return channel;
     });

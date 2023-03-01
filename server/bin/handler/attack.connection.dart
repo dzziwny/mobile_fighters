@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -14,7 +15,7 @@ class AttackConnection extends OnConnection {
   }
 
   @override
-  void onData(int playerId, List<int> data) {
+  void onData(int playerId, Uint8List data) {
     if (attackCooldowns[playerId] == true) {
       return;
     }
@@ -38,7 +39,7 @@ class AttackConnection extends OnConnection {
     final frame = CooldownDto(
       isCooldown: isCooldown,
       cooldownType: CooldownType.attack,
-    ).toData();
+    ).toBytes();
 
     channel.sink.add(frame);
   }

@@ -14,7 +14,7 @@ class CooldownConnection extends OnConnection {
       CooldownDto(
         isCooldown: attackCooldown == true,
         cooldownType: CooldownType.attack,
-      ).toData(),
+      ).toBytes(),
     );
 
     final dashCooldown = dashCooldowns[playerId];
@@ -22,7 +22,7 @@ class CooldownConnection extends OnConnection {
       CooldownDto(
         isCooldown: dashCooldown == true,
         cooldownType: CooldownType.dash,
-      ).toData(),
+      ).toBytes(),
     );
   }
 }

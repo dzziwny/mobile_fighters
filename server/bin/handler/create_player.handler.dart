@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
@@ -85,9 +84,9 @@ Team _selectTeam() {
 void _sharePlayerPosition(int id, PlayerPhysics physic) {
   final data = <int>[
     id,
-    ...(ByteData(4)..setFloat32(0, physic.position.x)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, physic.position.y)).buffer.asUint8List(),
-    ...(ByteData(4)..setFloat32(0, physic.angle)).buffer.asUint8List(),
+    ...physic.position.x.toBytes(),
+    ...physic.position.y.toBytes(),
+    ...physic.angle.toBytes(),
   ];
 
   gameDraws.add(() {

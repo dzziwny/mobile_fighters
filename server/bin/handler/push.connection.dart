@@ -15,7 +15,7 @@ class PushConnection extends OnConnection {
   }
 
   @override
-  void onData(int playerId, List<int> data) {
+  void onData(int playerId, Uint8List data) {
     if (pushCooldowns[playerId] == true) {
       return;
     }

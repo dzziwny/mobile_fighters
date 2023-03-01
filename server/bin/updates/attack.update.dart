@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
@@ -82,7 +83,7 @@ Vector2 calculateTarget(PlayerPhysics physic) {
 }
 
 void drawPlayerHit(int playerId, int hp) {
-  final List<int> data = [playerId, hp];
+  final Uint8List data = [playerId, hp].toBytes();
   gameDraws.add(() {
     for (var channel in hitWSChannels) {
       channel.sink.add(data);

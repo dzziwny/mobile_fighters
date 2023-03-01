@@ -21,6 +21,5 @@ class Socket {
 
   final String _base;
 
-  String build({String id = '<id>', bool isWeb = false}) =>
-      '${isWeb ? '/web' : ''}$_base/$id';
+  String route({int? id}) => '$_base/${id ?? '<id>'}';
 }
