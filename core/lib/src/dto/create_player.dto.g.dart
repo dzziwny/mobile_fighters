@@ -46,8 +46,6 @@ Map<String, dynamic> _$$_CreatePlayerDtoResponseToJson(
     };
 
 const _$TeamEnumMap = {
-  Team.material: 'material',
-  Team.cupertino: 'cupertino',
-  Team.fluent: 'fluent',
-  Team.spectator: 'spectator',
+  Team.red: 'red',
+  Team.blue: 'blue',
 };

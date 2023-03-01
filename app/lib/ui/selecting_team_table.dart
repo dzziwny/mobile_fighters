@@ -38,38 +38,7 @@ class SelectingTeamTable extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         StreamBuilder<List<String>>(
-                            stream: teamService.materialTeam$(),
-                            builder: (context, snapshot) {
-                              final players = snapshot.data ?? [];
-                              return Column(
-                                children: players
-                                    .map<Widget>(
-                                      (player) => Text(
-                                        player,
-                                        style: const TextStyle(
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                    )
-                                    .toList()
-                                  ..insert(
-                                    0,
-                                    const Divider(),
-                                  )
-                                  ..insert(
-                                    0,
-                                    const Text(
-                                      'Material',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                              );
-                            }),
-                        StreamBuilder<List<String>>(
-                            stream: teamService.fluentTeam$(),
+                            stream: teamService.redTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -100,7 +69,7 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: teamService.cupertinoTeam$(),
+                            stream: teamService.blueTeam$(),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -124,37 +93,6 @@ class SelectingTeamTable extends StatelessWidget {
                                       'Cupertino',
                                       style: TextStyle(
                                         color: Colors.blueGrey,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                              );
-                            }),
-                        StreamBuilder<List<String>>(
-                            stream: teamService.spectatorsTeam$(),
-                            builder: (context, snapshot) {
-                              final players = snapshot.data ?? [];
-                              return Column(
-                                children: players
-                                    .map<Widget>(
-                                      (player) => Text(
-                                        player,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                    .toList()
-                                  ..insert(
-                                    0,
-                                    const Divider(),
-                                  )
-                                  ..insert(
-                                    0,
-                                    const Text(
-                                      'Spectators',
-                                      style: TextStyle(
-                                        color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),

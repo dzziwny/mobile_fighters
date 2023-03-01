@@ -57,16 +57,12 @@ final gameDraws = <void Function()>[];
 * Teams
 */
 
-Map<int, Player> spectatorsTeam = {};
-Map<int, Player> materialTeam = {};
-Map<int, Player> cupertinoTeam = {};
-Map<int, Player> fluentTeam = {};
+Map<int, Player> redTeam = {};
+Map<int, Player> blueTeam = {};
 
 Map<Team, Map<int, Player>> teams = {
-  Team.spectator: spectatorsTeam,
-  Team.material: materialTeam,
-  Team.cupertino: cupertinoTeam,
-  Team.fluent: fluentTeam,
+  Team.red: redTeam,
+  Team.blue: blueTeam,
 };
 
 int ids = 0;
@@ -99,10 +95,8 @@ const double frameHeight = 1620.0;
 const int pushCooldownMilisesconds = 1;
 
 TeamsDto prepareTeams() => TeamsDto(
-      material: materialTeam.values.map((e) => e.nick).toList(),
-      cupertino: cupertinoTeam.values.map((e) => e.nick).toList(),
-      fluent: fluentTeam.values.map((e) => e.nick).toList(),
-      spectators: materialTeam.values.map((e) => e.nick).toList(),
+      red: redTeam.values.map((e) => e.nick).toList(),
+      blue: blueTeam.values.map((e) => e.nick).toList(),
     );
 
 void shareTeams() {
@@ -136,10 +130,8 @@ void sharePlayerRemoved(Player player) {
 
 void removePlayer(int id) {
   playerPhysics.remove(id);
-  spectatorsTeam.remove(id);
-  materialTeam.remove(id);
-  cupertinoTeam.remove(id);
-  fluentTeam.remove(id);
+  redTeam.remove(id);
+  blueTeam.remove(id);
   final player = players.remove(id);
 
   sharePlayers();

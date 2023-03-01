@@ -36,9 +36,10 @@ class PlayersLayer extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             boxShadow: [
-                              // TODO different color for different team
                               BoxShadow(
-                                color: Colors.blue.withOpacity(0.4),
+                                color: player.team == Team.blue
+                                    ? Colors.blue
+                                    : Colors.red,
                                 spreadRadius: 10.0,
                                 blurRadius: 25.0,
                                 blurStyle: BlurStyle.normal,

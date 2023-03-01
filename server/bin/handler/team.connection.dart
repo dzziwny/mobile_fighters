@@ -41,15 +41,13 @@ class TeamConnection extends OnConnection {
     final team = data[1];
     switch (team) {
       case 0:
-        cupertinoTeam[player.id] = player;
-        materialTeam.remove(player.id);
-        spectatorsTeam.remove(player.id);
+        redTeam[player.id] = player;
+        blueTeam.remove(player.id);
         break;
 
       case 1:
-        materialTeam[player.id] = player;
-        cupertinoTeam.remove(player.id);
-        spectatorsTeam.remove(player.id);
+        blueTeam[player.id] = player;
+        redTeam.remove(player.id);
         break;
       default:
         return;
@@ -80,9 +78,8 @@ class TeamConnection extends OnConnection {
     //   return;
     // }
 
-    cupertinoTeam = {};
-    materialTeam = {};
-    spectatorsTeam = Map.of(players);
+    redTeam = {};
+    blueTeam = {};
     // TODO reset positions and HPs
     shareTeams();
 

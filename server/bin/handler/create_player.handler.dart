@@ -66,20 +66,7 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   return player;
 }
 
-Team _selectTeam() {
-  final material = materialTeam.length;
-  final cupertino = cupertinoTeam.length;
-  final fluent = fluentTeam.length;
-  if (fluent <= cupertino && fluent <= material) {
-    return Team.fluent;
-  }
-
-  if (cupertino <= material && cupertino <= fluent) {
-    return Team.cupertino;
-  }
-
-  return Team.material;
-}
+Team _selectTeam() => blueTeam.length <= redTeam.length ? Team.blue : Team.red;
 
 void _sharePlayerPosition(int id, PlayerPhysics physic) {
   final data = <int>[

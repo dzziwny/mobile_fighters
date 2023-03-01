@@ -11,10 +11,8 @@ part 'teams.dto.g.dart';
 class TeamsDto with _$TeamsDto {
   @JsonSerializable(explicitToJson: true)
   const factory TeamsDto({
-    required List<String> material,
-    required List<String> cupertino,
-    required List<String> fluent,
-    required List<String> spectators,
+    required List<String> red,
+    required List<String> blue,
   }) = _TeamsDto;
 
   factory TeamsDto.fromJson(Map<String, dynamic> json) =>
