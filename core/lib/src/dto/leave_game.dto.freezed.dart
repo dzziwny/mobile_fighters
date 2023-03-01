@@ -106,8 +106,7 @@ class __$$_LeaveGameDtoRequestCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$_LeaveGameDtoRequest implements _LeaveGameDtoRequest {
   const _$_LeaveGameDtoRequest({required this.guid, required this.id});
 

@@ -42,7 +42,7 @@ Map<String, dynamic> _$$_CreatePlayerDtoResponseToJson(
     <String, dynamic>{
       'id': instance.id,
       'team': _$TeamEnumMap[instance.team]!,
-      'position': instance.position.toJson(),
+      'position': instance.position,
     };
 
 const _$TeamEnumMap = {

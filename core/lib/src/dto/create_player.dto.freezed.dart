@@ -131,8 +131,7 @@ class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
   const _$_CreatePlayerDtoRequest(
       {required this.id,
@@ -330,8 +329,7 @@ class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
   const _$_CreatePlayerDtoResponse(
       {required this.id, required this.team, required this.position});

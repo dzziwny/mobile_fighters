@@ -128,8 +128,7 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$_PlayerChangeDto implements _PlayerChangeDto {
   const _$_PlayerChangeDto(
       {required this.id,

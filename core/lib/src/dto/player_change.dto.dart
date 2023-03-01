@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_annotation_target
-
 import 'dart:convert';
 
 import 'package:core/src/model/_model.dart';
@@ -10,7 +8,6 @@ part 'player_change.dto.g.dart';
 
 @freezed
 class PlayerChangeDto with _$PlayerChangeDto {
-  @JsonSerializable(explicitToJson: true)
   const factory PlayerChangeDto({
     required int id,
     required PlayerChangeType type,

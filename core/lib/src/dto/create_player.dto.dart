@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_annotation_target
-
 import 'package:core/src/model/_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -8,7 +6,6 @@ part 'create_player.dto.g.dart';
 
 @freezed
 class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
-  @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoRequest({
     required int id,
     required String guid,
@@ -22,8 +19,6 @@ class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
 
 @freezed
 class CreatePlayerDtoResponse with _$CreatePlayerDtoResponse {
-  // TODO add fromJson everywhere and remove this decorator
-  @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoResponse({
     required int id,
     required Team team,
