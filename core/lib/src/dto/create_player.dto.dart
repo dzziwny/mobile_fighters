@@ -22,10 +22,12 @@ class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
 
 @freezed
 class CreatePlayerDtoResponse with _$CreatePlayerDtoResponse {
+  // TODO add fromJson everywhere and remove this decorator
   @JsonSerializable(explicitToJson: true)
   const factory CreatePlayerDtoResponse({
     required int id,
     required Team team,
+    required Position position,
   }) = _CreatePlayerDtoResponse;
 
   factory CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =>

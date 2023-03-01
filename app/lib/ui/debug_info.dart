@@ -11,7 +11,7 @@ class DebugInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: StreamBuilder<List<Player>>(
+      child: StreamBuilder<Map<int, Player>>(
           stream: playersWs.data(),
           builder: (context, snapshot) {
             final players = snapshot.data;
@@ -26,7 +26,7 @@ class DebugInfo extends StatelessWidget {
                   'Players:',
                   style: TextStyle(color: Colors.white),
                 ),
-                for (final player in players)
+                for (final player in players.values)
                   Text(
                     player.toString(),
                     style: const TextStyle(color: Colors.white),

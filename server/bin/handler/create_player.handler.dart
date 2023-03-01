@@ -15,7 +15,11 @@ Future<Response> createPlayerHandler(Request request) async {
   final json = jsonDecode(body);
   final dto = CreatePlayerDtoRequest.fromJson(json);
   final player = createPlayer(dto);
-  final response = CreatePlayerDtoResponse(id: player.id, team: player.team);
+  final response = CreatePlayerDtoResponse(
+    id: player.id,
+    team: player.team,
+    position: player.position,
+  );
 
   return Response.ok(jsonEncode(response));
 }
@@ -44,6 +48,12 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
     nick: dto.nick,
     team: team,
     device: dto.device,
+    position: Position(
+      playerId: id,
+      x: randomX,
+      y: randomY,
+      angle: randomAngle,
+    ),
   );
 
   teams[team]?[id] = player;

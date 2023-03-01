@@ -9,17 +9,15 @@ import 'package:rxdart/rxdart.dart';
 class AttackBloc implements Disposable {
   final _attacks$ = BehaviorSubject.seeded(<Attack>[]);
 
-  late final _handler = attackWs.data().withLatestFrom(
-    positionService.positions$(),
-    (AttackResponse response, Map<int, Position> positions) {
+  late final _handler = attackWs.data().map(
+    (AttackResponse response) {
       final attacks = _attacks$.value;
       switch (response.phase) {
         case AttackPhase.start:
-          final startPosition = positions[response.attackerId];
           final attack = Attack(
             response.id,
-            startPosition?.x ?? 0.0,
-            startPosition?.y ?? 0.0,
+            response.sourceX,
+            response.sourceY,
             response.targetX,
             response.targetY,
           );

@@ -11,6 +11,7 @@ _$_Player _$$_PlayerFromJson(Map<String, dynamic> json) => _$_Player(
       nick: json['nick'] as String,
       team: $enumDecode(_$TeamEnumMap, json['team']),
       device: $enumDecode(_$DeviceEnumMap, json['device']),
+      position: Position.fromJson(json['position'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_PlayerToJson(_$_Player instance) => <String, dynamic>{
@@ -18,6 +19,7 @@ Map<String, dynamic> _$$_PlayerToJson(_$_Player instance) => <String, dynamic>{
       'nick': instance.nick,
       'team': _$TeamEnumMap[instance.team]!,
       'device': _$DeviceEnumMap[instance.device]!,
+      'position': instance.position,
     };
 
 const _$TeamEnumMap = {

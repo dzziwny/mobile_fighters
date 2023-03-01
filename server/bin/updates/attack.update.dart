@@ -28,6 +28,8 @@ void attackUpdate(int attackerId) {
     target.x,
     target.y,
     AttackPhase.start,
+    physic.position.x,
+    physic.position.y,
   );
 
   final bytes = response.toBytes();
@@ -60,7 +62,8 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
     }
   }
 
-  final response = AttackResponse(attackId, 0, .0, .0, AttackPhase.boom);
+  final response =
+      AttackResponse(attackId, 0, .0, .0, AttackPhase.boom, .0, .0);
   final bytes = response.toBytes();
   gameDraws.add((() {
     for (var channel in attackWSChannels) {

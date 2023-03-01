@@ -24,6 +24,7 @@ mixin _$Player {
   String get nick => throw _privateConstructorUsedError;
   Team get team => throw _privateConstructorUsedError;
   Device get device => throw _privateConstructorUsedError;
+  Position get position => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,9 @@ abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
-  $Res call({int id, String nick, Team team, Device device});
+  $Res call({int id, String nick, Team team, Device device, Position position});
+
+  $PositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -55,6 +58,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? nick = null,
     Object? team = null,
     Object? device = null,
+    Object? position = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -73,7 +77,19 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Position,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PositionCopyWith<$Res> get position {
+    return $PositionCopyWith<$Res>(_value.position, (value) {
+      return _then(_value.copyWith(position: value) as $Val);
+    });
   }
 }
 
@@ -83,7 +99,10 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       __$$_PlayerCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String nick, Team team, Device device});
+  $Res call({int id, String nick, Team team, Device device, Position position});
+
+  @override
+  $PositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -100,6 +119,7 @@ class __$$_PlayerCopyWithImpl<$Res>
     Object? nick = null,
     Object? team = null,
     Object? device = null,
+    Object? position = null,
   }) {
     return _then(_$_Player(
       id: null == id
@@ -118,19 +138,23 @@ class __$$_PlayerCopyWithImpl<$Res>
           ? _value.device
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Position,
     ));
   }
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$_Player implements _Player {
   const _$_Player(
       {required this.id,
       required this.nick,
       required this.team,
-      required this.device});
+      required this.device,
+      required this.position});
 
   factory _$_Player.fromJson(Map<String, dynamic> json) =>
       _$$_PlayerFromJson(json);
@@ -143,10 +167,12 @@ class _$_Player implements _Player {
   final Team team;
   @override
   final Device device;
+  @override
+  final Position position;
 
   @override
   String toString() {
-    return 'Player(id: $id, nick: $nick, team: $team, device: $device)';
+    return 'Player(id: $id, nick: $nick, team: $team, device: $device, position: $position)';
   }
 
   @override
@@ -157,12 +183,15 @@ class _$_Player implements _Player {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.nick, nick) || other.nick == nick) &&
             (identical(other.team, team) || other.team == team) &&
-            (identical(other.device, device) || other.device == device));
+            (identical(other.device, device) || other.device == device) &&
+            (identical(other.position, position) ||
+                other.position == position));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, nick, team, device);
+  int get hashCode =>
+      Object.hash(runtimeType, id, nick, team, device, position);
 
   @JsonKey(ignore: true)
   @override
@@ -183,7 +212,8 @@ abstract class _Player implements Player {
       {required final int id,
       required final String nick,
       required final Team team,
-      required final Device device}) = _$_Player;
+      required final Device device,
+      required final Position position}) = _$_Player;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$_Player.fromJson;
 
@@ -195,6 +225,8 @@ abstract class _Player implements Player {
   Team get team;
   @override
   Device get device;
+  @override
+  Position get position;
   @override
   @JsonKey(ignore: true)
   _$$_PlayerCopyWith<_$_Player> get copyWith =>

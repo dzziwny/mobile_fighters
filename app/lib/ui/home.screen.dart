@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                             double frameHeight =
                                 frame.sizey + borderVerticalPadding * 2;
                             return StreamBuilder<Position>(
-                                stream: positionService.myPosition$(),
+                                stream: positionBloc.myPosition$(),
                                 builder: (context, snapshot) {
                                   final position = snapshot.data;
                                   double x = 0.0;
@@ -111,9 +111,8 @@ class HomeScreen extends StatelessWidget {
                             return const SizedBox();
                           }
                           return ElevatedButton(
-                            onPressed: isCooldown
-                                ? null
-                                : () => positionService.dash(),
+                            onPressed:
+                                isCooldown ? null : () => positionBloc.dash(),
                             child: const Icon(
                               Icons.rocket_launch,
                             ),

@@ -27,7 +27,13 @@ class ServerClient implements Disposable {
     final id = await id$.first;
     final dto = await createPlayer$(_guid, id, nick, device);
     myPlayer$.add(
-      Player(id: dto.id, device: device, nick: nick, team: dto.team),
+      Player(
+        id: dto.id,
+        device: device,
+        nick: nick,
+        team: dto.team,
+        position: dto.position,
+      ),
     );
   }
 

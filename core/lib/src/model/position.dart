@@ -1,12 +1,21 @@
 import 'dart:typed_data';
 
-class Position {
-  final int playerId;
-  final double x;
-  final double y;
-  final double angle;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const Position(this.playerId, this.x, this.y, this.angle);
+part 'position.freezed.dart';
+part 'position.g.dart';
+
+@freezed
+class Position with _$Position {
+  const factory Position({
+    required int playerId,
+    required double x,
+    required double y,
+    required double angle,
+  }) = _Position;
+
+  factory Position.fromJson(Map<String, dynamic> json) =>
+      _$PositionFromJson(json);
 
   @override
   String toString() {
@@ -14,12 +23,12 @@ class Position {
   }
 
   factory Position.fromBytes(List<int> bytes) => Position(
-        bytes[0],
-        ByteData.sublistView(Uint8List.fromList(bytes.sublist(1, 5)))
+        playerId: bytes[0],
+        x: ByteData.sublistView(Uint8List.fromList(bytes.sublist(1, 5)))
             .getFloat32(0),
-        ByteData.sublistView(Uint8List.fromList(bytes.sublist(5, 9)))
+        y: ByteData.sublistView(Uint8List.fromList(bytes.sublist(5, 9)))
             .getFloat32(0),
-        ByteData.sublistView(Uint8List.fromList(bytes.sublist(9, 13)))
+        angle: ByteData.sublistView(Uint8List.fromList(bytes.sublist(9, 13)))
             .getFloat32(0),
       );
 }
