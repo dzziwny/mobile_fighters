@@ -14,11 +14,14 @@ class PushConnection extends OnConnection {
     pushChannels.add(channel);
   }
 
+  Timer? timer;
+
   @override
   void onData(int playerId, Uint8List data) {
-    if (pushCooldowns[playerId] == true) {
+    if (pushCooldowns[playerId] == true && timer?.isActive == true) {
       return;
     }
+
     pushCooldowns[playerId] = true;
 
     double angle = ByteData.sublistView(Uint8List.fromList(data.sublist(1, 5)))
@@ -43,7 +46,7 @@ class PushConnection extends OnConnection {
     playerPhysics[playerId]?.pushingForce = Vector2(dx, dy) * 5.0;
     playerPhysics[playerId]?.angle = angle;
 
-    Timer(Duration(milliseconds: pushCooldownMilisesconds), () {
+    timer = Timer(Duration(milliseconds: pushCooldownMilisesconds), () {
       pushCooldowns[playerId] = false;
     });
   }

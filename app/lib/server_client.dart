@@ -73,8 +73,20 @@ class ServerClient implements Disposable {
   Stream<WebSocketChannel> channel(Socket socket) {
     return id$.skipNull().map((id) {
       final uri = Uri.parse('ws://$host:$port${socket.route(id: id)}');
-      final channel = WebSocketChannel.connect(uri);
-      return channel;
-    });
+      return uri;
+    }).switchMap(
+      (Uri uri) {
+        var channel = WebSocketChannel.connect(uri);
+        return Stream.periodic(const Duration(seconds: 2)).map(
+          (_) {
+            if (channel.closeCode != null || channel.closeReason != null) {
+              channel = WebSocketChannel.connect(uri);
+            }
+
+            return channel;
+          },
+        );
+      },
+    ).distinct();
   }
 }

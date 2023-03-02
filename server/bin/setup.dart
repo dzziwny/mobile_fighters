@@ -92,7 +92,7 @@ const double dashSpeed = 0.00005;
 // Ultra HD xddddd
 const double frameWidth = 2160.0;
 const double frameHeight = 1620.0;
-const int pushCooldownMilisesconds = 1;
+const int pushCooldownMilisesconds = 20;
 
 TeamsDto prepareTeams() => TeamsDto(
       red: redTeam.values.map((e) => e.nick).toList(),
