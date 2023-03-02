@@ -23,6 +23,14 @@ class BubbleGame extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 70.0,
+                blurRadius: 100.0,
+                blurStyle: BlurStyle.normal,
+                color: Colors.green,
+              ),
+            ],
           ),
           padding: const EdgeInsets.symmetric(
             vertical: borderVerticalPadding,

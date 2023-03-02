@@ -37,8 +37,6 @@ void attackUpdate(int attackerId) async {
   }
 
   final attackId = await _generateAttackId();
-  print('use id $attackId');
-
   final target = calculateTarget(physic);
   Timer(attackUntilBoomDuration, () {
     gameUpdates.add(() => _completeAttackUpdate(attackId, attackerId, target));
