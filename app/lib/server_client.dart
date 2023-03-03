@@ -55,7 +55,7 @@ class ServerClient implements Disposable {
 
   final Future<GameFrame> gameFrame = gameFrame$();
 
-  // TODO add leaving game after dead
+  // TODO resp again after dead
   // int _dataToDead(Uint8List data) {
   //   leaveGame();
   //   final attackingPlayerId = data[0];
