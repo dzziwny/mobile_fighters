@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'position.freezed.dart';
@@ -24,11 +25,8 @@ class Position with _$Position {
 
   factory Position.fromBytes(Uint8List bytes) => Position(
         playerId: bytes[0],
-        x: ByteData.sublistView(Uint8List.fromList(bytes.sublist(1, 5)))
-            .getFloat32(0),
-        y: ByteData.sublistView(Uint8List.fromList(bytes.sublist(5, 9)))
-            .getFloat32(0),
-        angle: ByteData.sublistView(Uint8List.fromList(bytes.sublist(9, 13)))
-            .getFloat32(0),
+        x: bytes.toDouble(1, 5),
+        y: bytes.toDouble(5, 9),
+        angle: bytes.toDouble(9, 13),
       );
 }
