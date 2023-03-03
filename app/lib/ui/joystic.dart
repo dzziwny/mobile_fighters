@@ -21,7 +21,10 @@ class _JoysticState extends State<Joystic> {
     return GestureDetector(
       onTapDown: (TapDownDetails details) {
         var offset = details.localPosition;
-        updateKnob(offset);
+        const center = Offset(65.0, 65.0);
+        final relativeOffset = (offset - center) / 10.0;
+        angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
+        positionBloc.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
 
         setState(() {
           knobPosition = details.localPosition;
@@ -73,13 +76,6 @@ class _JoysticState extends State<Joystic> {
 
     positionBloc.updateKnob(
         angle, fixedRelative.dx * 5.0, fixedRelative.dy * 5.0);
-  }
-
-  void updateKnob(Offset offset) {
-    const center = Offset(65.0, 65.0);
-    final relativeOffset = (offset - center) / 10.0;
-    angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
-    positionBloc.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   void updateKnobButAngle(Offset offset) {
