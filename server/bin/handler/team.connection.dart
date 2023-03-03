@@ -80,7 +80,6 @@ class TeamConnection extends OnConnection {
 
     redTeam = {};
     blueTeam = {};
-    // TODO reset positions and HPs
     shareTeams();
 
     phase = GamePhase.selectingTeam;

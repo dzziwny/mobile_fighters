@@ -55,13 +55,6 @@ class ServerClient implements Disposable {
 
   final Future<GameFrame> gameFrame = gameFrame$();
 
-  // TODO resp again after dead
-  // int _dataToDead(Uint8List data) {
-  //   leaveGame();
-  //   final attackingPlayerId = data[0];
-  //   return attackingPlayerId;
-  // }
-
   @override
   Future onDispose() async {
     await Future.wait([

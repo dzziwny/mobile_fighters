@@ -74,7 +74,6 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
       final hp = playerHp[targetId]! - 20;
       playerHp[targetId] = hp;
       if (hp <= 0) {
-        // TODO dont remove position from playerPhysics
         // handlePlayerDead(targetId, attackerId);
       } else {
         drawPlayerHit(targetId, hp);
