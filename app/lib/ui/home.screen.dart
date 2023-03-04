@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/statics.dart';
@@ -19,6 +21,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           const _Game(),
+          HitReaction(),
           StreamBuilder<bool>(
             stream: serverClient.isInGame(),
             builder: (context, snapshot) {
@@ -44,6 +47,93 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class HitReaction extends StatefulWidget {
+  const HitReaction({
+    super.key,
+  });
+
+  @override
+  State<HitReaction> createState() => _HitReactionState();
+}
+
+class _HitReactionState extends State<HitReaction>
+    with TickerProviderStateMixin {
+  late final AnimationController opacityController;
+  late final AnimationController radiusController;
+  late final StreamSubscription hitSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    opacityController = AnimationController(
+      value: 0.0,
+      vsync: this,
+    );
+
+    radiusController = AnimationController(
+      value: 10.0,
+      vsync: this,
+    );
+
+    hitSubscription = hitWs.data().listen((_) => animateHit());
+  }
+
+  Future<void> animateHit() async {
+    await Future.wait([
+      opacityController.animateTo(
+        1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeIn,
+      ),
+      radiusController.animateTo(
+        0.9,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeIn,
+      )
+    ]);
+
+    await Future.wait([
+      opacityController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 1800),
+        curve: Curves.easeIn,
+      ),
+      radiusController.animateTo(
+        2.0,
+        duration: const Duration(milliseconds: 1800),
+        curve: Curves.easeIn,
+      )
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AnimatedBuilder(
+        animation: opacityController,
+        builder: (_, __) {
+          return Opacity(
+            opacity: opacityController.value,
+            child: AnimatedBuilder(
+                animation: radiusController,
+                builder: (_, __) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        radius: radiusController.value,
+                        colors: [
+                          Colors.transparent,
+                          theme.colorScheme.error,
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          );
+        });
   }
 }
 
