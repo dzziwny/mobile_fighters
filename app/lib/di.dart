@@ -24,6 +24,7 @@ final cooldownService = CooldownService();
 final teamService = TeamService();
 
 final attackBloc = AttackBloc();
+final hpBloc = HpBloc();
 final positionBloc = PositionBloc();
 
 const uuid = Uuid();

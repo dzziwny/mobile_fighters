@@ -543,6 +543,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  value_stream_builder:
+    dependency: "direct main"
+    description:
+      name: value_stream_builder
+      sha256: "7b572e3937af6856f968e65fd16a1753ade99bb5a5c6794966071c7f71e3f1c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   vector_graphics:
     dependency: transitive
     description:

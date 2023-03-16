@@ -18,6 +18,7 @@ Future<Response> createPlayerHandler(Request request) async {
     id: player.id,
     team: player.team,
     position: player.position,
+    hp: 200,
   );
 
   return Response.ok(jsonEncode(response));
@@ -39,7 +40,6 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
   final randomAngle = Random().nextInt(100) / 10.0;
   final physic = PlayerPhysics(Vector2(randomX, randomY))..angle = randomAngle;
   playerPhysics[id] = physic;
-  playerHp[id] = 100;
 
   final team = _selectTeam();
   final player = Player(
@@ -53,6 +53,7 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
       y: randomY,
       angle: randomAngle,
     ),
+    hp: 200,
   );
 
   teams[team]?[id] = player;

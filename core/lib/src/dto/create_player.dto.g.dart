@@ -35,6 +35,7 @@ _$_CreatePlayerDtoResponse _$$_CreatePlayerDtoResponseFromJson(
       id: json['id'] as int,
       team: $enumDecode(_$TeamEnumMap, json['team']),
       position: Position.fromJson(json['position'] as Map<String, dynamic>),
+      hp: json['hp'] as int,
     );
 
 Map<String, dynamic> _$$_CreatePlayerDtoResponseToJson(
@@ -43,6 +44,7 @@ Map<String, dynamic> _$$_CreatePlayerDtoResponseToJson(
       'id': instance.id,
       'team': _$TeamEnumMap[instance.team]!,
       'position': instance.position,
+      'hp': instance.hp,
     };
 
 const _$TeamEnumMap = {

@@ -33,6 +33,7 @@ class ServerClient implements Disposable {
         nick: nick,
         team: dto.team,
         position: dto.position,
+        hp: dto.hp,
       ),
     );
   }

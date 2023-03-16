@@ -17,6 +17,7 @@ class Player with _$Player {
     required Team team,
     required Device device,
     required Position position,
+    required int hp,
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

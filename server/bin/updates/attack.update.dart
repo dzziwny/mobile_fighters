@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:synchronized/synchronized.dart';
@@ -67,16 +66,20 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
   for (final entry in playerPhysics.entries) {
     final targetId = entry.key;
     final targetPosition = entry.value.position;
+    final targetPlayer = players[targetId];
+    if (targetPlayer == null) {
+      return;
+    }
 
     final isHit = targetPosition.distanceToSquared(attackCenter) <
         attackAreaRadiusSquared;
     if (isHit) {
-      final hp = playerHp[targetId]! - 20;
-      playerHp[targetId] = hp;
-      if (hp <= 0) {
+      final hitPlayer = targetPlayer.copyWith(hp: targetPlayer.hp - 40);
+      players[targetId] = hitPlayer;
+      if (hitPlayer.hp <= 0) {
         // handlePlayerDead(targetId, attackerId);
       } else {
-        drawPlayerHit(targetId, hp);
+        drawPlayerHit(targetId, hitPlayer.hp);
       }
     }
   }
@@ -102,10 +105,11 @@ Vector2 calculateTarget(PlayerPhysics physic) {
 }
 
 void drawPlayerHit(int playerId, int hp) {
-  final Uint8List data = [playerId, hp].toBytes();
+  final dto = HitDto(hp: hp, playerId: playerId);
+  final bytes = dto.toBytes();
   gameDraws.add(() {
     for (var channel in hitWSChannels) {
-      channel.sink.add(data);
+      channel.sink.add(bytes);
     }
   });
 }

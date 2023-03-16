@@ -44,6 +44,7 @@ dependencies:
   http: ^0.13.4
   flutter_svg: ^2.0.2
   flutter_shake_animated: ^0.0.5
+  value_stream_builder: ^1.0.0
 
 dev_dependencies:
   flutter_test:

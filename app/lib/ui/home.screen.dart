@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           const _Game(),
-          HitReaction(),
+          const HitReaction(),
           StreamBuilder<bool>(
             stream: serverClient.isInGame(),
             builder: (context, snapshot) {

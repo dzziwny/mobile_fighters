@@ -34,12 +34,6 @@ final Map<int, bool> dashCooldowns = {};
 final Map<int, bool> attackCooldowns = {};
 
 /*
-* key   ->  playerId
-* value ->  hp max 100, min 0
-*/
-final playerHp = <int, int>{};
-
-/*
 * Game events. First value indicates, what event came.
 * 0 - position update
 * 1 - attack

@@ -220,6 +220,7 @@ mixin _$CreatePlayerDtoResponse {
   int get id => throw _privateConstructorUsedError;
   Team get team => throw _privateConstructorUsedError;
   Position get position => throw _privateConstructorUsedError;
+  int get hp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -233,7 +234,7 @@ abstract class $CreatePlayerDtoResponseCopyWith<$Res> {
           $Res Function(CreatePlayerDtoResponse) then) =
       _$CreatePlayerDtoResponseCopyWithImpl<$Res, CreatePlayerDtoResponse>;
   @useResult
-  $Res call({int id, Team team, Position position});
+  $Res call({int id, Team team, Position position, int hp});
 
   $PositionCopyWith<$Res> get position;
 }
@@ -255,6 +256,7 @@ class _$CreatePlayerDtoResponseCopyWithImpl<$Res,
     Object? id = null,
     Object? team = null,
     Object? position = null,
+    Object? hp = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -269,6 +271,10 @@ class _$CreatePlayerDtoResponseCopyWithImpl<$Res,
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as Position,
+      hp: null == hp
+          ? _value.hp
+          : hp // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -289,7 +295,7 @@ abstract class _$$_CreatePlayerDtoResponseCopyWith<$Res>
       __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, Team team, Position position});
+  $Res call({int id, Team team, Position position, int hp});
 
   @override
   $PositionCopyWith<$Res> get position;
@@ -310,6 +316,7 @@ class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
     Object? id = null,
     Object? team = null,
     Object? position = null,
+    Object? hp = null,
   }) {
     return _then(_$_CreatePlayerDtoResponse(
       id: null == id
@@ -324,6 +331,10 @@ class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as Position,
+      hp: null == hp
+          ? _value.hp
+          : hp // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -332,7 +343,10 @@ class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
   const _$_CreatePlayerDtoResponse(
-      {required this.id, required this.team, required this.position});
+      {required this.id,
+      required this.team,
+      required this.position,
+      required this.hp});
 
   factory _$_CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =>
       _$$_CreatePlayerDtoResponseFromJson(json);
@@ -343,10 +357,12 @@ class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
   final Team team;
   @override
   final Position position;
+  @override
+  final int hp;
 
   @override
   String toString() {
-    return 'CreatePlayerDtoResponse(id: $id, team: $team, position: $position)';
+    return 'CreatePlayerDtoResponse(id: $id, team: $team, position: $position, hp: $hp)';
   }
 
   @override
@@ -357,12 +373,13 @@ class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.position, position) ||
-                other.position == position));
+                other.position == position) &&
+            (identical(other.hp, hp) || other.hp == hp));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, team, position);
+  int get hashCode => Object.hash(runtimeType, id, team, position, hp);
 
   @JsonKey(ignore: true)
   @override
@@ -384,7 +401,8 @@ abstract class _CreatePlayerDtoResponse implements CreatePlayerDtoResponse {
   const factory _CreatePlayerDtoResponse(
       {required final int id,
       required final Team team,
-      required final Position position}) = _$_CreatePlayerDtoResponse;
+      required final Position position,
+      required final int hp}) = _$_CreatePlayerDtoResponse;
 
   factory _CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =
       _$_CreatePlayerDtoResponse.fromJson;
@@ -395,6 +413,8 @@ abstract class _CreatePlayerDtoResponse implements CreatePlayerDtoResponse {
   Team get team;
   @override
   Position get position;
+  @override
+  int get hp;
   @override
   @JsonKey(ignore: true)
   _$$_CreatePlayerDtoResponseCopyWith<_$_CreatePlayerDtoResponse>

@@ -23,6 +23,7 @@ class CreatePlayerDtoResponse with _$CreatePlayerDtoResponse {
     required int id,
     required Team team,
     required Position position,
+    required int hp,
   }) = _CreatePlayerDtoResponse;
 
   factory CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =>

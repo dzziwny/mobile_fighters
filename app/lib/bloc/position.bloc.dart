@@ -52,7 +52,9 @@ class PositionBloc implements Disposable {
 
   Stream<Position> position(int playerId) {
     return _playersPositions
-        .map((positions) => positions[playerId])
+        .map((positions) {
+          return positions[playerId];
+        })
         .skipNull()
         .switchMap((stream) => stream);
   }
