@@ -77,7 +77,7 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
       final hitPlayer = targetPlayer.copyWith(hp: targetPlayer.hp - 40);
       players[targetId] = hitPlayer;
       if (hitPlayer.hp <= 0) {
-        // handlePlayerDead(targetId, attackerId);
+        handlePlayerDead(targetId, attackerId);
       } else {
         drawPlayerHit(targetId, hitPlayer.hp);
       }
@@ -115,15 +115,47 @@ void drawPlayerHit(int playerId, int hp) {
 }
 
 void handlePlayerDead(int playerId, int attackingPlayerId) {
-  playerPhysics.remove(playerId);
-  final player = players.remove(playerId);
-
-  sharePlayers();
-  if (player != null) {
-    sharePlayerRemoved(player);
+  _sharePlayerDead(playerId, attackingPlayerId);
+  final physic = playerPhysics[playerId];
+  final player = players[playerId];
+  if (physic == null || player == null) {
+    return;
   }
 
-  _sharePlayerDead(playerId, attackingPlayerId);
+  // recreate player
+  final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
+  final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
+  final randomAngle = Random().nextInt(100) / 10.0;
+  physic.position = Vector2(randomX, randomY);
+  physic.angle = randomAngle;
+
+  final position = Position(
+    playerId: playerId,
+    x: randomX,
+    y: randomY,
+    angle: randomAngle,
+  );
+  final hitPlayer = player.copyWith(hp: 200, position: position);
+  players[playerId] = hitPlayer;
+
+  sharePlayers();
+
+  // share new position
+  final data = <int>[
+    playerId,
+    ...physic.position.x.toBytes(),
+    ...physic.position.y.toBytes(),
+    ...physic.angle.toBytes(),
+  ];
+
+  gameDraws.add(() {
+    for (var channel in pushChannels) {
+      channel.sink.add(data);
+    }
+  });
+
+  // share new hp
+  drawPlayerHit(playerId, hitPlayer.hp);
 }
 
 void _sharePlayerDead(int playerId, int attackingPlayerId) {
