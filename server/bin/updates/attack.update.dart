@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:core/core.dart';
@@ -74,7 +75,9 @@ void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
     final isHit = targetPosition.distanceToSquared(attackCenter) <
         attackAreaRadiusSquared;
     if (isHit) {
-      final hitPlayer = targetPlayer.copyWith(hp: targetPlayer.hp - 40);
+      final hitPlayer = targetPlayer.copyWith(
+        hp: targetPlayer.hp - attackPower,
+      );
       players[targetId] = hitPlayer;
       if (hitPlayer.hp <= 0) {
         handlePlayerDead(targetId, attackerId);
@@ -115,7 +118,7 @@ void drawPlayerHit(int playerId, int hp) {
 }
 
 void handlePlayerDead(int playerId, int attackingPlayerId) {
-  _sharePlayerDead(playerId, attackingPlayerId);
+  _shareFrag(attackingPlayerId, playerId);
   final physic = playerPhysics[playerId];
   final player = players[playerId];
   if (physic == null || player == null) {
@@ -135,12 +138,12 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
     y: randomY,
     angle: randomAngle,
   );
-  final hitPlayer = player.copyWith(hp: 200, position: position);
+  final hitPlayer = player.copyWith(hp: startHp, position: position);
   players[playerId] = hitPlayer;
 
   sharePlayers();
 
-  // share new position
+  // share new position after respawn
   final data = <int>[
     playerId,
     ...physic.position.x.toBytes(),
@@ -154,15 +157,26 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
     }
   });
 
-  // share new hp
+  // share new hp after respawn
   drawPlayerHit(playerId, hitPlayer.hp);
 }
 
-void _sharePlayerDead(int playerId, int attackingPlayerId) {
-  final channel = deadWSChannels[playerId];
-  if (channel == null) {
+void _shareFrag(int killerId, int enemyId) {
+  final killer = players[killerId];
+  final enemy = players[enemyId];
+  if (killer == null || enemy == null) {
     return;
   }
 
-  channel.sink.add([attackingPlayerId]);
+  final dto = FragDto(
+    enemy: enemy.nick,
+    enemyTeam: enemy.team,
+    killer: killer.nick,
+    killerTeam: killer.team,
+  );
+
+  final data = jsonEncode(dto);
+  for (var channel in fragWSChannels.values) {
+    channel.sink.add(data);
+  }
 }

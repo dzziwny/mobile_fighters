@@ -6,6 +6,6 @@ import 'on_connection.dart';
 class DeadConnection extends OnConnection {
   @override
   void onInit(int playerId, WebSocketChannel channel) {
-    deadWSChannels[playerId] = channel;
+    fragWSChannels[playerId] = channel;
   }
 }

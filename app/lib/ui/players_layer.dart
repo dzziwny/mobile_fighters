@@ -64,7 +64,7 @@ class _Player extends StatelessWidget {
                             thumbColor: theme.colorScheme.error,
                             activeColor: theme.colorScheme.error,
                             value: snapshot.data,
-                            max: 200.0,
+                            max: startHpDouble,
                             onChanged: (double value) {},
                           );
                         }),

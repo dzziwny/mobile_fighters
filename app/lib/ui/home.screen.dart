@@ -4,8 +4,10 @@ import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
+import 'package:bubble_fight/ui/frags_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'controls_layer.dart';
 import 'nick_window_layer.dart';
@@ -44,6 +46,14 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [_AttacksButtons(), SizedBox(height: 32.0)],
           ),
+          const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Row(
+              children: [
+                FragsLayer(),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -78,7 +88,15 @@ class _HitReactionState extends State<HitReaction>
       vsync: this,
     );
 
-    hitSubscription = hitWs.data().listen((_) => animateHit());
+    hitSubscription = Rx.combineLatest2(
+      serverClient.id$,
+      hitWs.data(),
+      (id, hit) {
+        if (hit.playerId == id) {
+          animateHit();
+        }
+      },
+    ).listen(null);
   }
 
   Future<void> animateHit() async {
@@ -134,6 +152,14 @@ class _HitReactionState extends State<HitReaction>
                 }),
           );
         });
+  }
+
+  @override
+  Future<void> dispose() async {
+    opacityController.dispose();
+    radiusController.dispose();
+    await hitSubscription.cancel();
+    super.dispose();
   }
 }
 

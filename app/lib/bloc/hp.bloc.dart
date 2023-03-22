@@ -44,7 +44,7 @@ class HpBloc implements Disposable {
         .map((hps) => hps[player.id])
         .skipNull()
         .switchMap((hp$) => hp$)
-        .shareValueSeeded(200.0);
+        .shareValueSeeded(startHpDouble);
   }
 
   @override

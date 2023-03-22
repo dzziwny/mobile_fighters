@@ -76,6 +76,16 @@
           "stopAll": true
         },
         {
+          "name": "server+2apps",
+          "configurations": ["server", "app", "app"],
+          "stopAll": true
+        },
+        {
+          "name": "server+3apps",
+          "configurations": ["server", "app", "app", "app"],
+          "stopAll": true
+        },
+        {
           "name": "chrome,macos/server",
           "configurations": ["server", "macOS", "chrome"],
           "stopAll": true
