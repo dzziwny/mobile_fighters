@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
