@@ -2,8 +2,26 @@ import 'dart:convert';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
+import 'package:synchronized/synchronized.dart';
 
 import '../setup.dart';
+
+var _idLock = Lock();
+final _bits = List<int>.generate(256, (i) => i);
+final _idsInUsage = <int, bool>{};
+
+Future<int> _generateId() => _idLock.synchronized(() {
+      for (var id in _bits) {
+        if (_idsInUsage[id] != null) {
+          continue;
+        }
+
+        _idsInUsage[id] = true;
+        return id;
+      }
+
+      throw Exception('Attacks stack overflow xd');
+    });
 
 Future<Response> connectHandler(Request request) async {
   final body = await request.readAsString();
@@ -14,7 +32,7 @@ Future<Response> connectHandler(Request request) async {
     return Response.ok(jsonEncode(ConnectFromServerDto(id: id)));
   }
 
-  id = ++ids;
+  id = await _generateId();
   guids[dto.guid] = id;
   final responseDto = ConnectFromServerDto(id: id);
 

@@ -59,8 +59,6 @@ Map<Team, Map<int, Player>> teams = {
   Team.blue: blueTeam,
 };
 
-int ids = 0;
-
 GamePhase phase = GamePhase.selectingTeam;
 
 Player? gameHost;
@@ -75,18 +73,6 @@ Map<int, WebSocketChannel> fragWSChannels = {};
 Map<int, WebSocketChannel> teamsWSChannels = {};
 Map<int, WebSocketChannel> gamePhaseWSChannels = {};
 Map<int, WebSocketChannel> dashChannels = {};
-
-// If there are lags, try make sliceTime smaller
-const int sliceTimeMicroseconds = 5000;
-const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
-
-const double normalSpeed = 0.00001;
-const double dashSpeed = 0.00005;
-
-// Ultra HD xddddd
-const double frameWidth = 2160.0;
-const double frameHeight = 1620.0;
-const int pushCooldownMilisesconds = 20;
 
 TeamsDto prepareTeams() => TeamsDto(
       red: redTeam.values.map((e) => e.nick).toList(),
