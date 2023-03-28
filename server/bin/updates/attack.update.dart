@@ -126,15 +126,18 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
   }
 
   // recreate player
-  final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
-  final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
+  var respawnX = Random().nextInt((respawnWidth).toInt()).toDouble();
+  if (player.team == Team.red) {
+    respawnX = boardWidth - respawnX;
+  }
+  final randomY = Random().nextInt((boardHeight).toInt()).toDouble();
   final randomAngle = Random().nextInt(100) / 10.0;
-  physic.position = Vector2(randomX, randomY);
+  physic.position = Vector2(respawnX, randomY);
   physic.angle = randomAngle;
 
   final position = Position(
     playerId: playerId,
-    x: randomX,
+    x: respawnX,
     y: randomY,
     angle: randomAngle,
   );

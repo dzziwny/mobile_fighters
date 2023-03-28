@@ -26,7 +26,10 @@ const double dashSpeed = 0.00005;
 
 //FRAME
 // Ultra HD xddddd
-const double frameWidth = 2160.0;
-const double frameHeight = 1620.0;
+const double boardWidth = 2160.0;
+const double boardHeight = 1620.0;
+
+// RESPAWNS
+const double respawnWidth = 150.0;
 
 const goldenRatio = 1.61803398875;

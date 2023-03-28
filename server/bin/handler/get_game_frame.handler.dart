@@ -5,8 +5,8 @@ import 'package:shelf/shelf.dart';
 
 Future<Response> gameFrameHandler(Request request) async {
   final frame = GameFrame(
-    sizex: frameWidth,
-    sizey: frameHeight,
+    sizex: boardWidth,
+    sizey: boardHeight,
   );
 
   final data = jsonEncode(frame);

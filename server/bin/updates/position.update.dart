@@ -11,8 +11,8 @@ double _resolveX(PlayerPhysics physic, double dt, Vector2 momentum) {
     return 0.0;
   }
   var x = physic.position.x + momentum.x * dt;
-  if (x > frameWidth) {
-    return frameWidth;
+  if (x > boardWidth) {
+    return boardWidth;
   }
 
   if (x < 0.0) {
@@ -28,8 +28,8 @@ double _resolveY(PlayerPhysics physic, double dt, Vector2 momentum) {
   }
 
   var y = physic.position.y + momentum.y * dt;
-  if (y > frameHeight) {
-    return frameHeight;
+  if (y > boardHeight) {
+    return boardHeight;
   }
 
   if (y < 0.0) {
@@ -67,10 +67,10 @@ void physicUpdate(int playerId) {
   physic.position = _resolvePosition(physic, dt);
 
   /// Boundary bouncing
-  if (physic.position.y == frameHeight || physic.position.y == 0.0) {
+  if (physic.position.y == boardHeight || physic.position.y == 0.0) {
     physic.velocity.y = -physic.velocity.y;
   }
-  if (physic.position.x == frameWidth || physic.position.x == 0.0) {
+  if (physic.position.x == boardWidth || physic.position.x == 0.0) {
     physic.velocity.x = -physic.velocity.x;
   }
 

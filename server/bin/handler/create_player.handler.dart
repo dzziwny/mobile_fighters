@@ -35,13 +35,18 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
     return prevPlayer;
   }
 
-  final randomX = Random().nextInt((frameWidth).toInt()).toDouble();
-  final randomY = Random().nextInt((frameHeight).toInt()).toDouble();
+  final team = _selectTeam();
+
+  var respawnX = Random().nextInt((respawnWidth).toInt()).toDouble();
+  if (team == Team.red) {
+    respawnX = boardWidth - respawnX;
+  }
+
+  final randomY = Random().nextInt((boardHeight).toInt()).toDouble();
   final randomAngle = Random().nextInt(100) / 10.0;
-  final physic = PlayerPhysics(Vector2(randomX, randomY))..angle = randomAngle;
+  final physic = PlayerPhysics(Vector2(respawnX, randomY))..angle = randomAngle;
   playerPhysics[id] = physic;
 
-  final team = _selectTeam();
   final player = Player(
     id: id,
     nick: dto.nick,
@@ -49,7 +54,7 @@ Player createPlayer(CreatePlayerDtoRequest dto) {
     device: dto.device,
     position: Position(
       playerId: id,
-      x: randomX,
+      x: respawnX,
       y: randomY,
       angle: randomAngle,
     ),

@@ -83,7 +83,7 @@ class _Player extends StatelessWidget {
                           spreadRadius: 10.0,
                           blurRadius: 25.0,
                           blurStyle: BlurStyle.normal,
-                        )
+                        ),
                       ],
                     ),
                     height: 144.0,
