@@ -30,7 +30,7 @@ class AttackConnection extends OnConnection {
     });
   }
 
-  void _attackCooldownUpdate(int playerId, bool isCooldown) {
+  Future<void> _attackCooldownUpdate(int playerId, bool isCooldown) async {
     final channel = cooldownWSChannels[playerId];
     if (channel == null) {
       return;

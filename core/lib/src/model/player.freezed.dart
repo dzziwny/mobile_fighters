@@ -24,7 +24,7 @@ mixin _$Player {
   String get nick => throw _privateConstructorUsedError;
   Team get team => throw _privateConstructorUsedError;
   Device get device => throw _privateConstructorUsedError;
-  Position get position => throw _privateConstructorUsedError;
+  PlayerPosition get position => throw _privateConstructorUsedError;
   int get hp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,10 +42,10 @@ abstract class $PlayerCopyWith<$Res> {
       String nick,
       Team team,
       Device device,
-      Position position,
+      PlayerPosition position,
       int hp});
 
-  $PositionCopyWith<$Res> get position;
+  $PlayerPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -88,7 +88,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as Position,
+              as PlayerPosition,
       hp: null == hp
           ? _value.hp
           : hp // ignore: cast_nullable_to_non_nullable
@@ -98,8 +98,8 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
 
   @override
   @pragma('vm:prefer-inline')
-  $PositionCopyWith<$Res> get position {
-    return $PositionCopyWith<$Res>(_value.position, (value) {
+  $PlayerPositionCopyWith<$Res> get position {
+    return $PlayerPositionCopyWith<$Res>(_value.position, (value) {
       return _then(_value.copyWith(position: value) as $Val);
     });
   }
@@ -116,11 +116,11 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       String nick,
       Team team,
       Device device,
-      Position position,
+      PlayerPosition position,
       int hp});
 
   @override
-  $PositionCopyWith<$Res> get position;
+  $PlayerPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -160,7 +160,7 @@ class __$$_PlayerCopyWithImpl<$Res>
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as Position,
+              as PlayerPosition,
       hp: null == hp
           ? _value.hp
           : hp // ignore: cast_nullable_to_non_nullable
@@ -192,7 +192,7 @@ class _$_Player implements _Player {
   @override
   final Device device;
   @override
-  final Position position;
+  final PlayerPosition position;
   @override
   final int hp;
 
@@ -240,7 +240,7 @@ abstract class _Player implements Player {
       required final String nick,
       required final Team team,
       required final Device device,
-      required final Position position,
+      required final PlayerPosition position,
       required final int hp}) = _$_Player;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$_Player.fromJson;
@@ -254,7 +254,7 @@ abstract class _Player implements Player {
   @override
   Device get device;
   @override
-  Position get position;
+  PlayerPosition get position;
   @override
   int get hp;
   @override

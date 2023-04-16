@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 
 class PositionBloc implements Disposable {
   final _playersPositions =
-      BehaviorSubject.seeded(<int, BehaviorSubject<Position>>{});
+      BehaviorSubject.seeded(<int, BehaviorSubject<PlayerPosition>>{});
 
   late final _playersHandler = playersWs.data().map((players) {
     final subjects = _playersPositions.value;
@@ -47,10 +47,10 @@ class PositionBloc implements Disposable {
     _positionsSubscription = _positionHandler.connect();
   }
 
-  Stream<List<MapEntry<int, Stream<Position>>>> positions() =>
+  Stream<List<MapEntry<int, Stream<PlayerPosition>>>> positions() =>
       _playersPositions.map((positions) => positions.entries.toList());
 
-  Stream<Position> position(int playerId) {
+  Stream<PlayerPosition> position(int playerId) {
     return _playersPositions
         .map((positions) {
           return positions[playerId];
@@ -59,7 +59,7 @@ class PositionBloc implements Disposable {
         .switchMap((stream) => stream);
   }
 
-  Stream<Position> myPosition$() =>
+  Stream<PlayerPosition> myPosition$() =>
       serverClient.id$.switchMap((id) => position(id));
 
   Future<void> updateKnob(double angle, double deltaX, double deltaY) async {

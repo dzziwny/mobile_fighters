@@ -34,7 +34,8 @@ _$_CreatePlayerDtoResponse _$$_CreatePlayerDtoResponseFromJson(
     _$_CreatePlayerDtoResponse(
       id: json['id'] as int,
       team: $enumDecode(_$TeamEnumMap, json['team']),
-      position: Position.fromJson(json['position'] as Map<String, dynamic>),
+      position:
+          PlayerPosition.fromJson(json['position'] as Map<String, dynamic>),
       hp: json['hp'] as int,
     );
 

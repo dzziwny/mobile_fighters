@@ -219,7 +219,7 @@ CreatePlayerDtoResponse _$CreatePlayerDtoResponseFromJson(
 mixin _$CreatePlayerDtoResponse {
   int get id => throw _privateConstructorUsedError;
   Team get team => throw _privateConstructorUsedError;
-  Position get position => throw _privateConstructorUsedError;
+  PlayerPosition get position => throw _privateConstructorUsedError;
   int get hp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -234,9 +234,9 @@ abstract class $CreatePlayerDtoResponseCopyWith<$Res> {
           $Res Function(CreatePlayerDtoResponse) then) =
       _$CreatePlayerDtoResponseCopyWithImpl<$Res, CreatePlayerDtoResponse>;
   @useResult
-  $Res call({int id, Team team, Position position, int hp});
+  $Res call({int id, Team team, PlayerPosition position, int hp});
 
-  $PositionCopyWith<$Res> get position;
+  $PlayerPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -270,7 +270,7 @@ class _$CreatePlayerDtoResponseCopyWithImpl<$Res,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as Position,
+              as PlayerPosition,
       hp: null == hp
           ? _value.hp
           : hp // ignore: cast_nullable_to_non_nullable
@@ -280,8 +280,8 @@ class _$CreatePlayerDtoResponseCopyWithImpl<$Res,
 
   @override
   @pragma('vm:prefer-inline')
-  $PositionCopyWith<$Res> get position {
-    return $PositionCopyWith<$Res>(_value.position, (value) {
+  $PlayerPositionCopyWith<$Res> get position {
+    return $PlayerPositionCopyWith<$Res>(_value.position, (value) {
       return _then(_value.copyWith(position: value) as $Val);
     });
   }
@@ -295,10 +295,10 @@ abstract class _$$_CreatePlayerDtoResponseCopyWith<$Res>
       __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, Team team, Position position, int hp});
+  $Res call({int id, Team team, PlayerPosition position, int hp});
 
   @override
-  $PositionCopyWith<$Res> get position;
+  $PlayerPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -330,7 +330,7 @@ class __$$_CreatePlayerDtoResponseCopyWithImpl<$Res>
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as Position,
+              as PlayerPosition,
       hp: null == hp
           ? _value.hp
           : hp // ignore: cast_nullable_to_non_nullable
@@ -356,7 +356,7 @@ class _$_CreatePlayerDtoResponse implements _CreatePlayerDtoResponse {
   @override
   final Team team;
   @override
-  final Position position;
+  final PlayerPosition position;
   @override
   final int hp;
 
@@ -401,7 +401,7 @@ abstract class _CreatePlayerDtoResponse implements CreatePlayerDtoResponse {
   const factory _CreatePlayerDtoResponse(
       {required final int id,
       required final Team team,
-      required final Position position,
+      required final PlayerPosition position,
       required final int hp}) = _$_CreatePlayerDtoResponse;
 
   factory _CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =
@@ -412,7 +412,7 @@ abstract class _CreatePlayerDtoResponse implements CreatePlayerDtoResponse {
   @override
   Team get team;
   @override
-  Position get position;
+  PlayerPosition get position;
   @override
   int get hp;
   @override

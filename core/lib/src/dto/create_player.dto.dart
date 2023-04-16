@@ -22,7 +22,7 @@ class CreatePlayerDtoResponse with _$CreatePlayerDtoResponse {
   const factory CreatePlayerDtoResponse({
     required int id,
     required Team team,
-    required Position position,
+    required PlayerPosition position,
     required int hp,
   }) = _CreatePlayerDtoResponse;
 

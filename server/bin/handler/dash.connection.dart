@@ -36,7 +36,7 @@ class DashConnection extends OnConnection {
     dashChannels[playerId] = channel;
   }
 
-  void _dashCooldownUpdate(int playerId, bool isCooldown) {
+  Future<void> _dashCooldownUpdate(int playerId, bool isCooldown) async {
     final channel = cooldownWSChannels[playerId];
     if (channel == null) {
       return;

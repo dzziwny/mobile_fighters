@@ -40,7 +40,7 @@ class _Player extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return StreamBuilder<Position>(
+    return StreamBuilder<PlayerPosition>(
         stream: positionBloc.position(player.id),
         builder: (context, snapshot) {
           final position = snapshot.data;

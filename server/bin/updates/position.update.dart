@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../handler/channels.handler.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
 
@@ -47,24 +49,25 @@ Vector2 _resolvePosition(PlayerPhysics physic, double dt) {
   return position;
 }
 
-void physicUpdate(int playerId) {
+Future<void> physicUpdate(int playerId, Knob knob) async {
   const dt = sliceTimeSeconds;
   final physic = playerPhysics[playerId];
   if (physic == null ||
-      (physic.pushingForce.x == 0.0 &&
-          physic.pushingForce.y == 0.0 &&
+      (knob.x == 0.0 &&
+          knob.y == 0.0 &&
           physic.velocity.x == 0.0 &&
           physic.velocity.y == 0.0)) {
     return;
   }
 
   final friction = calculateFriction(physic);
-  final netForce = physic.pushingForce + friction;
+  final netForce = knob.force + friction;
 
   physic.velocity
     ..add(netForce)
     ..roundToZero();
   physic.position = _resolvePosition(physic, dt);
+  physic.angle = knob.angle;
 
   /// Boundary bouncing
   if (physic.position.y == boardHeight || physic.position.y == 0.0) {
@@ -81,7 +84,8 @@ void physicUpdate(int playerId) {
     ...physic.angle.toBytes(),
   ];
 
-  gameDraws.add(() {
+  gameDraws.add(() async {
+    final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
     for (var channel in pushChannels) {
       channel.sink.add(data);
     }

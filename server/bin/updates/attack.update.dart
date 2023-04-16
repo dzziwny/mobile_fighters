@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../handler/channels.handler.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
 
@@ -30,7 +32,7 @@ Future<void> _releaseAttackId(int id) => _attackIdLock.synchronized(() {
       _idsInUsage.remove(id);
     });
 
-void attackUpdate(int attackerId) async {
+Future<void> attackUpdate(int attackerId) async {
   final physic = playerPhysics[attackerId];
   if (physic == null) {
     return;
@@ -60,7 +62,11 @@ void attackUpdate(int attackerId) async {
   }));
 }
 
-void _completeAttackUpdate(int attackId, int attackerId, Vector2 attackCenter) {
+Future<void> _completeAttackUpdate(
+  int attackId,
+  int attackerId,
+  Vector2 attackCenter,
+) async {
   // final targets = Map<int, PlayerPhysics>.from(playerPhysics);
   // final physic = targets.remove(attackerId);
 
@@ -135,7 +141,7 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
   physic.position = Vector2(respawnX, randomY);
   physic.angle = randomAngle;
 
-  final position = Position(
+  final position = PlayerPosition(
     playerId: playerId,
     x: respawnX,
     y: randomY,
@@ -154,7 +160,8 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
     ...physic.angle.toBytes(),
   ];
 
-  gameDraws.add(() {
+  gameDraws.add(() async {
+    final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
     for (var channel in pushChannels) {
       channel.sink.add(data);
     }

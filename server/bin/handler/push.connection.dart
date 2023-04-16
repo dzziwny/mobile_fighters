@@ -1,30 +1,25 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:get_it/get_it.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../setup.dart';
+import 'channels.handler.dart';
+import 'knob.input.dart';
 import 'on_connection.dart';
 
 class PushConnection extends OnConnection {
+  final knobInput = GetIt.I<KnobInput>();
+  final channelsHandler = GetIt.I<ChannelsHandler>();
+
   @override
   void onInit(int playerId, WebSocketChannel channel) {
-    pushChannels.add(channel);
+    channelsHandler.addPushChannel(playerId, channel);
   }
-
-  Timer? timer;
 
   @override
   void onData(int playerId, Uint8List data) {
-    if (pushCooldowns[playerId] == true && timer?.isActive == true) {
-      return;
-    }
-
-    pushCooldowns[playerId] = true;
-
     double angle = data.toDouble(1, 5);
     if (angle > pi || angle < -pi) {
       return;
@@ -40,11 +35,8 @@ class PushConnection extends OnConnection {
       return;
     }
 
-    playerPhysics[playerId]?.pushingForce = Vector2(dx, dy);
-    playerPhysics[playerId]?.angle = angle;
+    final knob = Knob(dx, dy, angle);
 
-    timer = Timer(Duration(milliseconds: pushCooldownMilisesconds), () {
-      pushCooldowns[playerId] = false;
-    });
+    knobInput.update(playerId, knob);
   }
 }

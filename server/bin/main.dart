@@ -2,20 +2,48 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
+import 'package:shelf_router/shelf_router.dart';
 
-import 'router.dart';
+import 'handler/_handler.dart';
+import 'handler/knob.input.dart';
+import 'handler/on_connection.dart';
+import 'register_di.dart';
 import 'setup.dart';
 import 'updates/_updates.dart';
 
 int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
 int accumulatorTime = 0;
 
+extension WithWeb on Router {
+  void ws(Socket endpoint, OnConnection onConnection) =>
+      get(endpoint.route(), onConnection.handler());
+}
+
 void main(List<String> args) async {
   // final ip = InternetAddress.anyIPv4;
   final ip = '0.0.0.0';
+
+  registerDI();
+
+  final router = Router()
+    ..get(Endpoint.gameFrame, gameFrameHandler)
+    ..post(Endpoint.connect, connectHandler)
+    ..post(Endpoint.startGame, createPlayerHandler)
+    ..post(Endpoint.leaveGame, leaveGameHandler)
+    ..ws(Socket.pushWs, PushConnection())
+    ..ws(Socket.dashWs, DashConnection())
+    ..ws(Socket.cooldownWs, CooldownConnection())
+    ..ws(Socket.attackWs, AttackConnection())
+    ..ws(Socket.fragWs, DeadConnection())
+    ..ws(Socket.selectTeamWs, TeamConnection())
+    ..ws(Socket.gamePhaseWsTemplate, GamePhaseConnection())
+    ..ws(Socket.playersWs, PlayersConnection())
+    ..ws(Socket.playerChangeWs, PlayerChangeConnection())
+    ..ws(Socket.hitWs, HitConnection());
 
   final handler = Pipeline()
       // .addMiddleware(
@@ -41,15 +69,31 @@ void main(List<String> args) async {
   });
 }
 
-void update() {
+Future<void> update() async {
+  await _CRUDsUpdate();
+  await _actionsUpdate();
+  await _physicUpdate();
+}
+
+Future<void> _CRUDsUpdate() async {
+  // TODO
+}
+
+Future<void> _actionsUpdate() async {
   for (var i = 0; i < gameUpdates.length; i++) {
     final func = gameUpdates.removeAt(0);
-    func();
+    await func();
   }
+}
 
-  for (var playerId in players.keys) {
-    physicUpdate(playerId);
-  }
+Future<void> _physicUpdate() async {
+  final knobInput = GetIt.I<KnobInput>();
+
+  final updates = players.keys.map((id) {
+    final knob = knobInput.get(id);
+    return physicUpdate(id, knob);
+  });
+  await Future.wait(updates);
 }
 
 void draw() {

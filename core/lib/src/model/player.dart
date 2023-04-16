@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'device.dart';
-import 'position.dart';
+import 'player_position.dart';
 import 'team.dart';
 
 part 'player.freezed.dart';
@@ -16,7 +16,7 @@ class Player with _$Player {
     required String nick,
     required Team team,
     required Device device,
-    required Position position,
+    required PlayerPosition position,
     required int hp,
   }) = _Player;
 

@@ -4,7 +4,6 @@ class PlayerPhysics {
   Vector2 position;
   double angle = 0.0;
   Vector2 velocity = Vector2.zero();
-  Vector2 pushingForce = Vector2.zero();
 
   /// Proportionality constant that relates the friction force to the velocity
   /// of the object. Its value is determined by the properties of the materials
@@ -21,12 +20,8 @@ class PlayerPhysics {
 
   PlayerPhysics(this.position);
 
-  bool isNan() =>
-      angle.isNaN || velocity.isNaN || position.isNaN || pushingForce.isNaN;
+  bool isNan() => angle.isNaN || velocity.isNaN || position.isNaN;
 
   bool isInfinite() =>
-      angle.isInfinite ||
-      velocity.isInfinite ||
-      position.isInfinite ||
-      pushingForce.isInfinite;
+      angle.isInfinite || velocity.isInfinite || position.isInfinite;
 }

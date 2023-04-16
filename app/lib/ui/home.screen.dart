@@ -227,7 +227,7 @@ class _Game extends StatelessWidget {
 
                 double frameWidth = frame.sizex + borderHorizontalPadding * 2;
                 double frameHeight = frame.sizey + borderVerticalPadding * 2;
-                return StreamBuilder<Position>(
+                return StreamBuilder<PlayerPosition>(
                     stream: positionBloc.myPosition$(),
                     builder: (context, snapshot) {
                       final position = snapshot.data;

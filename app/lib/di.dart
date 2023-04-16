@@ -10,7 +10,7 @@ final serverClient = ServerClient();
 
 final playersWs = Ws(Socket.playersWs, Player.parseToMap);
 final playerChangeWs = Ws(Socket.playerChangeWs, PlayerChangeDto.parse);
-final positionWs = Ws(Socket.pushWs, Position.fromBytes);
+final positionWs = Ws(Socket.pushWs, PlayerPosition.fromBytes);
 final dashWs = Ws(Socket.dashWs, DashDto.fromBytes);
 final attackWs = Ws(Socket.attackWs, AttackResponse.fromBytes);
 final cooldownWs = Ws(Socket.cooldownWs, CooldownDto.fromBytes);

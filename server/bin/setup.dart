@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -29,7 +30,6 @@ final playerPhysics = <int, PlayerPhysics>{};
 * value ->  [x, y, angle]
 */
 
-final Map<int, bool> pushCooldowns = {};
 final Map<int, bool> dashCooldowns = {};
 final Map<int, bool> attackCooldowns = {};
 
@@ -38,7 +38,7 @@ final Map<int, bool> attackCooldowns = {};
 * 0 - position update
 * 1 - attack
 */
-final gameUpdates = <void Function()>[];
+final gameUpdates = <Future<void> Function()>[];
 
 /*
 * Game draws. First value indicates, what event came.
@@ -46,6 +46,13 @@ final gameUpdates = <void Function()>[];
 * 1 - attack
 */
 final gameDraws = <void Function()>[];
+
+/*
+* Game draws. First value indicates, what event came.
+* 0 - position update
+* 1 - attack
+*/
+final positionIsolates = <int, Isolate>{};
 
 /*
 * Teams
@@ -63,7 +70,6 @@ GamePhase phase = GamePhase.selectingTeam;
 
 Player? gameHost;
 
-List<WebSocketChannel> pushChannels = [];
 List<WebSocketChannel> playersWSChannels = [];
 List<WebSocketChannel> playerChangeWSChannels = [];
 List<WebSocketChannel> attackWSChannels = [];
