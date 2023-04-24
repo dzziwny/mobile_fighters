@@ -214,7 +214,13 @@ class _Game extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.contain,
         alignment: Alignment.center,
-        child: SizedBox(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage("assets/cosmos_background.gif"),
+            ),
+          ),
           width: borderWidth,
           height: borderHeight,
           child: FutureBuilder<GameFrame>(
