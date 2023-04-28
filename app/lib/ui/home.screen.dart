@@ -11,8 +11,30 @@ import 'package:rxdart/rxdart.dart';
 import 'controls_layer.dart';
 import 'nick_window_layer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final StreamSubscription myPlayerSubscription;
+
+  @override
+  void initState() {
+    myPlayerSubscription = serverClient.myPlayer$.listen(
+      (player) {
+        if (player != null) {
+          movementBloc.gameBoardFocusNode.requestFocus();
+        } else {
+          movementBloc.gameBoardFocusNode.unfocus();
+        }
+      },
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +78,12 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  Future<void> dispose() async {
+    await myPlayerSubscription.cancel();
+    super.dispose();
   }
 }
 
@@ -211,59 +239,62 @@ class _Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: FittedBox(
-        fit: BoxFit.contain,
-        alignment: Alignment.center,
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage("assets/cosmos_background.gif"),
+      child: KeyboardListener(
+        focusNode: movementBloc.gameBoardFocusNode,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage("assets/cosmos_background.gif"),
+              ),
             ),
-          ),
-          width: borderWidth,
-          height: borderHeight,
-          child: FutureBuilder<GameFrame>(
-              future: serverClient.gameFrame,
-              builder: (context, snapshot) {
-                final frame = snapshot.data;
-                if (frame == null) {
-                  return const SizedBox.shrink();
-                }
+            width: borderWidth,
+            height: borderHeight,
+            child: FutureBuilder<GameFrame>(
+                future: serverClient.gameFrame,
+                builder: (context, snapshot) {
+                  final frame = snapshot.data;
+                  if (frame == null) {
+                    return const SizedBox.shrink();
+                  }
 
-                double frameWidth = frame.sizex + borderHorizontalPadding * 2;
-                double frameHeight = frame.sizey + borderVerticalPadding * 2;
-                return StreamBuilder<PlayerPosition>(
-                    stream: positionBloc.myPosition$(),
-                    builder: (context, snapshot) {
-                      final position = snapshot.data;
-                      double x = 0.0;
-                      double y = 0.0;
+                  double frameWidth = frame.sizex + borderHorizontalPadding * 2;
+                  double frameHeight = frame.sizey + borderVerticalPadding * 2;
+                  return StreamBuilder<PlayerPosition>(
+                      stream: positionBloc.myPosition$(),
+                      builder: (context, snapshot) {
+                        final position = snapshot.data;
+                        double x = 0.0;
+                        double y = 0.0;
 
-                      if (position != null) {
-                        x = (position.x - frame.sizex / 2) /
-                            ((frameWidth - borderWidth) / 2);
-                        y = (position.y - frame.sizey / 2) /
-                            ((frameHeight - borderHeight) / 2);
-                      }
+                        if (position != null) {
+                          x = (position.x - frame.sizex / 2) /
+                              ((frameWidth - borderWidth) / 2);
+                          y = (position.y - frame.sizey / 2) /
+                              ((frameHeight - borderHeight) / 2);
+                        }
 
-                      return ClipRect(
-                        child: OverflowBox(
-                          maxWidth: double.infinity,
-                          maxHeight: double.infinity,
-                          alignment: Alignment(x, y),
-                          child: SizedBox(
-                            width: frameWidth,
-                            height: frameHeight,
-                            child: BubbleGame(
-                              boardWidth: frame.sizex,
-                              boardHeight: frame.sizey,
+                        return ClipRect(
+                          child: OverflowBox(
+                            maxWidth: double.infinity,
+                            maxHeight: double.infinity,
+                            alignment: Alignment(x, y),
+                            child: SizedBox(
+                              width: frameWidth,
+                              height: frameHeight,
+                              child: BubbleGame(
+                                boardWidth: frame.sizex,
+                                boardHeight: frame.sizey,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    });
-              }),
+                        );
+                      });
+                }),
+          ),
         ),
       ),
     );

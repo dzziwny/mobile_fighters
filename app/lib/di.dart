@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'bloc/_bloc.dart';
@@ -24,6 +25,10 @@ final teamService = TeamService();
 final attackBloc = AttackBloc();
 final fragBloc = FragBloc();
 final hpBloc = HpBloc();
+final movementBloc = MovementBloc();
 final positionBloc = PositionBloc();
 
 const uuid = Uuid();
+
+final isMobile = defaultTargetPlatform == TargetPlatform.android ||
+    defaultTargetPlatform == TargetPlatform.iOS;

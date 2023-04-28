@@ -55,6 +55,7 @@ Future<void> physicUpdate(int playerId, Knob knob) async {
   if (physic == null ||
       (knob.x == 0.0 &&
           knob.y == 0.0 &&
+          knob.angle == physic.angle &&
           physic.velocity.x == 0.0 &&
           physic.velocity.y == 0.0)) {
     return;
