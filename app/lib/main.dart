@@ -24,16 +24,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final halfWidth = mediaQuery.size.width / 2;
-    final halfHeight = mediaQuery.size.height / 2;
-    return Listener(
-      onPointerHover: (event) =>
-          movementBloc.setAngle(event, halfWidth, halfHeight),
-      child: MaterialApp(
-        theme: lightTheme(),
-        home: const HomeScreen(),
-      ),
+    return MaterialApp(
+      theme: lightTheme(),
+      home: const HomeScreen(),
     );
   }
 }

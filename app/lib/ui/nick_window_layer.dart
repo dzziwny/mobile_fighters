@@ -1,4 +1,5 @@
 import 'package:bubble_fight/di.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'nick_window.dart';
@@ -17,7 +18,17 @@ class NickWindowLayer extends StatelessWidget {
         if (isInGame == true) {
           return const SizedBox.shrink();
         }
-        return const NickWindow();
+
+        return MouseRegion(
+          child: Center(
+            child: Container(
+              width: 600 * goldenRatio,
+              height: 600,
+              padding: const EdgeInsets.all(32.0),
+              child: const NickWindow(),
+            ),
+          ),
+        );
       },
     );
   }

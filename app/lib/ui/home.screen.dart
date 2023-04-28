@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:bubble_fight/di.dart';
-import 'package:bubble_fight/statics.dart';
-import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:bubble_fight/ui/frags_layer.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'controls_layer.dart';
+import 'game_board_layer.dart';
+import 'hit_reaction_layer.dart';
 import 'nick_window_layer.dart';
+import 'sight_layer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,8 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: theme.colorScheme.onBackground,
       body: Stack(
         children: [
-          const _Game(),
-          const HitReaction(),
+          const GameBoardLayer(),
+          const SightLayer(),
+          const MouseRegion(
+            opaque: false,
+            child: HitReactionLayer(),
+          ),
           StreamBuilder<bool>(
             stream: serverClient.isInGame(),
             builder: (context, snapshot) {
@@ -55,14 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return const ControlsLayer();
             },
           ),
-          Center(
-            child: Container(
-              width: 600 * goldenRatio,
-              height: 600,
-              padding: const EdgeInsets.all(32.0),
-              child: const NickWindowLayer(),
-            ),
-          ),
+          const NickWindowLayer(),
           const Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [_AttacksButtons(), SizedBox(height: 32.0)],
@@ -83,109 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Future<void> dispose() async {
     await myPlayerSubscription.cancel();
-    super.dispose();
-  }
-}
-
-class HitReaction extends StatefulWidget {
-  const HitReaction({
-    super.key,
-  });
-
-  @override
-  State<HitReaction> createState() => _HitReactionState();
-}
-
-class _HitReactionState extends State<HitReaction>
-    with TickerProviderStateMixin {
-  late final AnimationController opacityController;
-  late final AnimationController radiusController;
-  late final StreamSubscription hitSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    opacityController = AnimationController(
-      value: 0.0,
-      vsync: this,
-    );
-
-    radiusController = AnimationController(
-      value: 10.0,
-      vsync: this,
-    );
-
-    hitSubscription = Rx.combineLatest2(
-      serverClient.id$,
-      hitWs.data(),
-      (id, hit) {
-        if (hit.playerId == id) {
-          animateHit();
-        }
-      },
-    ).listen(null);
-  }
-
-  Future<void> animateHit() async {
-    await Future.wait([
-      opacityController.animateTo(
-        1.0,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeIn,
-      ),
-      radiusController.animateTo(
-        0.9,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeIn,
-      )
-    ]);
-
-    await Future.wait([
-      opacityController.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 1800),
-        curve: Curves.easeIn,
-      ),
-      radiusController.animateTo(
-        2.0,
-        duration: const Duration(milliseconds: 1800),
-        curve: Curves.easeIn,
-      )
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return AnimatedBuilder(
-        animation: opacityController,
-        builder: (_, __) {
-          return Opacity(
-            opacity: opacityController.value,
-            child: AnimatedBuilder(
-                animation: radiusController,
-                builder: (_, __) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        radius: radiusController.value,
-                        colors: [
-                          Colors.transparent,
-                          theme.colorScheme.error,
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          );
-        });
-  }
-
-  @override
-  Future<void> dispose() async {
-    opacityController.dispose();
-    radiusController.dispose();
-    await hitSubscription.cancel();
     super.dispose();
   }
 }
@@ -229,74 +122,6 @@ class _AttacksButtons extends StatelessWidget {
           icon: const Icon(Icons.logout_rounded),
         ),
       ],
-    );
-  }
-}
-
-class _Game extends StatelessWidget {
-  const _Game();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: KeyboardListener(
-        focusNode: movementBloc.gameBoardFocusNode,
-        child: FittedBox(
-          fit: BoxFit.contain,
-          alignment: Alignment.center,
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage("assets/cosmos_background.gif"),
-              ),
-            ),
-            width: borderWidth,
-            height: borderHeight,
-            child: FutureBuilder<GameFrame>(
-                future: serverClient.gameFrame,
-                builder: (context, snapshot) {
-                  final frame = snapshot.data;
-                  if (frame == null) {
-                    return const SizedBox.shrink();
-                  }
-
-                  double frameWidth = frame.sizex + borderHorizontalPadding * 2;
-                  double frameHeight = frame.sizey + borderVerticalPadding * 2;
-                  return StreamBuilder<PlayerPosition>(
-                      stream: positionBloc.myPosition$(),
-                      builder: (context, snapshot) {
-                        final position = snapshot.data;
-                        double x = 0.0;
-                        double y = 0.0;
-
-                        if (position != null) {
-                          x = (position.x - frame.sizex / 2) /
-                              ((frameWidth - borderWidth) / 2);
-                          y = (position.y - frame.sizey / 2) /
-                              ((frameHeight - borderHeight) / 2);
-                        }
-
-                        return ClipRect(
-                          child: OverflowBox(
-                            maxWidth: double.infinity,
-                            maxHeight: double.infinity,
-                            alignment: Alignment(x, y),
-                            child: SizedBox(
-                              width: frameWidth,
-                              height: frameHeight,
-                              child: BubbleGame(
-                                boardWidth: frame.sizex,
-                                boardHeight: frame.sizey,
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                }),
-          ),
-        ),
-      ),
     );
   }
 }
