@@ -25,9 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
     myPlayerSubscription = serverClient.myPlayer$.listen(
       (player) {
         if (player != null) {
-          movementBloc.gameBoardFocusNode.requestFocus();
+          controlsBloc.gameBoardFocusNode.requestFocus();
         } else {
-          movementBloc.gameBoardFocusNode.unfocus();
+          controlsBloc.gameBoardFocusNode.unfocus();
         }
       },
     );

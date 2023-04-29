@@ -8,6 +8,8 @@ class Endpoint {
 class Socket {
   static var playersWs = Socket('players');
   static var pushWs = Socket('push');
+  static var rotateWs = Socket('rotate');
+  static var movementKeyboardhWs = Socket('movementKeyboard');
   static var dashWs = Socket('dash');
   static var cooldownWs = Socket('cooldownWs');
   static var attackWs = Socket('attack');

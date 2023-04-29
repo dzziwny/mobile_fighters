@@ -12,6 +12,8 @@ final serverClient = ServerClient();
 final playersWs = Ws(Socket.playersWs, Player.parseToMap);
 final playerChangeWs = Ws(Socket.playerChangeWs, PlayerChangeDto.parse);
 final positionWs = Ws(Socket.pushWs, PlayerPosition.fromBytes);
+final keyboardWs = Ws(Socket.movementKeyboardhWs, MovementKeyboard.fromBytes);
+final rotateWs = Ws(Socket.rotateWs, PlayerAngle.fromBytes);
 final dashWs = Ws(Socket.dashWs, DashDto.fromBytes);
 final attackWs = Ws(Socket.attackWs, AttackResponse.fromBytes);
 final cooldownWs = Ws(Socket.cooldownWs, CooldownDto.fromBytes);
@@ -25,7 +27,7 @@ final teamService = TeamService();
 final attackBloc = AttackBloc();
 final fragBloc = FragBloc();
 final hpBloc = HpBloc();
-final movementBloc = MovementBloc();
+final controlsBloc = ControlsBloc();
 final positionBloc = PositionBloc();
 
 const uuid = Uuid();

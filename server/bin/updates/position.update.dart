@@ -49,26 +49,31 @@ Vector2 _resolvePosition(PlayerPhysics physic, double dt) {
   return position;
 }
 
-Future<void> physicUpdate(int playerId, Knob knob) async {
+Future<void> physicUpdate(
+  int playerId,
+  double x,
+  double y,
+  double angle,
+) async {
   const dt = sliceTimeSeconds;
   final physic = playerPhysics[playerId];
   if (physic == null ||
-      (knob.x == 0.0 &&
-          knob.y == 0.0 &&
-          knob.angle == physic.angle &&
+      (x == 0.0 &&
+          y == 0.0 &&
+          angle == physic.angle &&
           physic.velocity.x == 0.0 &&
           physic.velocity.y == 0.0)) {
     return;
   }
 
   final friction = calculateFriction(physic);
-  final netForce = knob.force + friction;
+  final netForce = Vector2(x, y) + friction;
 
   physic.velocity
     ..add(netForce)
     ..roundToZero();
   physic.position = _resolvePosition(physic, dt);
-  physic.angle = knob.angle;
+  physic.angle = angle;
 
   /// Boundary bouncing
   if (physic.position.y == boardHeight || physic.position.y == 0.0) {

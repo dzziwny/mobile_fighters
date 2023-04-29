@@ -3,6 +3,7 @@ import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/bubble_game.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math.dart';
 
 class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
@@ -13,13 +14,26 @@ class GameBoardLayer extends StatelessWidget {
     final halfWidth = mediaQuery.size.width / 2;
     final halfHeight = mediaQuery.size.height / 2;
     return Positioned.fill(
-      child: MouseRegion(
-        onHover: (event) {
-          movementBloc.setAngle(event, halfWidth, halfHeight);
+      child: Listener(
+        onPointerDown: (_) {
+          attackWs.send(AttackRequest.startGun);
         },
-        opaque: false,
+        onPointerUp: (_) {
+          attackWs.send(AttackRequest.stopGun);
+        },
+        onPointerHover: (event) {
+          if (!controlsBloc.gameBoardFocusNode.hasFocus) {
+            return;
+          }
+
+          final x = event.position.dx - halfWidth;
+          final y = event.position.dy - halfHeight;
+          final angle =
+              (Vector2(x, y).clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
+          rotateWs.send(PlayerAngle.toBytes(angle));
+        },
         child: KeyboardListener(
-          focusNode: movementBloc.gameBoardFocusNode,
+          focusNode: controlsBloc.gameBoardFocusNode,
           child: FittedBox(
             fit: BoxFit.contain,
             alignment: Alignment.center,

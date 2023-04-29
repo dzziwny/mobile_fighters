@@ -54,3 +54,10 @@ enum AttackPhase {
   start,
   boom,
 }
+
+class AttackRequest {
+  static Uint8List bomb = [0].toBytes();
+  static Uint8List startGun = [1].toBytes();
+  static Uint8List stopGun = [2].toBytes();
+  static Uint8List reloadGun = [3].toBytes();
+}

@@ -9,32 +9,20 @@ import 'channels.handler.dart';
 import 'knob.input.dart';
 import 'on_connection.dart';
 
-class PushConnection extends OnConnection {
+class RotateConnection extends OnConnection {
   final knobInput = GetIt.I<KnobInput>();
   final channelsHandler = GetIt.I<ChannelsHandler>();
 
   @override
-  void onInit(int playerId, WebSocketChannel channel) {
-    channelsHandler.addPushChannel(playerId, channel);
-  }
+  void onInit(int playerId, WebSocketChannel channel) {}
 
   @override
   void onData(int playerId, Uint8List data) {
-    double angle = data.toDouble(1, 5);
+    double angle = data.toDouble(0, 4);
     if (angle > pi || angle < -pi) {
       return;
     }
 
-    double x = data.toDouble(5, 9);
-    if (x > 5.0 || x < -5.0) {
-      return;
-    }
-
-    double y = data.toDouble(9, 13);
-    if (y > 5.0 || y < -5.0) {
-      return;
-    }
-
-    knobInput.update(playerId, x, y, angle);
+    knobInput.updateAngle(playerId, angle);
   }
 }

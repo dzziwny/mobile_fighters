@@ -35,6 +35,8 @@ void main(List<String> args) async {
     ..post(Endpoint.startGame, createPlayerHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
     ..ws(Socket.pushWs, PushConnection())
+    ..ws(Socket.rotateWs, RotateConnection())
+    ..ws(Socket.movementKeyboardhWs, MovementKeyboardConnection())
     ..ws(Socket.dashWs, DashConnection())
     ..ws(Socket.cooldownWs, CooldownConnection())
     ..ws(Socket.attackWs, AttackConnection())
@@ -90,8 +92,11 @@ Future<void> _physicUpdate() async {
   final knobInput = GetIt.I<KnobInput>();
 
   final updates = players.keys.map((id) {
-    final knob = knobInput.get(id);
-    return physicUpdate(id, knob);
+    final x = knobInput.x(id);
+    final y = knobInput.y(id);
+    final angle = knobInput.angle(id);
+
+    return physicUpdate(id, x, y, angle);
   });
   await Future.wait(updates);
 }
