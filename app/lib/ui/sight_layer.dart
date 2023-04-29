@@ -28,10 +28,10 @@ class _SightLayerState extends State<SightLayer> {
         child: Stack(
           children: [
             Positioned(
-              top: top - 16.0,
-              left: left - 16.0,
+              top: top - 19.0,
+              left: left - 19.0,
               child: Image.asset('assets/sight.png'),
-            )
+            ),
           ],
         ),
       ),

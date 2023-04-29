@@ -74,28 +74,31 @@ class _HitReactionState extends State<HitReactionLayer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return AnimatedBuilder(
-        animation: opacityController,
-        builder: (_, __) {
-          return Opacity(
-            opacity: opacityController.value,
-            child: AnimatedBuilder(
-                animation: radiusController,
-                builder: (_, __) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        radius: radiusController.value,
-                        colors: [
-                          Colors.transparent,
-                          theme.colorScheme.error,
-                        ],
+    return MouseRegion(
+      opaque: false,
+      child: AnimatedBuilder(
+          animation: opacityController,
+          builder: (_, __) {
+            return Opacity(
+              opacity: opacityController.value,
+              child: AnimatedBuilder(
+                  animation: radiusController,
+                  builder: (_, __) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          radius: radiusController.value,
+                          colors: [
+                            Colors.transparent,
+                            theme.colorScheme.error,
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }),
-          );
-        });
+                    );
+                  }),
+            );
+          }),
+    );
   }
 
   @override

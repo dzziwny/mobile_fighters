@@ -24,6 +24,11 @@ double startHpDouble = startHp.toDouble();
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
 
+const playerRadius = 40.0;
+const playerDiameter = playerRadius * 2;
+const playerPhoneHeight = playerDiameter + 64.0;
+const playerPhoneWidth = playerDiameter + 9.0;
+
 //FRAME
 // Ultra HD xddddd
 const double boardWidth = 2160.0;

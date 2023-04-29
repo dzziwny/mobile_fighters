@@ -40,30 +40,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.onBackground,
-      body: Stack(
+      body: const Stack(
         children: [
-          const GameBoardLayer(),
-          const SightLayer(),
-          const MouseRegion(
-            opaque: false,
-            child: HitReactionLayer(),
-          ),
-          StreamBuilder<bool>(
-            stream: serverClient.isInGame(),
-            builder: (context, snapshot) {
-              final isInGame = snapshot.data;
-              if (isInGame != true) {
-                return const SizedBox.shrink();
-              }
-              return const ControlsLayer();
-            },
-          ),
-          const NickWindowLayer(),
-          const Column(
+          GameBoardLayer(),
+          SightLayer(),
+          HitReactionLayer(),
+          ControlsLayer(),
+          NickWindowLayer(),
+          // LinesLayer(),
+          Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [_AttacksButtons(), SizedBox(height: 32.0)],
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(32.0),
             child: Row(
               children: [
