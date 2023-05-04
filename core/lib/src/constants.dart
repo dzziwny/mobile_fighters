@@ -31,8 +31,11 @@ const playerPhoneWidth = playerDiameter + 9.0;
 
 //FRAME
 // Ultra HD xddddd
-const double boardWidth = 2160.0;
-const double boardHeight = 1620.0;
+const int boardWidth = 255 * 8;
+const int boardHeight = 255 * 6;
+
+const double boardWidthDouble = boardWidth + 0.0;
+const double boardHeightDouble = boardHeight + 0.0;
 
 // RESPAWNS
 const double respawnWidth = 150.0;

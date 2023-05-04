@@ -81,8 +81,8 @@ class GameBoardLayer extends StatelessWidget {
                                 width: frameWidth,
                                 height: frameHeight,
                                 child: BubbleGame(
-                                  boardWidth: frame.sizex,
-                                  boardHeight: frame.sizey,
+                                  boardWidth: frame.sizex.toDouble(),
+                                  boardHeight: frame.sizey.toDouble(),
                                 ),
                               ),
                             ),

@@ -6,8 +6,8 @@ part 'game_frame.g.dart';
 @freezed
 class GameFrame with _$GameFrame {
   const factory GameFrame({
-    required double sizex,
-    required double sizey,
+    required int sizex,
+    required int sizey,
   }) = _GameFrame;
 
   factory GameFrame.fromJson(Map<String, dynamic> json) =>

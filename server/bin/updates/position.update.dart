@@ -13,8 +13,8 @@ double _resolveX(PlayerPhysics physic, double dt, Vector2 momentum) {
     return 0.0;
   }
   var x = physic.position.x + momentum.x * dt;
-  if (x > boardWidth) {
-    return boardWidth;
+  if (x > boardWidthDouble) {
+    return boardWidthDouble;
   }
 
   if (x < 0.0) {
@@ -30,8 +30,8 @@ double _resolveY(PlayerPhysics physic, double dt, Vector2 momentum) {
   }
 
   var y = physic.position.y + momentum.y * dt;
-  if (y > boardHeight) {
-    return boardHeight;
+  if (y > boardHeightDouble) {
+    return boardHeightDouble;
   }
 
   if (y < 0.0) {
