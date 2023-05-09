@@ -49,7 +49,7 @@ Vector2 _resolvePosition(PlayerPhysics physic, double dt) {
   return position;
 }
 
-Future<void> physicUpdate(
+Future<void> playerPhysicUpdate(
   int playerId,
   double x,
   double y,
@@ -57,12 +57,7 @@ Future<void> physicUpdate(
 ) async {
   const dt = sliceTimeSeconds;
   final physic = playerPhysics[playerId];
-  if (physic == null ||
-      (x == 0.0 &&
-          y == 0.0 &&
-          angle == physic.angle &&
-          physic.velocity.x == 0.0 &&
-          physic.velocity.y == 0.0)) {
+  if (physic == null) {
     return;
   }
 
@@ -72,6 +67,8 @@ Future<void> physicUpdate(
   physic.velocity
     ..add(netForce)
     ..roundToZero();
+
+  print(physic.velocity);
   physic.position = _resolvePosition(physic, dt);
   physic.angle = angle;
 

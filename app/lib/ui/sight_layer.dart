@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as mat;
+import 'package:vector_math/vector_math.dart';
 
 class SightLayer extends StatefulWidget {
   const SightLayer({super.key});
@@ -8,31 +10,37 @@ class SightLayer extends StatefulWidget {
 }
 
 class _SightLayerState extends State<SightLayer> {
-  var top = 0.0;
-  var left = 0.0;
+  final position = ValueNotifier(Vector2(0.0, 0.0));
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: MouseRegion(
-        opaque: false,
-        cursor: SystemMouseCursors.none,
-        onHover: (event) {
-          final x = event.position.dx;
-          final y = event.position.dy;
-          setState(() {
-            top = y;
-            left = x;
-          });
+    return MouseRegion(
+      opaque: false,
+      cursor: SystemMouseCursors.none,
+      child: Listener(
+        onPointerMove: (e) {
+          position.value = Vector2(e.position.dx, e.position.dy);
         },
-        child: Stack(
-          children: [
-            Positioned(
-              top: top - 19.0,
-              left: left - 19.0,
-              child: Image.asset('assets/sight.png'),
-            ),
-          ],
+        onPointerHover: (e) {
+          position.value = Vector2(e.position.dx, e.position.dy);
+        },
+        // Container must be so that listener can catch whole area not only a sight
+        child: Container(
+          color: mat.Colors.transparent,
+          child: Stack(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: position,
+                builder: (context, value, child) {
+                  return Positioned(
+                    top: value.y - 19.0,
+                    left: value.x - 19.0,
+                    child: Image.asset('assets/sight.png'),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

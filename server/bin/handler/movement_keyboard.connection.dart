@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'channels.handler.dart';
-import 'knob.input.dart';
+import '../inputs/knob.input.dart';
 import 'on_connection.dart';
 
 class MovementKeyboardConnection extends OnConnection {

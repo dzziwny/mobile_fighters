@@ -4,6 +4,7 @@ const attackFlyingAnimationDuration = Duration(milliseconds: 1000);
 
 // If there are lags, try make sliceTime smaller
 const int sliceTimeMicroseconds = 5000;
+const double sliceTimeMicrosecondsDouble = sliceTimeMicroseconds + 0.0;
 const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 
 const int attackCooldownSesconds = 2;
@@ -30,7 +31,6 @@ const playerPhoneHeight = playerDiameter + 64.0;
 const playerPhoneWidth = playerDiameter + 9.0;
 
 //FRAME
-// Ultra HD xddddd
 const int boardWidth = 255 * 8;
 const int boardHeight = 255 * 6;
 

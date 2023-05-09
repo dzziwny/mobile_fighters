@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'model/bullet.dart';
 import 'model/player_physics.dart';
 
 /*
@@ -16,6 +17,7 @@ final guids = <String, int>{};
 * value ->  Player
 */
 final players = <int, Player>{};
+final bullets = <int, Bullet>{};
 
 /*
 * physics

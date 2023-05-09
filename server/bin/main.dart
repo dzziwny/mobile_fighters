@@ -9,7 +9,7 @@ import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'handler/_handler.dart';
-import 'handler/knob.input.dart';
+import 'inputs/knob.input.dart';
 import 'handler/on_connection.dart';
 import 'register_di.dart';
 import 'setup.dart';
@@ -40,6 +40,7 @@ void main(List<String> args) async {
     ..ws(Socket.dashWs, DashConnection())
     ..ws(Socket.cooldownWs, CooldownConnection())
     ..ws(Socket.attackWs, AttackConnection())
+    ..ws(Socket.bulletWs, BulletConnection())
     ..ws(Socket.fragWs, DeadConnection())
     ..ws(Socket.selectTeamWs, TeamConnection())
     ..ws(Socket.gamePhaseWsTemplate, GamePhaseConnection())
@@ -74,6 +75,7 @@ void main(List<String> args) async {
 Future<void> update() async {
   await _CRUDsUpdate();
   await _actionsUpdate();
+  await _bulletsUpdate();
   await _physicUpdate();
 }
 
@@ -88,6 +90,14 @@ Future<void> _actionsUpdate() async {
   }
 }
 
+Future<void> _bulletsUpdate() async {
+  final updates = bullets.values.map(
+    (bullet) => bulletPhysicUpdate(bullet, sliceTimeSeconds),
+  );
+
+  await Future.wait(updates);
+}
+
 Future<void> _physicUpdate() async {
   final knobInput = GetIt.I<KnobInput>();
 
@@ -96,8 +106,9 @@ Future<void> _physicUpdate() async {
     final y = knobInput.y(id);
     final angle = knobInput.angle(id);
 
-    return physicUpdate(id, x, y, angle);
+    return playerPhysicUpdate(id, x, y, angle);
   });
+
   await Future.wait(updates);
 }
 

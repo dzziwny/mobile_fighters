@@ -8,10 +8,10 @@ import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../inputs/_input.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
 import 'channels.handler.dart';
-import 'knob.input.dart';
 
 void playerPosition(SendPort sendPort) async {
   final receivePort = ReceivePort();
@@ -67,6 +67,7 @@ Future<Player> createPlayer(CreatePlayerDtoRequest dto) async {
   sendPort.send(team);
   final Position position = await receiveStream.first;
   GetIt.I<KnobInput>().create(id, position.angle);
+  GetIt.I<BulletInput>().create(id);
 
   final physic = PlayerPhysics(Vector2(position.x, position.y))
     ..angle = position.angle;

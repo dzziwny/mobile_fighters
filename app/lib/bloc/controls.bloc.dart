@@ -16,6 +16,13 @@ class ControlsBloc implements Disposable {
 
   ControlsBloc() {
     gameBoardFocusNode.onKey = (node, event) {
+      if (event.physicalKey == lastMovementEvent?.physicalKey &&
+          event.runtimeType == lastMovementEvent?.runtimeType) {
+        return KeyEventResult.handled;
+      }
+
+      lastMovementEvent = event;
+
       /*
       * Resolve actions
       */
@@ -25,15 +32,19 @@ class ControlsBloc implements Disposable {
         return KeyEventResult.handled;
       }
 
-      /*
-      * Resolve movement
-      */
-      if (event.physicalKey == lastMovementEvent?.physicalKey &&
-          event.runtimeType == lastMovementEvent?.runtimeType) {
+      if (event.physicalKey == PhysicalKeyboardKey.keyP) {
+        if (event is RawKeyDownEvent) {
+          bulletWs.send([1].toBytes());
+        } else {
+          bulletWs.send([0].toBytes());
+        }
+
         return KeyEventResult.handled;
       }
 
-      lastMovementEvent = event;
+      /*
+      * Resolve movement
+      */
 
       if (event.physicalKey == PhysicalKeyboardKey.keyW) {
         if (event is RawKeyDownEvent) {

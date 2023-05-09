@@ -1,4 +1,5 @@
 export 'attack.connection.dart';
+export 'bullet.connection.dart';
 export 'connect.handler.dart';
 export 'cooldown.connection.dart';
 export 'create_player.handler.dart';

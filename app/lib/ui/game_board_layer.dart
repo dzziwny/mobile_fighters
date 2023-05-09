@@ -16,10 +16,21 @@ class GameBoardLayer extends StatelessWidget {
     return Positioned.fill(
       child: Listener(
         onPointerDown: (_) {
-          attackWs.send(AttackRequest.startGun);
+          bulletWs.send(BulletRequest.startGun);
         },
         onPointerUp: (_) {
-          attackWs.send(AttackRequest.stopGun);
+          bulletWs.send(BulletRequest.stopGun);
+        },
+        onPointerMove: (event) {
+          if (!controlsBloc.gameBoardFocusNode.hasFocus) {
+            return;
+          }
+
+          final x = event.position.dx - halfWidth;
+          final y = event.position.dy - halfHeight;
+          final angle =
+              (Vector2(x, y).clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
+          rotateWs.send(PlayerAngle.toBytes(angle));
         },
         onPointerHover: (event) {
           if (!controlsBloc.gameBoardFocusNode.hasFocus) {

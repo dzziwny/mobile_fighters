@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'attacks_bottom_layer.dart';
 import 'attacks_upper_layer.dart';
+import 'bullets.layer.dart';
 import 'respawns_layer.dart';
 
 class BubbleGame extends StatelessWidget {
@@ -54,6 +55,7 @@ class BubbleGame extends StatelessWidget {
               children: [
                 RespawnsLayer(),
                 AttacksBottomLayer(),
+                BulletsLayer(),
                 PlayersLayer(),
                 AttacksUpperLayer(),
               ],

@@ -1,4 +1,5 @@
 export 'attack.response.dart';
+export 'bullet.response.dart';
 export 'device.dart';
 export 'game_frame.dart';
 export 'game_phase.dart';

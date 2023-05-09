@@ -13,6 +13,7 @@ class Socket {
   static var dashWs = Socket('dash');
   static var cooldownWs = Socket('cooldownWs');
   static var attackWs = Socket('attack');
+  static var bulletWs = Socket('gun');
   static var fragWs = Socket('deadWs');
   static var selectTeamWs = Socket('selectTeamWs');
   static var gamePhaseWsTemplate = Socket('gamePhaseWs');
