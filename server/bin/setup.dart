@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'actions/action.dart';
 import 'model/bullet.dart';
 import 'model/player_physics.dart';
 
@@ -40,7 +41,7 @@ final Map<int, bool> attackCooldowns = {};
 * 0 - position update
 * 1 - attack
 */
-final gameUpdates = <Future<void> Function()>[];
+final actions = <Action>[];
 
 /*
 * Game draws. First value indicates, what event came.

@@ -75,7 +75,6 @@ void main(List<String> args) async {
 Future<void> update() async {
   await _CRUDsUpdate();
   await _actionsUpdate();
-  await _bulletsUpdate();
   await _physicUpdate();
 }
 
@@ -84,13 +83,20 @@ Future<void> _CRUDsUpdate() async {
 }
 
 Future<void> _actionsUpdate() async {
-  for (var i = 0; i < gameUpdates.length; i++) {
-    final func = gameUpdates.removeAt(0);
-    await func();
+  for (var i = 0; i < actions.length; i++) {
+    final action = actions.removeAt(0);
+    await action.handle();
   }
 }
 
-Future<void> _bulletsUpdate() async {
+Future<void> _physicUpdate() async {
+  await Future.wait([
+    _bulletsPhysicUpdate(),
+    _playersPhysicUpdate(),
+  ]);
+}
+
+Future<void> _bulletsPhysicUpdate() async {
   final updates = bullets.values.map(
     (bullet) => bulletPhysicUpdate(bullet, sliceTimeSeconds),
   );
@@ -98,7 +104,7 @@ Future<void> _bulletsUpdate() async {
   await Future.wait(updates);
 }
 
-Future<void> _physicUpdate() async {
+Future<void> _playersPhysicUpdate() async {
   final knobInput = GetIt.I<KnobInput>();
 
   final updates = players.keys.map((id) {

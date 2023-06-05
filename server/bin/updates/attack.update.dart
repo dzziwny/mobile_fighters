@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../actions/action.dart';
 import '../handler/channels.handler.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
@@ -41,7 +42,7 @@ Future<void> attackUpdate(int attackerId) async {
   final attackId = await _generateAttackId();
   final target = calculateTarget(physic);
   Timer(attackUntilBoomDuration, () {
-    gameUpdates.add(() => _completeAttackUpdate(attackId, attackerId, target));
+    actions.add(CompleteAttackAction(attackId, attackerId, target));
   });
 
   final response = AttackResponse(
@@ -62,7 +63,7 @@ Future<void> attackUpdate(int attackerId) async {
   }));
 }
 
-Future<void> _completeAttackUpdate(
+Future<void> completeAttackUpdate(
   int attackId,
   int attackerId,
   Vector2 attackCenter,

@@ -68,7 +68,6 @@ Future<void> playerPhysicUpdate(
     ..add(netForce)
     ..roundToZero();
 
-  print(physic.velocity);
   physic.position = _resolvePosition(physic, dt);
   physic.angle = angle;
 

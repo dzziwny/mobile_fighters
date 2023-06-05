@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../actions/action.dart';
 import '../inputs/_input.dart';
 import '../setup.dart';
-import '../updates/_updates.dart';
 import 'channels.handler.dart';
 import 'on_connection.dart';
 
@@ -34,7 +34,7 @@ class BulletConnection extends OnConnection {
     gunInput.update(playerId, isShooting);
     await delay;
     while (this.isShooting) {
-      gameUpdates.add(() => createBulletUpdate(playerId));
+      actions.add(CreateBulletAction(playerId));
       delay = Future.delayed(Duration(milliseconds: 100));
       await delay;
     }
