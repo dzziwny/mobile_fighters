@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../model/player_physics.dart';
 import '../setup.dart';
 
 double _resolveX(PlayerPhysics physic, double dt, Vector2 momentum) {

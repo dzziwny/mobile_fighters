@@ -8,7 +8,6 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'game_state.dart';
 import 'handler/_handler.dart';
 import 'handler/channels.handler.dart';
 import 'inputs/knob.input.dart';
@@ -48,7 +47,8 @@ void main(List<String> args) async {
     ..ws(Socket.gamePhaseWsTemplate, GamePhaseConnection())
     ..ws(Socket.playersWs, PlayersConnection())
     ..ws(Socket.playerChangeWs, PlayerChangeConnection())
-    ..ws(Socket.hitWs, HitConnection());
+    ..ws(Socket.hitWs, HitConnection())
+    ..ws(Socket.gameStateWs, GameStateConnection());
 
   final handler = Pipeline()
       // .addMiddleware(
@@ -125,27 +125,18 @@ Future<void> _playersPhysicUpdate() async {
 }
 
 Future<void> draw() async {
-  final state = GameState.create();
+  final bytes = GameState.bytes(
+    playerPhysics.entries,
+    bombAttackResponses,
+    hits,
+    bullets.values,
+  );
 
-  final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
-  for (var channel in pushChannels) {
-    channel.sink.add(state.pushChannelDatas);
-  }
+  bombAttackResponses = [];
+  hits = [];
 
-  for (var channel in attackWSChannels) {
-    for (var data in state.attackWSChannelsDatas) {
-      channel.sink.add(data);
-    }
-  }
-
-  for (var channel in hitWSChannels) {
-    for (var data in state.hitWSChannelsDatas) {
-      channel.sink.add(data);
-    }
-  }
-
-  final channels = await GetIt.I<ChannelsHandler>().getBulletChannels();
+  final channels = await GetIt.I<ChannelsHandler>().getGameStateChannels();
   for (var channel in channels) {
-    channel.sink.add(state.bulletWSChannelsDatas);
+    channel.sink.add(bytes);
   }
 }

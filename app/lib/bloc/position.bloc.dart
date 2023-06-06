@@ -35,8 +35,8 @@ class PositionBloc implements Disposable {
     _playersPositions.add(subjects);
   }).publish();
 
-  late final _positionHandler = positionsWs.data().map((positions) {
-    for (var position in positions) {
+  late final _positionHandler = gameStateWs.data().map((state) {
+    for (var position in state.positions) {
       _playersPositions.value[position.playerId]?.add(position);
     }
   }).publish();

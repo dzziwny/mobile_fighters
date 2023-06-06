@@ -5,8 +5,6 @@ import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'actions/action.dart';
-import 'model/bullet.dart';
-import 'model/player_physics.dart';
 
 /*
 * key   ->  guid

@@ -27,15 +27,17 @@ class HpBloc implements Disposable {
       _playersHp.add(hps);
     }).listen(null);
 
-    _hpSubscription = hitWs.data().map((dto) {
-      final hps = _playersHp.value;
-      final subject = hps[dto.playerId];
-      if (subject == null) {
-        return;
-      }
+    _hpSubscription = gameStateWs.data().map((state) {
+      for (var hit in state.hits) {
+        final hps = _playersHp.value;
+        final subject = hps[hit.playerId];
+        if (subject == null) {
+          return;
+        }
 
-      final hp = dto.hp.toDouble();
-      subject.add(hp);
+        final hp = hit.hp.toDouble();
+        subject.add(hp);
+      }
     }).listen(null);
   }
 

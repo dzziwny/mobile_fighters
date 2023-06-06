@@ -7,9 +7,9 @@ class BulletsLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bulletWs.data(),
+      stream: gameStateWs.data(),
       builder: (context, snapshot) {
-        final bullets = snapshot.data ?? [];
+        final bullets = snapshot.data?.bullets ?? [];
         return Stack(
           children: bullets.map(
             (bullet) {

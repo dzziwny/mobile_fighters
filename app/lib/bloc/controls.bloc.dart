@@ -28,7 +28,7 @@ class ControlsBloc implements Disposable {
       */
       if (event.physicalKey == PhysicalKeyboardKey.space &&
           event is RawKeyDownEvent) {
-        attackWs.send(AttackRequest.bomb);
+        bombsWs.send(AttackRequest.bomb);
         return KeyEventResult.handled;
       }
 

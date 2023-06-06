@@ -7,7 +7,6 @@ import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../actions/action.dart';
-import '../model/player_physics.dart';
 import '../setup.dart';
 
 var _attackIdLock = Lock();

@@ -14,5 +14,17 @@ class HitDto {
   factory HitDto.fromBytes(Uint8List bytes) =>
       HitDto(playerId: bytes[0], hp: bytes[1]);
 
+  static List<HitDto> hitsFromBytes(Uint8List bytes) {
+    final hits = <HitDto>[];
+
+    for (var i = 0; i < bytes.length; i += 2) {
+      final chunk = bytes.sublist(i, i + 2);
+      final hit = HitDto.fromBytes(chunk);
+      hits.add(hit);
+    }
+
+    return hits;
+  }
+
   Uint8List toBytes() => [playerId, hp].toBytes();
 }

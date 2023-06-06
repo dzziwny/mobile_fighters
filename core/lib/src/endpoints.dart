@@ -19,6 +19,7 @@ class Socket {
   static var gamePhaseWsTemplate = Socket('gamePhaseWs');
   static var playerChangeWs = Socket('playerChange');
   static var hitWs = Socket('hit');
+  static var gameStateWs = Socket('gameState');
 
   Socket(String name) : _base = '/$name/ws';
 

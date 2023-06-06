@@ -34,10 +34,12 @@ class _HitReactionState extends State<HitReactionLayer>
 
     hitSubscription = Rx.combineLatest2(
       serverClient.id$,
-      hitWs.data(),
-      (id, hit) {
-        if (hit.playerId == id) {
-          animateHit();
+      gameStateWs.data(),
+      (id, state) {
+        for (var hit in state.hits) {
+          if (hit.playerId == id) {
+            animateHit();
+          }
         }
       },
     ).listen(null);

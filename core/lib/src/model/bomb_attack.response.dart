@@ -35,6 +35,18 @@ class BombAttackResponse {
     return instance;
   }
 
+  static List<BombAttackResponse> attacksFromBytes(Uint8List bytes) {
+    final attacks = <BombAttackResponse>[];
+
+    for (var i = 0; i < bytes.length; i += 19) {
+      final chunk = bytes.sublist(i, i + 19);
+      final attack = BombAttackResponse.fromBytes(chunk);
+      attacks.add(attack);
+    }
+
+    return attacks;
+  }
+
   Uint8List toBytes() {
     final bytes = <int>[
       id,

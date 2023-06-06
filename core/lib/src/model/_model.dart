@@ -1,12 +1,15 @@
 export 'bomb_attack.response.dart';
+export 'bullet.dart';
 export 'bullet.response.dart';
 export 'device.dart';
 export 'game_frame.dart';
 export 'game_phase.dart';
+export 'game_state.dart';
 export 'movement_keyboard.dart';
 export 'player.dart';
 export 'player_angle.dart';
 export 'player_change_type.dart';
+export 'player_physics.dart';
 export 'player_position.dart';
 export 'position.dart';
 export 'team.dart';

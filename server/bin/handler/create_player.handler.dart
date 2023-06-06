@@ -9,7 +9,6 @@ import 'package:shelf/shelf.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../inputs/_input.dart';
-import '../model/player_physics.dart';
 import '../setup.dart';
 
 void playerPosition(SendPort sendPort) async {

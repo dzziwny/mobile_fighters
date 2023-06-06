@@ -6,6 +6,7 @@ export 'create_player.handler.dart';
 export 'dash.connection.dart';
 export 'dead.connection.dart';
 export 'game_phase.connection.dart';
+export 'game_state.connection.dart';
 export 'get_game_frame.handler.dart';
 export 'hit.connection.dart';
 export 'leave_game.handler.dart';

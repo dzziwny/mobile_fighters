@@ -4,7 +4,6 @@ import 'package:core/core.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../model/bullet.dart';
 import '../setup.dart';
 
 var _bulletIdLock = Lock();
