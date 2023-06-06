@@ -44,6 +44,18 @@ class BulletResponse {
     return instance;
   }
 
+  static List<BulletResponse> bulletsFromBytes(Uint8List bytes) {
+    final bullets = <BulletResponse>[];
+
+    for (var i = 0; i < bytes.length; i += 14) {
+      final chunk = bytes.sublist(i, i + 14);
+      final response = BulletResponse.fromBytes(chunk);
+      bullets.add(response);
+    }
+
+    return bullets;
+  }
+
   Uint8List toBytes() {
     final bytes = <int>[
       id,

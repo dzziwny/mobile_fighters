@@ -11,7 +11,6 @@ import 'package:vector_math/vector_math.dart';
 import '../inputs/_input.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
-import 'channels.handler.dart';
 
 void playerPosition(SendPort sendPort) async {
   final receivePort = ReceivePort();
@@ -93,28 +92,11 @@ Future<Player> createPlayer(CreatePlayerDtoRequest dto) async {
 
   sharePlayers();
   _sharePlayerCreated(id);
-  _sharePlayerPosition(id, physic);
   shareTeams();
   return player;
 }
 
 Team _selectTeam() => blueTeam.length <= redTeam.length ? Team.blue : Team.red;
-
-void _sharePlayerPosition(int id, PlayerPhysics physic) {
-  final data = <int>[
-    id,
-    ...physic.position.x.toBytes(),
-    ...physic.position.y.toBytes(),
-    ...physic.angle.toBytes(),
-  ];
-
-  gameDraws.add(() async {
-    final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
-    for (var channel in pushChannels) {
-      channel.sink.add(data);
-    }
-  });
-}
 
 void _sharePlayerCreated(int id) {
   final player = players[id];

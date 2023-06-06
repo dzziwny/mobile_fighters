@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:core/core.dart';
-import 'package:get_it/get_it.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../actions/action.dart';
-import '../handler/channels.handler.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
 
@@ -45,7 +43,7 @@ Future<void> attackUpdate(int attackerId) async {
     actions.add(CompleteAttackAction(attackId, attackerId, target));
   });
 
-  final response = AttackResponse(
+  final response = BombAttackResponse(
     attackId,
     attackerId,
     target.x,
@@ -55,12 +53,7 @@ Future<void> attackUpdate(int attackerId) async {
     physic.position.y,
   );
 
-  final bytes = response.toBytes();
-  gameDraws.add((() {
-    for (var channel in attackWSChannels) {
-      channel.sink.add(bytes);
-    }
-  }));
+  bombAttackResponses.add(response);
 }
 
 Future<void> completeAttackUpdate(
@@ -95,14 +88,8 @@ Future<void> completeAttackUpdate(
   }
 
   final response =
-      AttackResponse(attackId, 0, .0, .0, AttackPhase.boom, .0, .0);
-  final bytes = response.toBytes();
-  gameDraws.add((() {
-    for (var channel in attackWSChannels) {
-      channel.sink.add(bytes);
-    }
-    _releaseAttackId(attackId);
-  }));
+      BombAttackResponse(attackId, 0, .0, .0, AttackPhase.boom, .0, .0);
+  bombAttackResponses.add(response);
 }
 
 Vector2 calculateTarget(PlayerPhysics physic) {
@@ -116,12 +103,7 @@ Vector2 calculateTarget(PlayerPhysics physic) {
 
 void drawPlayerHit(int playerId, int hp) {
   final dto = HitDto(hp: hp, playerId: playerId);
-  final bytes = dto.toBytes();
-  gameDraws.add(() {
-    for (var channel in hitWSChannels) {
-      channel.sink.add(bytes);
-    }
-  });
+  hits.add(dto);
 }
 
 void handlePlayerDead(int playerId, int attackingPlayerId) {
@@ -152,21 +134,6 @@ void handlePlayerDead(int playerId, int attackingPlayerId) {
   players[playerId] = hitPlayer;
 
   sharePlayers();
-
-  // share new position after respawn
-  final data = <int>[
-    playerId,
-    ...physic.position.x.toBytes(),
-    ...physic.position.y.toBytes(),
-    ...physic.angle.toBytes(),
-  ];
-
-  gameDraws.add(() async {
-    final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
-    for (var channel in pushChannels) {
-      channel.sink.add(data);
-    }
-  });
 
   // share new hp after respawn
   drawPlayerHit(playerId, hitPlayer.hp);

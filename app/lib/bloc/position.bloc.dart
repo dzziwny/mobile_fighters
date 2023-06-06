@@ -35,8 +35,10 @@ class PositionBloc implements Disposable {
     _playersPositions.add(subjects);
   }).publish();
 
-  late final _positionHandler = positionWs.data().map((position) {
-    _playersPositions.value[position.playerId]?.add(position);
+  late final _positionHandler = positionsWs.data().map((positions) {
+    for (var position in positions) {
+      _playersPositions.value[position.playerId]?.add(position);
+    }
   }).publish();
 
   late final StreamSubscription _playersSubscription;
@@ -70,12 +72,12 @@ class PositionBloc implements Disposable {
       ...deltaY.toBytes(),
     ]);
 
-    await positionWs.send(bytes);
+    await positionsWs.send(bytes);
   }
 
   Future<void> dash() async {
     final bytes = [1].toBytes();
-    await positionWs.send(bytes);
+    await positionsWs.send(bytes);
   }
 
   @override

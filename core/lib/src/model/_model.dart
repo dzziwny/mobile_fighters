@@ -1,4 +1,4 @@
-export 'attack.response.dart';
+export 'bomb_attack.response.dart';
 export 'bullet.response.dart';
 export 'device.dart';
 export 'game_frame.dart';

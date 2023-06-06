@@ -29,4 +29,16 @@ class PlayerPosition with _$PlayerPosition {
         y: bytes.toDouble(5, 9),
         angle: bytes.toDouble(9, 13),
       );
+
+  static List<PlayerPosition> positionsFromBytes(Uint8List bytes) {
+    final positions = <PlayerPosition>[];
+
+    for (var i = 0; i < bytes.length; i += 13) {
+      final chunk = bytes.sublist(i, i + 13);
+      final position = PlayerPosition.fromBytes(chunk);
+      positions.add(position);
+    }
+
+    return positions;
+  }
 }

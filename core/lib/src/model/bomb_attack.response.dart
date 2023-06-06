@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 
-class AttackResponse {
+class BombAttackResponse {
   final int id;
   final int attackerId;
   final double sourceX;
@@ -11,7 +11,7 @@ class AttackResponse {
   final double targetY;
   final AttackPhase phase;
 
-  const AttackResponse(
+  const BombAttackResponse(
     this.id,
     this.attackerId,
     this.targetX,
@@ -21,8 +21,8 @@ class AttackResponse {
     this.sourceY,
   );
 
-  factory AttackResponse.fromBytes(Uint8List bytes) {
-    final instance = AttackResponse(
+  factory BombAttackResponse.fromBytes(Uint8List bytes) {
+    final instance = BombAttackResponse(
       bytes[0],
       bytes[1],
       bytes.toDouble(2, 6),

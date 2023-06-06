@@ -10,7 +10,7 @@ class AttackBloc implements Disposable {
   final _attacks$ = BehaviorSubject.seeded(<Attack>[]);
 
   late final _handler = attackWs.data().map(
-    (AttackResponse response) {
+    (BombAttackResponse response) {
       final attacks = _attacks$.value;
       switch (response.phase) {
         case AttackPhase.start:

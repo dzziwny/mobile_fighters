@@ -42,13 +42,8 @@ final Map<int, bool> attackCooldowns = {};
 * 1 - attack
 */
 final actions = <Action>[];
-
-/*
-* Game draws. First value indicates, what event came.
-* 0 - position update
-* 1 - attack
-*/
-final gameDraws = <void Function()>[];
+var bombAttackResponses = <BombAttackResponse>[];
+var hits = <HitDto>[];
 
 /*
 * Game draws. First value indicates, what event came.

@@ -8,7 +8,9 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import 'game_state.dart';
 import 'handler/_handler.dart';
+import 'handler/channels.handler.dart';
 import 'inputs/knob.input.dart';
 import 'handler/on_connection.dart';
 import 'register_di.dart';
@@ -59,16 +61,20 @@ void main(List<String> args) async {
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
 
-  Timer.periodic(Duration.zero, (_) {
+  // Set the desired frame rate (e.g., 60 frames per second)
+  final frameRate = Duration(milliseconds: 1000 ~/ 60);
+
+  Timer.periodic(frameRate, (_) async {
     final now = DateTime.now().microsecondsSinceEpoch;
     final dt = now - lastUpdateTime;
     lastUpdateTime = now;
     accumulatorTime += dt;
     while (accumulatorTime > sliceTimeMicroseconds) {
-      update();
+      await update();
       accumulatorTime -= sliceTimeMicroseconds;
     }
-    draw();
+
+    await draw();
   });
 }
 
@@ -118,9 +124,28 @@ Future<void> _playersPhysicUpdate() async {
   await Future.wait(updates);
 }
 
-void draw() {
-  for (var i = 0; i < gameDraws.length; i++) {
-    final func = gameDraws.removeAt(0);
-    func();
+Future<void> draw() async {
+  final state = GameState.create();
+
+  final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
+  for (var channel in pushChannels) {
+    channel.sink.add(state.pushChannelDatas);
+  }
+
+  for (var channel in attackWSChannels) {
+    for (var data in state.attackWSChannelsDatas) {
+      channel.sink.add(data);
+    }
+  }
+
+  for (var channel in hitWSChannels) {
+    for (var data in state.hitWSChannelsDatas) {
+      channel.sink.add(data);
+    }
+  }
+
+  final channels = await GetIt.I<ChannelsHandler>().getBulletChannels();
+  for (var channel in channels) {
+    channel.sink.add(state.bulletWSChannelsDatas);
   }
 }

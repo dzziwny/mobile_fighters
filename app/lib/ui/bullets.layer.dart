@@ -6,16 +6,17 @@ class BulletsLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: bulletBloc.bullets,
-      builder: (context, value, child) {
+    return StreamBuilder(
+      stream: bulletWs.data(),
+      builder: (context, snapshot) {
+        final bullets = snapshot.data ?? [];
         return Stack(
-          children: value.entries.map(
-            (entry) {
+          children: bullets.map(
+            (bullet) {
               return Positioned(
-                key: ValueKey(entry.value.id),
-                top: entry.value.y - 15.0,
-                left: entry.value.x - 15.0,
+                key: ValueKey(bullet.id),
+                top: bullet.y - 15.0,
+                left: bullet.x - 15.0,
                 height: 30.0,
                 width: 30.0,
                 child: Container(

@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:core/core.dart';
-import 'package:get_it/get_it.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../handler/channels.handler.dart';
 import '../model/bullet.dart';
 import '../setup.dart';
 
@@ -60,31 +58,9 @@ Future<void> bulletPhysicUpdate(Bullet bullet, double dt) async {
   }
 
   bullet.position = position;
-  final bytes = BulletResponse.bytes(
-    bullet.id,
-    bullet.position.x,
-    bullet.position.y,
-    bullet.angle,
-    false,
-  );
-
-  gameDraws.add(() async {
-    final channels = await GetIt.I<ChannelsHandler>().getBulletChannels();
-    for (var channel in channels) {
-      channel.sink.add(bytes);
-    }
-  });
 }
 
 Future<void> _removeBullet(Bullet bullet) async {
   await _releaseAttackId(bullet.id);
   bullets.remove(bullet.id);
-
-  final bytes = BulletResponse.bytes(bullet.id, 0.0, 0.0, 0.0, true);
-  gameDraws.add(() async {
-    final channels = await GetIt.I<ChannelsHandler>().getBulletChannels();
-    for (var channel in channels) {
-      channel.sink.add(bytes);
-    }
-  });
 }

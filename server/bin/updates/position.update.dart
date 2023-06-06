@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:core/core.dart';
-import 'package:get_it/get_it.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../handler/channels.handler.dart';
 import '../model/player_physics.dart';
 import '../setup.dart';
 
@@ -78,20 +76,6 @@ Future<void> playerPhysicUpdate(
   if (physic.position.x == boardWidth || physic.position.x == 0.0) {
     physic.velocity.x = -physic.velocity.x;
   }
-
-  final data = <int>[
-    playerId,
-    ...physic.position.x.toBytes(),
-    ...physic.position.y.toBytes(),
-    ...physic.angle.toBytes(),
-  ];
-
-  gameDraws.add(() async {
-    final pushChannels = await GetIt.I<ChannelsHandler>().getPushChannel();
-    for (var channel in pushChannels) {
-      channel.sink.add(data);
-    }
-  });
 }
 
 Vector2 calculateFriction(PlayerPhysics physics) {
