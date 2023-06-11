@@ -18,7 +18,8 @@ const double attackAreaDiameter = attackAreaRadius * 2;
 const double attackAreaRadiusSquared = attackAreaRadius * attackAreaRadius;
 
 // PLAYERS FEATURES
-const int attackPower = 70;
+const int bombPower = 70;
+const int bulletPower = 10;
 const int startHp = 210;
 double startHpDouble = startHp.toDouble();
 

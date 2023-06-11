@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../actions/action.dart';
+import '../actions/create_bullet.action.dart';
 import '../inputs/_input.dart';
 import '../setup.dart';
 import 'channels.handler.dart';

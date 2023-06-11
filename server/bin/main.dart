@@ -8,6 +8,8 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import 'actions/create_bullet.action.dart';
+import 'bullet.physic.dart';
 import 'handler/_handler.dart';
 import 'handler/channels.handler.dart';
 import 'inputs/knob.input.dart';
