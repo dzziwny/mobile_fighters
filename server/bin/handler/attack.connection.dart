@@ -5,6 +5,7 @@ import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../actions/action.dart';
+import '../actions/create_bomb.action.dart';
 import '../setup.dart';
 import 'on_connection.dart';
 
@@ -20,12 +21,12 @@ class AttackConnection extends OnConnection {
       return;
     }
 
-    actions.add(AttackAction(playerId));
-    actions.add(AttackCooldownAction(playerId, true));
+    actions.add(CreateBombAction(playerId));
+    actions.add(CreatingBombCooldownAction(playerId, true));
     attackCooldowns[playerId] = true;
 
     Timer(Duration(seconds: attackCooldownSesconds), () {
-      actions.add(AttackCooldownAction(playerId, false));
+      actions.add(CreatingBombCooldownAction(playerId, false));
       attackCooldowns[playerId] = false;
     });
   }
