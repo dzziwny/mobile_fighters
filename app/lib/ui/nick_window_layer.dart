@@ -1,4 +1,5 @@
 import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/statics.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +20,25 @@ class NickWindowLayer extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return MouseRegion(
+        return const MouseRegion(
           child: Center(
-            child: Container(
-              width: 600 * goldenRatio,
-              height: 600,
-              padding: const EdgeInsets.all(32.0),
-              child: const NickWindow(),
+            child: FittedBox(
+              child: SizedBox(
+                width: borderWidth,
+                height: borderHeight,
+                child: Center(
+                  child: SizedBox(
+                    height: 500.0,
+                    child: FittedBox(
+                      child: SizedBox(
+                        width: 600 * goldenRatio,
+                        height: 600,
+                        child: NickWindow(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         );
