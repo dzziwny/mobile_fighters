@@ -2,10 +2,9 @@ name: server
 description: A server app using the shelf package and Docker.
 publish_to: none
 version: 1.0.0
-# homepage: https://www.example.com
 
 environment:
-  sdk: '>=3.2.0-42.0.dev <4.0.0'
+  sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
   args: ^2.0.0
