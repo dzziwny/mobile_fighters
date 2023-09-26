@@ -23,6 +23,7 @@ void createBomb(int playerId) async {
     target: Vector2(target.x, target.y),
     velocity: Vector2(sin(player.angle), -cos(player.angle)).normalized()
       ..scale(initBombScale),
+    isActive: true,
   );
 
   bombs.add(response);

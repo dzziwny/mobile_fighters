@@ -15,7 +15,7 @@ class GameState {
 
   factory GameState.empty() => GameState(
         List.generate(maxPlayers, PlayerViewModel.empty),
-        List.generate(maxPlayers, BombView.empty),
+        List.generate(maxBombs, BombView.empty),
         List.generate(maxPlayers, HitDto.empty),
         List.generate(maxBullets, Bullet.empty),
       );
@@ -35,6 +35,10 @@ class GameState {
     neededBytes = leftBytes.sublist(0, Bullet.bytesCount);
     final bullets = BulletViewModel.manyFromBytes(neededBytes);
 
+    leftBytes = leftBytes.sublist(neededBytes.length);
+    neededBytes = leftBytes.sublist(0, Bomb.allBytesCount);
+    final bombs = BombView.listFromBytes(neededBytes);
+
     // var leftBytes = bytes.sublist(positionsBytesLength);
     // const bombsBytesLength = 4 * maxPlayers;
     // final bombsBytes = leftBytes.sublist(0, bombsBytesLength);
@@ -52,7 +56,7 @@ class GameState {
     // final frags = leftBytes.sublist(1, 1 + fragsBytesLength);
 
     // return GameState(positions, bombs, hits, bullets, frags);
-    return GameState(players, [], [], bullets);
+    return GameState(players, bombs, [], bullets);
   }
 
   static Uint8List bytes(
@@ -65,18 +69,7 @@ class GameState {
     final builder = BytesBuilder();
     builder.add(players.toBytes());
     builder.add(bullets.toBytes());
-
-    // final bombsBytes = <int>[];
-    // for (var bomb in bombs) {
-    //   final bytes = bomb.toBytes();
-    //   bombsBytes.addAll(bytes);
-    // }
-
-    // final hitsBytes = <int>[];
-    // for (var hit in hits) {
-    //   final bytes = hit.toBytes();
-    //   hitsBytes.addAll(bytes);
-    // }
+    builder.add(bombs.toBytes());
 
     return builder.toBytes();
   }

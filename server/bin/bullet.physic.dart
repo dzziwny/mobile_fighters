@@ -65,11 +65,3 @@ void _hitPlayer(
     drawPlayerHit(targetId, targetPlayer.hp);
   }
 }
-
-void bombPhysicUpdate(Bomb bomb, double dt) {
-  // final player = players[bomb.id];
-  // final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-  //   ..scale(100);
-
-  bomb.position = bomb.position + bomb.velocity * dt;
-}

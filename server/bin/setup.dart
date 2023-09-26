@@ -8,6 +8,11 @@ final guids = <String, int>{};
 final playerMetadatas =
     UnmodifiableListView(List.generate(maxPlayers, Player.empty));
 final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));
+final currentBullets = List.generate(
+  maxPlayers,
+  (index) => index * maxBullePerPlayer,
+);
+
 final players = UnmodifiableListView(List.generate(maxPlayers, Player.empty));
 final frags = List.filled(maxPlayers, 0);
 final actions =

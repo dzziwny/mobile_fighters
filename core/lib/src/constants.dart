@@ -2,8 +2,12 @@
 import 'package:core/src/model/_model.dart';
 
 const maxPlayers = 10;
+
 const maxBullePerPlayer = 10;
 const maxBullets = maxPlayers * maxBullePerPlayer;
+
+const maxBombsPerPlayer = 1;
+const maxBombs = maxPlayers * maxBombsPerPlayer;
 
 // DURATIONS
 const attackUntilBoomDuration = Duration(milliseconds: 1000);

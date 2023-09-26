@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:core/src/constants.dart';
 import 'package:vector_math/vector_math.dart';
 
 class Bomb {
@@ -7,12 +8,14 @@ class Bomb {
   Vector2 position;
   Vector2 velocity;
   Vector2 target;
+  bool isActive;
 
   Bomb({
     required this.id,
     required this.position,
     required this.velocity,
     required this.target,
+    required this.isActive,
   });
 
   factory Bomb.empty(int id) => Bomb(
@@ -20,6 +23,7 @@ class Bomb {
         position: Vector2.zero(),
         velocity: Vector2.zero(),
         target: Vector2.zero(),
+        isActive: false,
       );
 
   Uint8List toBytes() {
@@ -30,36 +34,54 @@ class Bomb {
         .buffer
         .asUint8List();
 
-    final bytes = Uint8List.fromList([...x, ...y]);
+    final isActive = this.isActive ? 1 : 0;
+
+    final bytes = Uint8List.fromList([...x, ...y, isActive]);
     return bytes;
   }
+
+  static int bytesCount = Bomb.empty(0).toBytes().length;
+  static int allBytesCount = bytesCount * maxBombs;
 }
 
 class BombView {
   int x;
   int y;
+  bool isActive;
 
-  BombView(this.x, this.y);
+  BombView(this.x, this.y, this.isActive);
 
   factory BombView.fromBytes(Uint8List bytes) {
     final position = bytes.sublist(0, 4).buffer.asUint16List();
     final x = position[0];
     final y = position[1];
-    final instance = BombView(x, y);
+    final isActive = bytes[4] == 1;
+    final instance = BombView(x, y, isActive);
     return instance;
   }
 
-  factory BombView.empty(int id) => BombView(0, 0);
+  factory BombView.empty(int id) => BombView(0, 0, false);
 
   static List<BombView> listFromBytes(Uint8List bytes) {
     final bombs = <BombView>[];
 
-    for (var i = 0; i < bytes.length; i += 4) {
-      final chunk = bytes.sublist(i, i + 4);
+    for (var i = 0; i < bytes.length; i += Bomb.bytesCount) {
+      final chunk = bytes.sublist(i, i + Bomb.bytesCount);
       final bomb = BombView.fromBytes(chunk);
       bombs.add(bomb);
     }
 
     return bombs;
+  }
+}
+
+extension BombsToBytes on List<Bomb> {
+  Uint8List toBytes() {
+    final builder = BytesBuilder();
+    for (var bullet in this) {
+      builder.add(bullet.toBytes());
+    }
+
+    return builder.toBytes();
   }
 }

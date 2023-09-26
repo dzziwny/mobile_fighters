@@ -34,6 +34,12 @@ class GameService {
           gameState.bullets[i].angle = state.bullets[i].angle;
           gameState.bullets[i].isActive = state.bullets[i].isActive;
         }
+
+        for (var i = 0; i < maxBombs; i++) {
+          gameState.bombs[i].x = state.bombs[i].x;
+          gameState.bombs[i].y = state.bombs[i].y;
+          gameState.bombs[i].isActive = state.bullets[i].isActive;
+        }
       },
     );
   }

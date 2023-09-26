@@ -10,6 +10,7 @@ import 'package:shelf_router/shelf_router.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'actions/bomb_actions.dart';
+import 'bomb.physic.dart';
 import 'bullet.physic.dart';
 import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
@@ -81,7 +82,7 @@ void _executeActions() {
   for (var i = 0; i < maxPlayers; i++) {
     // TODO sprawdz czy aby nie zatrzymuje za kazdym razem
     if (playerInputs[i].isBullet && !bulletTimers[i].isActive) {
-      startBulletLoop(playerInputs[i]);
+      startBulletLoop(playerInputs[i], i);
     } else if (!playerInputs[i].isBullet) {
       playerInputs[i].isBullet = false;
     }
@@ -143,13 +144,11 @@ void _playersPhysicUpdate() {
   }
 }
 
-int currentBullet = 0;
-void startBulletLoop(PlayerControlsState state) {
-  if (currentBullet == maxBullePerPlayer) {
-    currentBullet = 0;
-  }
+void startBulletLoop(PlayerControlsState state, int playerId) {
+  final firstBullet = playerId * maxBullePerPlayer;
+  final resetCounter = (playerId + 1) * maxBullePerPlayer;
 
-  createBullet(currentBullet, state.playerId);
+  // createBullet(currentBullet, state.playerId);
   bulletTimers[state.playerId] = Timer.periodic(
     Duration(milliseconds: bulletsCooldownMilisesconds),
     (timer) {
@@ -157,12 +156,13 @@ void startBulletLoop(PlayerControlsState state) {
         timer.cancel();
       }
 
-      if (currentBullet == maxBullePerPlayer) {
-        currentBullet = 0;
+      var currentBullet = currentBullets[playerId];
+      if (currentBullet == resetCounter) {
+        currentBullet = firstBullet;
       }
 
       createBullet(currentBullet, state.playerId);
-      currentBullet++;
+      currentBullets[playerId] = ++currentBullet;
     },
   );
 }
