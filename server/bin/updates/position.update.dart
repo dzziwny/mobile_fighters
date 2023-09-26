@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../inputs/player_state_input.dart';
 import '../setup.dart';
 
-double _resolveX(PlayerPhysics physic, double dt, Vector2 momentum) {
+double _resolveX(Player player, double dt, Vector2 momentum) {
   if (momentum.isNaN) {
     return 0.0;
   }
-  var x = physic.position.x + momentum.x * dt;
+  var x = player.x + momentum.x * dt;
   if (x > boardWidthDouble) {
     return boardWidthDouble;
   }
@@ -21,12 +22,12 @@ double _resolveX(PlayerPhysics physic, double dt, Vector2 momentum) {
   return x;
 }
 
-double _resolveY(PlayerPhysics physic, double dt, Vector2 momentum) {
-  if (momentum.isNaN) {
+double _resolveY(Player physic, double dt, Vector2 force) {
+  if (force.isNaN) {
     return 0.0;
   }
 
-  var y = physic.position.y + momentum.y * dt;
+  var y = physic.y + force.y * dt;
   if (y > boardHeightDouble) {
     return boardHeightDouble;
   }
@@ -38,46 +39,46 @@ double _resolveY(PlayerPhysics physic, double dt, Vector2 momentum) {
   return y;
 }
 
-Vector2 _resolvePosition(PlayerPhysics physic, double dt) {
-  final x = _resolveX(physic, dt, physic.velocity);
-  final y = _resolveY(physic, dt, physic.velocity);
-
-  final position = Vector2(x, y);
-  return position;
-}
+int lastX = 0;
 
 Future<void> playerPhysicUpdate(
-  int playerId,
-  double x,
-  double y,
-  double angle,
+  PlayerControlsState state,
 ) async {
   const dt = sliceTimeSeconds;
-  final physic = playerPhysics[playerId];
-  if (physic == null) {
-    return;
-  }
+  final player = players[state.playerId];
+  final velocity = Vector2(player.velocityX, player.velocityY);
+  final friction = calculateFriction(player, velocity);
+  final netForce = Vector2(state.x, state.y) + friction;
+  final netVelocity = velocity..add(netForce);
 
-  final friction = calculateFriction(physic);
-  final netForce = Vector2(x, y) + friction;
+  player
+    ..velocityX = netVelocity.x
+    ..velocityY = netVelocity.y;
 
-  physic.velocity
-    ..add(netForce)
-    ..roundToZero();
+  final x = _resolveX(player, dt, netVelocity);
+  final y = _resolveY(player, dt, netVelocity);
 
-  physic.position = _resolvePosition(physic, dt);
-  physic.angle = angle;
+  final position = Vector2(x, y);
+  player
+    ..x = position.x
+    ..y = position.y
+    ..angle = state.angle;
 
   /// Boundary bouncing
-  if (physic.position.y == boardHeight || physic.position.y == 0.0) {
-    physic.velocity.y = -physic.velocity.y;
+  if (player.y == boardHeight || player.y == 0.0) {
+    player.velocityY = -player.velocityY;
   }
-  if (physic.position.x == boardWidth || physic.position.x == 0.0) {
-    physic.velocity.x = -physic.velocity.x;
+  if (player.x == boardWidth || player.x == 0.0) {
+    player.velocityX = -player.velocityX;
   }
 }
 
-Vector2 calculateFriction(PlayerPhysics physics) {
-  final scale = -physics.k * pow(physics.velocity.length2, physics.n);
-  return physics.velocity.normalized().scaled(scale);
+Vector2 calculateFriction(Player player, Vector2 velocity) {
+  final scale = -gamePhysics.k *
+      pow(
+        velocity.length2,
+        gamePhysics.n,
+      );
+
+  return velocity.normalized().scaled(scale);
 }

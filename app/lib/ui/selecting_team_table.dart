@@ -1,4 +1,3 @@
-import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 
 class SelectingTeamTable extends StatelessWidget {
@@ -9,7 +8,8 @@ class SelectingTeamTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: teamService.isSelectingTeam$(),
+      // TODO
+      stream: Stream.value(false),
       builder: (context, snapshot) {
         if (snapshot.data != true) {
           return const SizedBox();
@@ -38,7 +38,8 @@ class SelectingTeamTable extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         StreamBuilder<List<String>>(
-                            stream: teamService.redTeam$(),
+                            //TODO
+                            stream: Stream.value([]),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(
@@ -69,7 +70,8 @@ class SelectingTeamTable extends StatelessWidget {
                               );
                             }),
                         StreamBuilder<List<String>>(
-                            stream: teamService.blueTeam$(),
+                            //TODO
+                            stream: Stream.value([]),
                             builder: (context, snapshot) {
                               final players = snapshot.data ?? [];
                               return Column(

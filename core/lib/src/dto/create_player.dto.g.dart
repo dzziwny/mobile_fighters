@@ -28,27 +28,3 @@ const _$DeviceEnumMap = {
   Device.pixel: 'pixel',
   Device.iphone: 'iphone',
 };
-
-_$_CreatePlayerDtoResponse _$$_CreatePlayerDtoResponseFromJson(
-        Map<String, dynamic> json) =>
-    _$_CreatePlayerDtoResponse(
-      id: json['id'] as int,
-      team: $enumDecode(_$TeamEnumMap, json['team']),
-      position:
-          PlayerPosition.fromJson(json['position'] as Map<String, dynamic>),
-      hp: json['hp'] as int,
-    );
-
-Map<String, dynamic> _$$_CreatePlayerDtoResponseToJson(
-        _$_CreatePlayerDtoResponse instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'team': _$TeamEnumMap[instance.team]!,
-      'position': instance.position,
-      'hp': instance.hp,
-    };
-
-const _$TeamEnumMap = {
-  Team.red: 'red',
-  Team.blue: 'blue',
-};

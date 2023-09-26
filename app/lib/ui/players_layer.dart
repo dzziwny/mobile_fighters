@@ -4,110 +4,99 @@ import 'package:bubble_fight/ui/google_pixel_7.dart';
 import 'package:bubble_fight/ui/iphone_14.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:value_stream_builder/value_stream_builder.dart';
+
+import 'auto_refresh_state.dart';
 
 class PlayersLayer extends StatelessWidget {
   const PlayersLayer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Map<int, Player>>(
-      stream: playersWs.data(),
-      builder: (context, snapshot) {
-        final players = snapshot.data;
-        if (players == null) {
-          return const SizedBox.shrink();
-        }
-
-        return Stack(
-          children: players.values
-              .map(
-                (Player player) => _Player(player: player),
-              )
-              .toList(),
-        );
-      },
+    final theme = Theme.of(context);
+    return Stack(
+      children: List.generate(
+        maxPlayers,
+        (id) => _Player(id: id, theme: theme),
+      ).toList(),
     );
   }
 }
 
-class _Player extends StatelessWidget {
+class _Player extends StatefulWidget {
   const _Player({
-    required this.player,
+    required this.id,
+    required this.theme,
   });
 
-  final Player player;
+  final int id;
+  final ThemeData theme;
 
   static const _playerHeightOffest = hpBarHeight + (playerAreaHeight / 2.0);
   static const _playerWidthOffest = fullPlayerAreaWidth / 2.0;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return StreamBuilder<PlayerPosition>(
-        stream: positionBloc.position(player.id),
-        builder: (context, snapshot) {
-          final position = snapshot.data;
-          if (position == null) {
-            return const SizedBox.shrink();
-          }
+  State<_Player> createState() => _PlayerState();
+}
 
-          return Positioned(
-            top: position.y - _playerHeightOffest,
-            left: position.x - _playerWidthOffest,
-            child: SizedBox(
-              height: fullPlayerAreaHeight,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: hpBarHeight,
-                    width: fullPlayerAreaWidth,
-                    child: FittedBox(
-                      child: SizedBox(
-                        width: 300.0,
-                        child: ValueStreamBuilder<double>(
-                            stream: hpBloc.get(player),
-                            builder: (context, snapshot) {
-                              return Slider(
-                                thumbColor: theme.colorScheme.error,
-                                activeColor: theme.colorScheme.error,
-                                value: snapshot.data,
-                                max: startHpDouble,
-                                onChanged: (double value) {},
-                              );
-                            }),
-                      ),
-                    ),
+class _PlayerState extends AutoRefreshState<_Player> {
+  @override
+  Widget build(BuildContext context) {
+    final player = gameService.gameState.players[widget.id];
+    return Positioned(
+      top: player.y - _Player._playerHeightOffest,
+      left: player.x - _Player._playerWidthOffest,
+      child: SizedBox(
+        height: fullPlayerAreaHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: hpBarHeight,
+              width: fullPlayerAreaWidth,
+              child: FittedBox(
+                child: SizedBox(
+                  width: 300.0,
+                  child: Slider(
+                    thumbColor: widget.theme.colorScheme.error,
+                    activeColor: widget.theme.colorScheme.error,
+                    value:
+                        gameService.gameState.players[player.id].hp.toDouble(),
+                    max: startHpDouble,
+                    onChanged: (double value) {},
                   ),
-                  SizedBox(
-                    height: playerAreaHeight,
-                    child: Transform.rotate(
-                      angle: position.angle,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: player.team == Team.blue
-                                  ? Colors.blue
-                                  : Colors.red,
-                              spreadRadius: 10.0,
-                              blurRadius: 25.0,
-                              blurStyle: BlurStyle.normal,
-                            ),
-                          ],
-                        ),
-                        height: playerPhoneHeight,
-                        width: playerPhoneWidth,
-                        child: FittedBox(child: deviceWidget(player.device)),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          );
-        });
+            SizedBox(
+              height: playerAreaHeight,
+              child: Transform.rotate(
+                angle: player.angle,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        // color:
+                        //     player.team == Team.blue ? Colors.blue : Colors.red,
+                        // TODO
+                        color: Colors.blue,
+                        spreadRadius: 10.0,
+                        blurRadius: 25.0,
+                        blurStyle: BlurStyle.normal,
+                      ),
+                    ],
+                  ),
+                  height: playerPhoneHeight,
+                  width: playerPhoneWidth,
+                  // TODO
+                  // child: FittedBox(child: deviceWidget(player.device)),
+                  child: const FittedBox(child: GooglePixel7()),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget deviceWidget(Device device) {

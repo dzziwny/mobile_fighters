@@ -1,108 +1,83 @@
 import 'dart:typed_data';
 
-import 'package:core/src/extensions.dart';
+import 'package:core/src/constants.dart';
 
 import '../dto/hit.dto.dart';
-import 'bomb_attack.response.dart';
+import 'bomb.dart';
 import 'bullet.dart';
-import 'bullet.response.dart';
-import 'player_physics.dart';
-import 'player_position.dart';
+import 'player.dart';
 
 class GameState {
-  final List<PlayerPosition> positions;
-  final List<BombAttackResponse> bombs;
+  final List<PlayerViewModel> players;
+  final List<BombView> bombs;
   final List<HitDto> hits;
-  final List<BulletResponse> bullets;
+  final List<BulletViewModel> bullets;
+
+  factory GameState.empty() => GameState(
+        List.generate(maxPlayers, PlayerViewModel.empty),
+        List.generate(maxPlayers, BombView.empty),
+        List.generate(maxPlayers, HitDto.empty),
+        List.generate(maxBullets, Bullet.empty),
+      );
 
   GameState(
-    this.positions,
+    this.players,
     this.bombs,
     this.hits,
     this.bullets,
   );
 
   factory GameState.fromBytes(Uint8List bytes) {
-    final positionsLength = bytes[0];
-    final positionsBytesLength = positionsLength * 13;
-    final positionsBytes = bytes.sublist(1, 1 + positionsBytesLength);
-    final positions = PlayerPosition.positionsFromBytes(positionsBytes);
+    var neededBytes = bytes.sublist(0, Player.allBytesCount);
+    final players = PlayerViewModel.manyFromBytes(neededBytes);
 
-    var leftBytes = bytes.sublist(1 + positionsBytesLength);
-    final bombsLenght = leftBytes[0];
-    final bombsBytesLength = bombsLenght * 19;
-    final bombsBytes = leftBytes.sublist(1, 1 + bombsBytesLength);
-    final bombs = BombAttackResponse.attacksFromBytes(bombsBytes);
+    var leftBytes = bytes.sublist(neededBytes.length);
+    neededBytes = leftBytes.sublist(0, Bullet.bytesCount);
+    final bullets = BulletViewModel.manyFromBytes(neededBytes);
 
-    leftBytes = leftBytes.sublist(1 + bombsBytesLength);
-    final hitsLenght = leftBytes[0];
-    final hitsBytesLength = hitsLenght * 2;
-    final hitsBytes = leftBytes.sublist(1, 1 + hitsBytesLength);
-    final hits = HitDto.hitsFromBytes(hitsBytes);
+    // var leftBytes = bytes.sublist(positionsBytesLength);
+    // const bombsBytesLength = 4 * maxPlayers;
+    // final bombsBytes = leftBytes.sublist(0, bombsBytesLength);
+    // final bombs = BombView.listFromBytes(bombsBytes);
 
-    leftBytes = leftBytes.sublist(1 + hitsBytesLength);
-    final bulletsLenght = leftBytes[0];
-    final bulletsBytesLength = bulletsLenght * 14;
-    final bulletsBytes = leftBytes.sublist(1, 1 + bulletsBytesLength);
-    final bullets = BulletResponse.bulletsFromBytes(bulletsBytes);
+    // leftBytes = leftBytes.sublist(1 + bombsBytesLength);
+    // final hitsLenght = leftBytes[0];
+    // final hitsBytesLength = hitsLenght * 2;
+    // final hitsBytes = leftBytes.sublist(1, 1 + hitsBytesLength);
+    // final hits = HitDto.hitsFromBytes(hitsBytes);
 
-    return GameState(positions, bombs, hits, bullets);
+    // leftBytes = leftBytes.sublist(1 + bulletsBytesLength);
+    // final fragsLenght = leftBytes[0];
+    // final fragsBytesLength = fragsLenght * 2;
+    // final frags = leftBytes.sublist(1, 1 + fragsBytesLength);
+
+    // return GameState(positions, bombs, hits, bullets, frags);
+    return GameState(players, [], [], bullets);
   }
 
   static Uint8List bytes(
-    Iterable<MapEntry<int, PlayerPhysics>> pushes,
-    List<BombAttackResponse> bombs,
+    List<Player> players,
+    List<Bomb> bombs,
     List<HitDto> hits,
-    Iterable<Bullet> bullets,
+    List<Bullet> bullets,
+    List<int> frags,
   ) {
-    final pushBytes = <int>[];
-    for (var push in pushes) {
-      final bytes = <int>[
-        push.key,
-        ...push.value.position.x.toBytes(),
-        ...push.value.position.y.toBytes(),
-        ...push.value.angle.toBytes(),
-      ];
+    final builder = BytesBuilder();
+    builder.add(players.toBytes());
+    builder.add(bullets.toBytes());
 
-      pushBytes.addAll(bytes);
-    }
+    // final bombsBytes = <int>[];
+    // for (var bomb in bombs) {
+    //   final bytes = bomb.toBytes();
+    //   bombsBytes.addAll(bytes);
+    // }
 
-    final bombsBytes = <int>[];
-    for (var attack in bombs) {
-      final bytes = attack.toBytes();
-      bombsBytes.addAll(bytes);
-    }
+    // final hitsBytes = <int>[];
+    // for (var hit in hits) {
+    //   final bytes = hit.toBytes();
+    //   hitsBytes.addAll(bytes);
+    // }
 
-    final hitsBytes = <int>[];
-    for (var hit in hits) {
-      final bytes = hit.toBytes();
-      hitsBytes.addAll(bytes);
-    }
-
-    final bulletsBytes = <int>[];
-    for (var bullet in bullets) {
-      final bytes = BulletResponse.bytes(
-        bullet.id,
-        bullet.position.x,
-        bullet.position.y,
-        bullet.angle,
-        false,
-      );
-
-      bulletsBytes.addAll(bytes);
-    }
-
-    final bytes = <int>[
-      pushes.length,
-      ...pushBytes,
-      bombs.length,
-      ...bombsBytes,
-      hits.length,
-      ...hitsBytes,
-      bullets.length,
-      ...bulletsBytes,
-    ];
-
-    return Uint8List.fromList(bytes);
+    return builder.toBytes();
   }
 }

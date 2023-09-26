@@ -1,109 +1,158 @@
+import 'dart:typed_data';
+
 import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-class ControlsBloc implements Disposable {
-  int _w = 0;
-  int _s = 0;
-  int _a = 0;
-  int _d = 0;
+abstract class ControlsBloc {
+  void startGun();
+  void stopGun();
+  void rotate(double angle);
+  void dash();
+  void bomb();
+}
 
-  RawKeyEvent? lastMovementEvent;
+class MobileControlsBloc extends ControlsBloc {
+  int _keys = 0;
+  Uint8List _angle = [0, 0, 0, 0].toBytes();
 
-  final gameBoardFocusNode = FocusNode();
+  final _bytesBuilder = BytesBuilder();
 
-  ControlsBloc() {
-    gameBoardFocusNode.onKey = (node, event) {
-      if (event.physicalKey == lastMovementEvent?.physicalKey &&
-          event.runtimeType == lastMovementEvent?.runtimeType) {
-        return KeyEventResult.handled;
-      }
-
-      lastMovementEvent = event;
-
-      /*
-      * Resolve actions
-      */
-      if (event.physicalKey == PhysicalKeyboardKey.space &&
-          event is RawKeyDownEvent) {
-        bombsWs.send(AttackRequest.bomb);
-        return KeyEventResult.handled;
-      }
-
-      if (event.physicalKey == PhysicalKeyboardKey.keyP) {
-        if (event is RawKeyDownEvent) {
-          bulletWs.send([1].toBytes());
-        } else {
-          bulletWs.send([0].toBytes());
-        }
-
-        return KeyEventResult.handled;
-      }
-
-      /*
-      * Resolve movement
-      */
-
-      if (event.physicalKey == PhysicalKeyboardKey.keyW) {
-        if (event is RawKeyDownEvent) {
-          // 0x1000
-          _w = 0x8;
-        } else {
-          _w = 0;
-        }
-
-        _sendKnob();
-        return KeyEventResult.handled;
-      }
-
-      if (event.physicalKey == PhysicalKeyboardKey.keyS) {
-        if (event is RawKeyDownEvent) {
-          // 0x0100
-          _s = 0x4;
-        } else {
-          _s = 0;
-        }
-
-        _sendKnob();
-        return KeyEventResult.handled;
-      }
-
-      if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-        if (event is RawKeyDownEvent) {
-          // 0x0010
-          _a = 0x2;
-        } else {
-          _a = 0;
-        }
-
-        _sendKnob();
-        return KeyEventResult.handled;
-      }
-
-      if (event.physicalKey == PhysicalKeyboardKey.keyD) {
-        if (event is RawKeyDownEvent) {
-          // 0x0001
-          _d = 0x1;
-        } else {
-          _d = 0;
-        }
-
-        _sendKnob();
-        return KeyEventResult.handled;
-      }
-
-      return KeyEventResult.ignored;
-    };
-  }
-
-  Future<void> _sendKnob() async {
-    final state = _w | _s | _a | _d;
-    final bytes = Uint8List.fromList([state]);
-    await keyboardWs.send(bytes);
+  @override
+  void startGun() {
+    _keys = _keys | Bits.bullet;
+    _sendPlayerState();
   }
 
   @override
-  Future onDispose() async {}
+  void stopGun() {
+    _keys = _keys & ~Bits.bullet;
+    _sendPlayerState();
+  }
+
+  @override
+  void rotate(double angle) {
+    _angle = angle.toBytes();
+    _sendPlayerState();
+  }
+
+  @override
+  void dash() {
+    acitionsWs.send([Bits.dash].toBytes());
+  }
+
+  @override
+  void bomb() {
+    acitionsWs.send([Bits.bomb].toBytes());
+  }
+
+  // TODO use int's
+  void updateKnob(double x, double y) {
+    // TODO
+  }
+
+  void _sendPlayerState() {
+    _bytesBuilder.addByte(_keys);
+    _bytesBuilder.add(_angle);
+    final bytes = _bytesBuilder.takeBytes();
+    mobileControlsWs.send(bytes);
+  }
+}
+
+class DesktopControlsBloc extends ControlsBloc implements Disposable {
+  int _keys = 0;
+  Uint8List _angle = [0, 0, 0, 0].toBytes();
+
+  RawKeyEvent? _lastMovementEvent;
+  final _bytesBuilder = BytesBuilder();
+
+  final statesMap = {
+    PhysicalKeyboardKey.keyW: Bits.w,
+    PhysicalKeyboardKey.keyS: Bits.s,
+    PhysicalKeyboardKey.keyA: Bits.a,
+    PhysicalKeyboardKey.keyD: Bits.d,
+    PhysicalKeyboardKey.keyP: Bits.bullet,
+  };
+
+  final actionsMap = {
+    PhysicalKeyboardKey.keyB: Bits.bomb,
+    PhysicalKeyboardKey.space: Bits.dash,
+  };
+
+  DesktopControlsBloc() {
+    gameBoardFocusNode.onKey = (_, event) {
+      return handleActions(event) ?? handleState(event);
+    };
+  }
+
+  KeyEventResult? handleActions(RawKeyEvent event) {
+    if (event.physicalKey == _lastMovementEvent?.physicalKey &&
+        event.runtimeType == _lastMovementEvent?.runtimeType) {
+      return null;
+    }
+
+    _lastMovementEvent = event;
+
+    final bit = actionsMap[event.physicalKey];
+    if (bit == null) {
+      return null;
+    }
+
+    acitionsWs.send([bit].toBytes());
+    return KeyEventResult.handled;
+  }
+
+  KeyEventResult handleState(RawKeyEvent event) {
+    final bit = statesMap[event.physicalKey];
+    if (bit == null) {
+      return KeyEventResult.ignored;
+    }
+
+    _keys = event is RawKeyDownEvent ? _keys | bit : _keys & ~bit;
+
+    _sendPlayerState();
+    return KeyEventResult.handled;
+  }
+
+  @override
+  void startGun() {
+    _keys = _keys | Bits.bullet;
+    _sendPlayerState();
+  }
+
+  @override
+  void stopGun() {
+    _keys = _keys & ~Bits.bullet;
+    _sendPlayerState();
+  }
+
+  @override
+  void rotate(double angle) {
+    _angle = angle.toBytes();
+    _sendPlayerState();
+  }
+
+  @override
+  void dash() {
+    acitionsWs.send([Bits.dash].toBytes());
+  }
+
+  @override
+  void bomb() {
+    acitionsWs.send([Bits.bomb].toBytes());
+  }
+
+  void _sendPlayerState() {
+    _bytesBuilder.addByte(_keys);
+    _bytesBuilder.add(_angle);
+    final bytes = _bytesBuilder.takeBytes();
+    desktopControlsWs.send(bytes);
+  }
+
+  @override
+  Future onDispose() async {
+    gameBoardFocusNode.dispose();
+  }
 }

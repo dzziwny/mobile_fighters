@@ -3,16 +3,18 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 
 class HitDto {
-  final int playerId;
-  final int hp;
+  int playerId;
+  double hp;
 
-  const HitDto({
+  HitDto({
     required this.playerId,
     required this.hp,
   });
 
   factory HitDto.fromBytes(Uint8List bytes) =>
-      HitDto(playerId: bytes[0], hp: bytes[1]);
+      HitDto(playerId: bytes[0], hp: bytes[1].toDouble());
+
+  factory HitDto.empty(int id) => HitDto(playerId: id, hp: startHpDouble);
 
   static List<HitDto> hitsFromBytes(Uint8List bytes) {
     final hits = <HitDto>[];
@@ -26,5 +28,5 @@ class HitDto {
     return hits;
   }
 
-  Uint8List toBytes() => [playerId, hp].toBytes();
+  Uint8List toBytes() => [playerId, hp.toInt()].toBytes();
 }

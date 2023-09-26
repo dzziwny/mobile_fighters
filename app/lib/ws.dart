@@ -18,7 +18,7 @@ class Ws<DtoType, DataType> implements Disposable {
     Socket socket,
     DtoType Function(DataType) instanceBuilder,
   ) {
-    _channel = serverClient.channel(socket).publishReplay(maxSize: 1);
+    _channel = client.channel(socket).publishReplay(maxSize: 1);
 
     _data = _channel
         .switchMap((channel) => channel.stream)

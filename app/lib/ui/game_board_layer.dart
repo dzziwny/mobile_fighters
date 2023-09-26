@@ -1,50 +1,56 @@
 import 'package:bubble_fight/di.dart';
-import 'package:bubble_fight/statics.dart';
-import 'package:bubble_fight/ui/bubble_game.dart';
+import 'package:bubble_fight/ui/game_board.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math.dart';
+
+import 'auto_refresh_state.dart';
 
 class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
+
+  void onPointerMove(PointerEvent event, double halfWidth, double halfHeight) {
+    // if (gameBoardFocusNode.hasFocus) {
+    //   return;
+    // }
+
+    final x = event.position.dx - halfWidth;
+    final y = event.position.dy - halfHeight;
+    final angle =
+        (Vector2(x, y).clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
+
+    controlsBloc.rotate(angle);
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final halfWidth = mediaQuery.size.width / 2;
     final halfHeight = mediaQuery.size.height / 2;
+    const frame = GameFrame(
+      sizex: boardWidth,
+      sizey: boardHeight,
+    );
+
+    double frameWidth = frame.sizex + borderHorizontalPadding * 2;
+    double frameHeight = frame.sizey + borderVerticalPadding * 2;
+
     return Positioned.fill(
       child: Listener(
-        onPointerDown: (_) {
-          bulletWs.send(BulletRequest.startGun);
-        },
-        onPointerUp: (_) {
-          bulletWs.send(BulletRequest.stopGun);
-        },
-        onPointerMove: (event) {
-          if (!controlsBloc.gameBoardFocusNode.hasFocus) {
-            return;
-          }
-
-          final x = event.position.dx - halfWidth;
-          final y = event.position.dy - halfHeight;
-          final angle =
-              (Vector2(x, y).clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
-          rotateWs.send(PlayerAngle.toBytes(angle));
-        },
-        onPointerHover: (event) {
-          if (!controlsBloc.gameBoardFocusNode.hasFocus) {
-            return;
-          }
-
-          final x = event.position.dx - halfWidth;
-          final y = event.position.dy - halfHeight;
-          final angle =
-              (Vector2(x, y).clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
-          rotateWs.send(PlayerAngle.toBytes(angle));
-        },
+        onPointerDown: (_) => controlsBloc.startGun(),
+        onPointerUp: (_) => controlsBloc.stopGun(),
+        onPointerMove: isMobile
+            ? null
+            : (PointerMoveEvent event) =>
+                onPointerMove(event, halfWidth, halfHeight),
+        onPointerHover: isMobile
+            ? null
+            : (PointerHoverEvent event) =>
+                onPointerMove(event, halfWidth, halfHeight),
         child: KeyboardListener(
-          focusNode: controlsBloc.gameBoardFocusNode,
+          focusNode: gameBoardFocusNode,
           child: FittedBox(
             fit: BoxFit.contain,
             alignment: Alignment.center,
@@ -57,53 +63,77 @@ class GameBoardLayer extends StatelessWidget {
               ),
               width: borderWidth,
               height: borderHeight,
-              child: FutureBuilder<GameFrame>(
-                  future: serverClient.gameFrame,
-                  builder: (context, snapshot) {
-                    final frame = snapshot.data;
-                    if (frame == null) {
-                      return const SizedBox.shrink();
-                    }
-
-                    double frameWidth =
-                        frame.sizex + borderHorizontalPadding * 2;
-                    double frameHeight =
-                        frame.sizey + borderVerticalPadding * 2;
-                    return StreamBuilder<PlayerPosition>(
-                        stream: positionBloc.myPosition$(),
-                        builder: (context, snapshot) {
-                          final position = snapshot.data;
-                          double x = 0.0;
-                          double y = 0.0;
-
-                          if (position != null) {
-                            x = (position.x - frame.sizex / 2) /
-                                ((frameWidth - borderWidth) / 2);
-                            y = (position.y - frame.sizey / 2) /
-                                ((frameHeight - borderHeight) / 2);
-                          }
-
-                          return ClipRect(
-                            child: OverflowBox(
-                              maxWidth: double.infinity,
-                              maxHeight: double.infinity,
-                              alignment: Alignment(x, y),
-                              child: SizedBox(
-                                width: frameWidth,
-                                height: frameHeight,
-                                child: BubbleGame(
-                                  boardWidth: frame.sizex.toDouble(),
-                                  boardHeight: frame.sizey.toDouble(),
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                  }),
+              child: ClipRect(
+                child: ClippedBoard(
+                  frameWidth: frameWidth,
+                  frameHeight: frameHeight,
+                  frame: frame,
+                ),
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ClippedBoard extends StatefulWidget {
+  const ClippedBoard({
+    super.key,
+    required this.frameWidth,
+    required this.frameHeight,
+    required this.frame,
+  });
+
+  final double frameWidth;
+  final double frameHeight;
+  final GameFrame frame;
+
+  @override
+  State<ClippedBoard> createState() => _ClippedBoardState();
+}
+
+class _ClippedBoardState extends AutoRefreshState<ClippedBoard> {
+  late final Ticker _ticker;
+
+  late final child = SizedBox(
+    width: widget.frameWidth,
+    height: widget.frameHeight,
+    child: GameBoard(
+      boardWidth: widget.frame.sizex.toDouble(),
+      boardHeight: widget.frame.sizey.toDouble(),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker((Duration elapsed) {
+      setState(() {});
+    });
+
+    _ticker.start();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final player = gameService.gameState.players[client.id];
+    var x = (player.x - widget.frame.sizex / 2) /
+        ((widget.frameWidth - borderWidth) / 2);
+    var y = (player.y - widget.frame.sizey / 2) /
+        ((widget.frameHeight - borderHeight) / 2);
+    return OverflowBox(
+      maxWidth: double.infinity,
+      maxHeight: double.infinity,
+      alignment: Alignment(x, y),
+      child: child,
     );
   }
 }

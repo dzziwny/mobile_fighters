@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 class HitReactionLayer extends StatefulWidget {
   const HitReactionLayer({
@@ -32,17 +30,15 @@ class _HitReactionState extends State<HitReactionLayer>
       vsync: this,
     );
 
-    hitSubscription = Rx.combineLatest2(
-      serverClient.id$,
-      gameStateWs.data(),
-      (id, state) {
-        for (var hit in state.hits) {
-          if (hit.playerId == id) {
-            animateHit();
-          }
-        }
-      },
-    ).listen(null);
+    // TODO
+    // hitSubscription = gameDataWs.data().listen((state) {
+    //   state.players.
+    //   for (var hit in state.hits) {
+    //     if (hit.playerId == id) {
+    //       animateHit();
+    //     }
+    //   }
+    // });
   }
 
   Future<void> animateHit() async {

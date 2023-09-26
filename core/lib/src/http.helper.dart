@@ -31,7 +31,7 @@ Future<ConnectFromServerDto> connect$(String guid) async {
   return dto;
 }
 
-Future<CreatePlayerDtoResponse> createPlayer$(
+Future<void> createPlayer$(
   String guid,
   int id,
   String nick,
@@ -49,12 +49,9 @@ Future<CreatePlayerDtoResponse> createPlayer$(
     ),
   );
 
-  if (response.statusCode != 200) {
+  if (response.statusCode != 204) {
     throw Exception('Cannot create player');
   }
-
-  final dto = CreatePlayerDtoResponse.fromJson(jsonDecode(response.body));
-  return dto;
 }
 
 Future<GameFrame> gameFrame$() async {
@@ -71,4 +68,9 @@ Future<void> leaveGame$(String guid, int id) => post(
       body: jsonEncode(
         LeaveGameDtoRequest(guid: guid, id: id).toJson(),
       ),
+    );
+
+Future<void> setGamePhysics(GamePhysics physics) => post(
+      Uri.parse('$base${Endpoint.setGamePhysics}'),
+      body: physics.toString(),
     );

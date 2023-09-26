@@ -1,3 +1,4 @@
+import 'package:bubble_fight/bloc/frag.bloc.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class FragsLayer extends StatelessWidget {
 
 class FragRow extends StatelessWidget {
   final ThemeData theme;
-  final FragDto frag;
+  final FragRowModel frag;
 
   const FragRow({
     super.key,

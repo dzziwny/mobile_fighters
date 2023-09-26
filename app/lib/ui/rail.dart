@@ -12,7 +12,7 @@ class Rail extends StatelessWidget {
       destinations: [
         NavigationRailDestination(
           icon: IconButton(
-            onPressed: () => serverClient.leaveGame(),
+            onPressed: () => client.leaveGame(),
             icon: const Icon(Icons.logout_rounded),
           ),
           label: const Text('Leave'),

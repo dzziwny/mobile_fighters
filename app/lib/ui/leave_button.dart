@@ -7,7 +7,10 @@ class LeaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      onPressed: () => serverClient.leaveGame(),
+      onPressed: () {
+        client.leaveGame();
+        nickWindowController.set(true);
+      },
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Leave'),
     );

@@ -1,35 +1,35 @@
 import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 
-class BulletsLayer extends StatelessWidget {
+import 'auto_refresh_state.dart';
+
+class BulletsLayer extends StatefulWidget {
   const BulletsLayer({super.key});
 
   @override
+  State<BulletsLayer> createState() => _BulletsLayerState();
+}
+
+class _BulletsLayerState extends AutoRefreshState<BulletsLayer> {
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: gameStateWs.data(),
-      builder: (context, snapshot) {
-        final bullets = snapshot.data?.bullets ?? [];
-        return Stack(
-          children: bullets.map(
-            (bullet) {
-              return Positioned(
-                key: ValueKey(bullet.id),
-                top: bullet.y - 15.0,
-                left: bullet.x - 15.0,
-                height: 30.0,
-                width: 30.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
-              );
-            },
-          ).toList(),
-        );
-      },
+    return Stack(
+      children: gameService.gameState.bullets.map(
+        (bullet) {
+          return Positioned(
+            top: bullet.position.y - 15.0,
+            left: bullet.position.x - 15.0,
+            height: 30.0,
+            width: 30.0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:bubble_fight/di.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class DebugInfo extends StatelessWidget {
@@ -11,13 +10,15 @@ class DebugInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: StreamBuilder<Map<int, Player>>(
-          stream: playersWs.data(),
+      child: StreamBuilder(
+          stream: gameDataWs.data(),
           builder: (context, snapshot) {
-            final players = snapshot.data;
-            if (players == null) {
+            final game = snapshot.data;
+            if (game == null) {
               return const Center(child: CircularProgressIndicator());
             }
+
+            final players = game.players;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +27,7 @@ class DebugInfo extends StatelessWidget {
                   'Players:',
                   style: TextStyle(color: Colors.white),
                 ),
-                for (final player in players.values)
+                for (final player in players)
                   Text(
                     player.toString(),
                     style: const TextStyle(color: Colors.white),

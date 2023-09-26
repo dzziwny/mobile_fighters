@@ -1,3 +1,4 @@
+import 'package:bubble_fight/bloc/_bloc.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
@@ -24,6 +25,8 @@ class _JoysticState extends State<Joystic> {
         const center = Offset(65.0, 65.0);
         final relativeOffset = (offset - center) / 10.0;
         angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
+        (controlsBloc as MobileControlsBloc)
+            .updateKnob(relativeOffset.dx, relativeOffset.dy);
         positionBloc.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
 
         setState(() {

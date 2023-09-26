@@ -8,22 +8,13 @@ class ControlsLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: serverClient.isInGame(),
-      builder: (context, snapshot) {
-        final isInGame = snapshot.data;
-        if (isInGame != true) {
-          return const SizedBox.shrink();
-        }
-        return Positioned(
-          bottom: 70.0,
-          left: 70.0,
-          child: Opacity(
-            opacity: 0.8,
-            child: isMobile ? const Joystic() : const Keyboard(),
-          ),
-        );
-      },
+    return Positioned(
+      bottom: 70.0,
+      left: 70.0,
+      child: Opacity(
+        opacity: 0.8,
+        child: isMobile ? const Joystic() : const Keyboard(),
+      ),
     );
   }
 }

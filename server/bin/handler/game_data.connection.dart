@@ -1,11 +1,11 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../setup.dart';
+import '../register_di.dart';
 import 'on_connection.dart';
 
-class DeadConnection extends OnConnection {
+class GameDataConnection extends OnConnection {
   @override
   void onInit(int playerId, WebSocketChannel channel) {
-    fragWSChannels[playerId] = channel;
+    gameDataChannels.add(channel);
   }
 }

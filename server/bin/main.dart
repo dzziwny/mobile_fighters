@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:core/core.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:vector_math/vector_math.dart';
 
-import 'actions/create_bullet.action.dart';
+import 'actions/bomb_actions.dart';
 import 'bullet.physic.dart';
 import 'handler/_handler.dart';
-import 'handler/channels.handler.dart';
-import 'inputs/knob.input.dart';
+import 'handler/game_data.connection.dart';
+import 'handler/mobile_controls.connection.dart';
 import 'handler/on_connection.dart';
+import 'inputs/player_state_input.dart';
 import 'register_di.dart';
 import 'setup.dart';
 import 'updates/_updates.dart';
@@ -30,27 +32,17 @@ void main(List<String> args) async {
   // final ip = InternetAddress.anyIPv4;
   final ip = '0.0.0.0';
 
-  registerDI();
-
   final router = Router()
     ..get(Endpoint.gameFrame, gameFrameHandler)
     ..post(Endpoint.connect, connectHandler)
     ..post(Endpoint.startGame, createPlayerHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
-    ..ws(Socket.pushWs, PushConnection())
-    ..ws(Socket.rotateWs, RotateConnection())
-    ..ws(Socket.movementKeyboardhWs, MovementKeyboardConnection())
-    ..ws(Socket.dashWs, DashConnection())
-    ..ws(Socket.cooldownWs, CooldownConnection())
-    ..ws(Socket.attackWs, AttackConnection())
-    ..ws(Socket.bulletWs, BulletConnection())
-    ..ws(Socket.fragWs, DeadConnection())
-    ..ws(Socket.selectTeamWs, TeamConnection())
-    ..ws(Socket.gamePhaseWsTemplate, GamePhaseConnection())
-    ..ws(Socket.playersWs, PlayersConnection())
-    ..ws(Socket.playerChangeWs, PlayerChangeConnection())
-    ..ws(Socket.hitWs, HitConnection())
-    ..ws(Socket.gameStateWs, GameStateConnection());
+    ..post(Endpoint.setGamePhysics, setGamePhysicsHandler)
+    ..ws(Socket.mobilePlayerStateWs, MobileControlsConnection())
+    ..ws(Socket.desktopPlayerStateWs, DesktopControlsConnection())
+    ..ws(Socket.gameDataWs, GameDataConnection())
+    ..ws(Socket.gameStateWs, GameStateConnection())
+    ..ws(Socket.actionsWs, ActionsConnection());
 
   final handler = Pipeline()
       // .addMiddleware(
@@ -66,79 +58,143 @@ void main(List<String> args) async {
   // Set the desired frame rate (e.g., 60 frames per second)
   final frameRate = Duration(milliseconds: 1000 ~/ 60);
 
-  Timer.periodic(frameRate, (_) async {
+  Timer.periodic(frameRate, (_) {
     final now = DateTime.now().microsecondsSinceEpoch;
     final dt = now - lastUpdateTime;
     lastUpdateTime = now;
     accumulatorTime += dt;
     while (accumulatorTime > sliceTimeMicroseconds) {
-      await update();
+      update();
       accumulatorTime -= sliceTimeMicroseconds;
     }
 
-    await draw();
+    draw();
   });
 }
 
-Future<void> update() async {
-  await _CRUDsUpdate();
-  await _actionsUpdate();
-  await _physicUpdate();
+void update() {
+  _executeActions();
+  _physicUpdate();
 }
 
-Future<void> _CRUDsUpdate() async {
-  // TODO
+void _executeActions() {
+  for (var i = 0; i < maxPlayers; i++) {
+    // TODO sprawdz czy aby nie zatrzymuje za kazdym razem
+    if (playerInputs[i].isBullet && !bulletTimers[i].isActive) {
+      startBulletLoop(playerInputs[i]);
+    } else if (!playerInputs[i].isBullet) {
+      playerInputs[i].isBullet = false;
+    }
+
+    _registerAction(actionsStates[i]);
+  }
+
+  final registrations = actionsStates.map(_registerAction);
+  registrations;
 }
 
-Future<void> _actionsUpdate() async {
-  for (var i = 0; i < actions.length; i++) {
-    final action = actions.removeAt(0);
-    await action.handle();
+void _registerAction(ActionsState state) {
+  if (!state.isBombCooldown) {
+    state.isBombCooldown = true;
+    if (state.bomb) {
+      createBomb(state.id);
+      Timer(Duration(seconds: bombCooldownSesconds), () {
+        state.isBombCooldown = false;
+        state.bomb = true;
+      });
+    }
+  }
+
+  if (!state.isDashCooldown) {
+    state.isDashCooldown = true;
+    if (state.dash) {
+      // TODO
+      // startDash();
+      Timer(Duration(seconds: dashCooldownSesconds), () {
+        state.isDashCooldown = false;
+        state.dash = true;
+      });
+    }
   }
 }
 
-Future<void> _physicUpdate() async {
-  await Future.wait([
-    _bulletsPhysicUpdate(),
-    _playersPhysicUpdate(),
-  ]);
+void _physicUpdate() {
+  _bulletsPhysicUpdate();
+  _bombsPhysicUpdate();
+  _playersPhysicUpdate();
 }
 
-Future<void> _bulletsPhysicUpdate() async {
-  final updates = bullets.values.map(
-    (bullet) => bulletPhysicUpdate(bullet, sliceTimeSeconds),
+void _bulletsPhysicUpdate() {
+  for (var i = 0; i < maxBullets; i++) {
+    bulletPhysicUpdate(bullets[i], sliceTimeSeconds);
+  }
+}
+
+void _bombsPhysicUpdate() {
+  for (var i = 0; i < maxPlayers; i++) {
+    bombPhysicUpdate(bombs[i], sliceTimeSeconds);
+  }
+}
+
+void _playersPhysicUpdate() {
+  for (var i = 0; i < maxPlayers; i++) {
+    final state = playerInputs[i];
+    playerPhysicUpdate(state);
+  }
+}
+
+int currentBullet = 0;
+void startBulletLoop(PlayerControlsState state) {
+  if (currentBullet == maxBullePerPlayer) {
+    currentBullet = 0;
+  }
+
+  createBullet(currentBullet, state.playerId);
+  bulletTimers[state.playerId] = Timer.periodic(
+    Duration(milliseconds: bulletsCooldownMilisesconds),
+    (timer) {
+      if (!state.isBullet) {
+        timer.cancel();
+      }
+
+      if (currentBullet == maxBullePerPlayer) {
+        currentBullet = 0;
+      }
+
+      createBullet(currentBullet, state.playerId);
+      currentBullet++;
+    },
   );
-
-  await Future.wait(updates);
 }
 
-Future<void> _playersPhysicUpdate() async {
-  final knobInput = GetIt.I<KnobInput>();
+void createBullet(int id, int playerId) {
+  final player = players[playerId];
+  final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
+    ..scale(initBulletScale);
 
-  final updates = players.keys.map((id) {
-    final x = knobInput.x(id);
-    final y = knobInput.y(id);
-    final angle = knobInput.angle(id);
-
-    return playerPhysicUpdate(id, x, y, angle);
-  });
-
-  await Future.wait(updates);
+  final position = Vector2(player.x, player.y);
+  bullets[id]
+    ..shooterId = playerId
+    ..velocity = velocity
+    ..angle = player.angle
+    ..startPosition = position
+    ..position = position;
 }
 
-Future<void> draw() async {
+void draw() {
   final bytes = GameState.bytes(
-    playerPhysics.entries,
-    bombAttackResponses,
+    players,
+    bombs,
     hits,
-    bullets.values,
+    bullets,
+    frags,
   );
 
-  bombAttackResponses = [];
-  hits = [];
+  // TODO
+  // bombs = [];
+  // hits = [];
 
-  final channels = await GetIt.I<ChannelsHandler>().getGameStateChannels();
-  for (var channel in channels) {
+  for (var channel in gameStateChannels) {
     channel.sink.add(bytes);
   }
 }

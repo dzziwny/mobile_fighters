@@ -6,28 +6,29 @@ class RespawnsLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final respWidth = respawnWidth.toDouble();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: respawnWidth,
+          width: respWidth,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                spreadRadius: respawnWidth,
-                blurRadius: respawnWidth,
+                spreadRadius: respWidth,
+                blurRadius: respWidth,
                 color: Colors.blue.withOpacity(0.6),
               )
             ],
           ),
         ),
         Container(
-          width: respawnWidth,
+          width: respWidth,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                spreadRadius: respawnWidth,
-                blurRadius: respawnWidth,
+                spreadRadius: respWidth,
+                blurRadius: respWidth,
                 color: Colors.red.withOpacity(0.6),
               )
             ],

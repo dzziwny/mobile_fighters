@@ -1,14 +1,13 @@
-import 'package:bubble_fight/statics.dart';
 import 'package:bubble_fight/ui/players_layer.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'attacks_bottom_layer.dart';
-import 'attacks_upper_layer.dart';
 import 'bullets.layer.dart';
 import 'respawns_layer.dart';
 
-class BubbleGame extends StatelessWidget {
-  const BubbleGame({
+class GameBoard extends StatelessWidget {
+  const GameBoard({
     super.key,
     required this.boardWidth,
     required this.boardHeight,
@@ -57,7 +56,6 @@ class BubbleGame extends StatelessWidget {
                 AttacksBottomLayer(),
                 BulletsLayer(),
                 PlayersLayer(),
-                AttacksUpperLayer(),
               ],
             ),
           ),

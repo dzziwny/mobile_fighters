@@ -3,22 +3,23 @@ class Endpoint {
   static const startGame = '/startGame';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
+  static const setGamePhysics = '/setGamePhysics';
 }
 
 class Socket {
-  static var playersWs = Socket('players');
-  static var pushWs = Socket('push');
-  static var rotateWs = Socket('rotate');
-  static var movementKeyboardhWs = Socket('movementKeyboard');
-  static var dashWs = Socket('dash');
-  static var cooldownWs = Socket('cooldownWs');
-  static var attackWs = Socket('attack');
-  static var bulletWs = Socket('gun');
-  static var fragWs = Socket('deadWs');
-  static var selectTeamWs = Socket('selectTeamWs');
-  static var gamePhaseWsTemplate = Socket('gamePhaseWs');
-  static var playerChangeWs = Socket('playerChange');
-  static var hitWs = Socket('hit');
+  /// Data about players - names, teams, ids, etc.
+  static var gameDataWs = Socket('metadata');
+
+  /// Mobile player can send state here to move, attack, etc.
+  static var mobilePlayerStateWs = Socket('mobilePlayerState');
+
+  /// Mobile player can send state here to move, attack, etc.
+  static var desktopPlayerStateWs = Socket('desktopPlayerState');
+
+  /// Mobile player can send state here to move, attack, etc.
+  static var actionsWs = Socket('actions');
+
+  /// Player can get game state here about positions, bullets, bombs, frags etc.
   static var gameStateWs = Socket('gameState');
 
   Socket(String name) : _base = '/$name/ws';

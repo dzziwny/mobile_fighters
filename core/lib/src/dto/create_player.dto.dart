@@ -16,16 +16,3 @@ class CreatePlayerDtoRequest with _$CreatePlayerDtoRequest {
   factory CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =>
       _$CreatePlayerDtoRequestFromJson(json);
 }
-
-@freezed
-class CreatePlayerDtoResponse with _$CreatePlayerDtoResponse {
-  const factory CreatePlayerDtoResponse({
-    required int id,
-    required Team team,
-    required PlayerPosition position,
-    required int hp,
-  }) = _CreatePlayerDtoResponse;
-
-  factory CreatePlayerDtoResponse.fromJson(Map<String, dynamic> json) =>
-      _$CreatePlayerDtoResponseFromJson(json);
-}

@@ -1,11 +1,16 @@
-import 'package:get_it/get_it.dart';
+import 'dart:async';
 
-import 'handler/channels.handler.dart';
-import 'inputs/_input.dart';
+import 'package:core/core.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'inputs/player_state_input.dart';
 
-registerDI() {
-  GetIt.I.registerSingleton(ChannelsHandler());
+final playerInputs = List.generate(10, (id) => PlayerControlsState(id));
+final actionsStates = List.generate(10, (id) => ActionsState(id));
 
-  GetIt.I.registerSingleton(KnobInput());
-  GetIt.I.registerSingleton(BulletInput());
-}
+final bulletTimers = List.generate(
+  10,
+  (_) => Timer(Duration.zero, () {})..cancel(),
+);
+
+final List<WebSocketChannel> gameStateChannels = [];
+final List<WebSocketChannel> gameDataChannels = [];

@@ -1,38 +1,37 @@
+import 'package:bubble_fight/ui/nick_window.controller.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import 'bloc/_bloc.dart';
 import 'server_client.dart';
-import 'service/_service.dart';
 import 'ws.dart';
 
-final serverClient = ServerClient();
+final client = ServerClient();
 
-final playersWs = Ws(Socket.playersWs, Player.parseToMap);
-final playerChangeWs = Ws(Socket.playerChangeWs, PlayerChangeDto.parse);
-final positionsWs = Ws(Socket.pushWs, PlayerPosition.positionsFromBytes);
-final keyboardWs = Ws(Socket.movementKeyboardhWs, MovementKeyboard.fromBytes);
-final rotateWs = Ws(Socket.rotateWs, PlayerAngle.fromBytes);
-final dashWs = Ws(Socket.dashWs, DashDto.fromBytes);
-final bombsWs = Ws(Socket.attackWs, BombAttackResponse.attacksFromBytes);
-final bulletWs = Ws(Socket.bulletWs, BulletResponse.bulletsFromBytes);
-final cooldownWs = Ws(Socket.cooldownWs, CooldownDto.fromBytes);
-final hitWs = Ws(Socket.hitWs, HitDto.hitsFromBytes);
-final fragWs = Ws(Socket.fragWs, FragDto.parse);
-final teamWs = Ws(Socket.selectTeamWs, TeamsDto.parse);
+final mobileControlsWs =
+    Ws(Socket.mobilePlayerStateWs, PlayerViewModel.manyFromBytes);
+final desktopControlsWs =
+    Ws(Socket.desktopPlayerStateWs, MovementKeyboard.fromBytes);
+final acitionsWs = Ws(Socket.actionsWs, (_) => Object());
+
+final gameDataWs = Ws(Socket.gameDataWs, GameData.fromString);
 final gameStateWs = Ws(Socket.gameStateWs, GameState.fromBytes);
 
-final cooldownService = CooldownService();
-final teamService = TeamService();
+final gameService = GameService();
 
-final attackBloc = AttackBloc();
 final fragBloc = FragBloc();
-final hpBloc = HpBloc();
-final controlsBloc = ControlsBloc();
+final controlsBloc = isMobile ? MobileControlsBloc() : DesktopControlsBloc();
 final positionBloc = PositionBloc();
 
 const uuid = Uuid();
 
+final gameBoardFocusNode = FocusNode();
+
 final isMobile = defaultTargetPlatform == TargetPlatform.android ||
     defaultTargetPlatform == TargetPlatform.iOS;
+
+final nickWindowController = NickWindowController();
+
+// final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));

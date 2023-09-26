@@ -1,54 +1,19 @@
-import 'dart:convert';
-import 'dart:isolate';
+import 'dart:collection';
 
 import 'package:core/core.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'actions/action.dart';
+import 'register_di.dart';
 
-/*
-* key   ->  guid
-* value ->  id
-*/
 final guids = <String, int>{};
-/*
-* key   ->  id
-* value ->  Player
-*/
-final players = <int, Player>{};
-final bullets = <int, Bullet>{};
-
-/*
-* physics
-* key   ->  playerId
-* value ->  [x, y, angle]
-*/
-final playerPhysics = <int, PlayerPhysics>{};
-
-/*
-* cooldowns
-* key   ->  playerId
-* value ->  [x, y, angle]
-*/
-
-final Map<int, bool> dashCooldowns = {};
-final Map<int, bool> attackCooldowns = {};
-
-/*
-* Game events. First value indicates, what event came.
-* 0 - position update
-* 1 - attack
-*/
-final actions = <Action>[];
-var bombAttackResponses = <BombAttackResponse>[];
-var hits = <HitDto>[];
-
-/*
-* Game draws. First value indicates, what event came.
-* 0 - position update
-* 1 - attack
-*/
-final positionIsolates = <int, Isolate>{};
+final playerMetadatas =
+    UnmodifiableListView(List.generate(maxPlayers, Player.empty));
+final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));
+final players = UnmodifiableListView(List.generate(maxPlayers, Player.empty));
+final frags = List.filled(maxPlayers, 0);
+final actions =
+    UnmodifiableListView(List.generate(maxPlayers, (id) => ActionsState(id)));
+final bombs = UnmodifiableListView(List.generate(maxPlayers, Bomb.empty));
+final hits = UnmodifiableListView(List.generate(maxPlayers, HitDto.empty));
 
 /*
 * Teams
@@ -66,59 +31,23 @@ GamePhase phase = GamePhase.selectingTeam;
 
 Player? gameHost;
 
-List<WebSocketChannel> playersWSChannels = [];
-List<WebSocketChannel> playerChangeWSChannels = [];
-List<WebSocketChannel> attackWSChannels = [];
-List<WebSocketChannel> hitWSChannels = [];
-Map<int, WebSocketChannel> cooldownWSChannels = {};
-Map<int, WebSocketChannel> fragWSChannels = {};
-Map<int, WebSocketChannel> teamsWSChannels = {};
-Map<int, WebSocketChannel> gamePhaseWSChannels = {};
-Map<int, WebSocketChannel> dashChannels = {};
-
 TeamsDto prepareTeams() => TeamsDto(
       red: redTeam.values.map((e) => e.nick).toList(),
       blue: blueTeam.values.map((e) => e.nick).toList(),
     );
 
-void shareTeams() {
-  final dto = prepareTeams();
-  final data = jsonEncode(dto);
-  for (var teamChannel in teamsWSChannels.values) {
-    teamChannel.sink.add(data);
-  }
-}
-
-void sharePlayers() {
-  for (final channel in playersWSChannels) {
-    final data = jsonEncode(players.values.toList());
-    channel.sink.add(data);
-  }
-}
-
-void sharePlayerRemoved(Player player) {
-  final dto = PlayerChangeDto(
-    id: player.id,
-    nick: '',
-    type: PlayerChangeType.removed,
-    team: player.team,
-  );
-
-  final data = jsonEncode(dto);
-  for (final channel in playerChangeWSChannels) {
+void shareGameData() {
+  final gameData = GameData(players: players);
+  final data = gameData.toString();
+  for (final channel in gameDataChannels) {
     channel.sink.add(data);
   }
 }
 
 void removePlayer(int id) {
-  playerPhysics.remove(id);
+  players[id].isActive = false;
   redTeam.remove(id);
   blueTeam.remove(id);
-  final player = players.remove(id);
 
-  sharePlayers();
-  shareTeams();
-  if (player != null) {
-    sharePlayerRemoved(player);
-  }
+  shareGameData();
 }

@@ -10,12 +10,12 @@ void main() async {
 
   // Isolate.spawn((_) => server.main(), null);
 
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.portraitDown,
   ]);
 
-  serverClient.connect();
+  await client.connect();
   runApp(const App());
 }
 

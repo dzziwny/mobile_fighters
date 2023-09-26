@@ -117,10 +117,13 @@ class _NickWindowState extends State<NickWindow> {
                               onPressed: nickController.text == ''
                                   ? null
                                   : () {
-                                      serverClient.createPlayer(
+                                      client.createPlayer(
                                         nickController.text,
                                         selectedDevice,
                                       );
+
+                                      nickWindowController.set(false);
+                                      gameBoardFocusNode.requestFocus();
                                     },
                               icon: const Icon(Icons.play_arrow_rounded),
                             ),
