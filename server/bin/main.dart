@@ -8,7 +8,9 @@ import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'actions/bomb_actions.dart';
+import 'bomb_loop.dart';
 import 'bullet.physic.dart';
+import 'bullet_loop.dart';
 import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
 import 'handler/mobile_controls.connection.dart';
@@ -77,13 +79,8 @@ void update() {
 
 void _executeActions() {
   for (var i = 0; i < maxPlayers; i++) {
-    if (playerInputs[i].isBullet && !bulletTimers[i].isActive) {
-      startBulletLoop(playerInputs[i], i);
-    }
-
-    if (playerInputs[i].isBomb && !bombTimers[i].isActive) {
-      startBombLoop(playerInputs[i], i);
-    }
+    bulletsLoop.toggle(i, playerInputs[i].isBullet);
+    bombsLoop.toggle(i, playerInputs[i].isBomb);
   }
 }
 
@@ -110,59 +107,6 @@ void _playersPhysicUpdate() {
     final state = playerInputs[i];
     playerPhysicUpdate(state);
   }
-}
-
-void startBulletLoop(PlayerControlsState state, int playerId) {
-  final firstBullet = playerId * maxBullePerPlayer;
-  final reset = (playerId + 1) * maxBullePerPlayer;
-  final timer = bulletTimers[state.playerId];
-  executeBulletStep(state, playerId, timer, firstBullet, reset);
-  bulletTimers[state.playerId] = Timer.periodic(
-    bulletsCooldown,
-    (timer) => executeBulletStep(state, playerId, timer, firstBullet, reset),
-  );
-}
-
-void executeBulletStep(
-  PlayerControlsState state,
-  int playerId,
-  Timer timer,
-  int firstBullet,
-  int resetCounter,
-) {
-  if (!state.isBullet) {
-    timer.cancel();
-  }
-
-  var currentBullet = currentBullets[playerId];
-  if (currentBullet == resetCounter) {
-    currentBullet = firstBullet;
-  }
-
-  createBullet(currentBullet, state.playerId);
-  currentBullets[playerId] = ++currentBullet;
-}
-
-void startBombLoop(PlayerControlsState state, int playerId) {
-  final firstBomb = playerId * maxBombsPerPlayer;
-  final resetCounter = (playerId + 1) * maxBombsPerPlayer;
-
-  bombTimers[state.playerId] = Timer.periodic(
-    bombCooldown,
-    (timer) {
-      if (!state.isBomb) {
-        timer.cancel();
-      }
-
-      var currentBomb = currentBombs[playerId];
-      if (currentBomb == resetCounter) {
-        currentBomb = firstBomb;
-      }
-
-      createBomb(currentBomb, state.playerId);
-      currentBombs[playerId] = ++currentBomb;
-    },
-  );
 }
 
 void draw() {

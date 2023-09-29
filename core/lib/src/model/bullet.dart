@@ -4,6 +4,8 @@ import 'package:core/src/constants.dart';
 import 'package:core/src/extensions.dart';
 import 'package:vector_math/vector_math.dart';
 
+import 'ammunition.dart';
+
 class BulletViewModel {
   Vector2 position;
   double angle;
@@ -58,11 +60,15 @@ class BulletViewModel {
   }
 }
 
-class Bullet extends BulletViewModel {
+class Bullet extends BulletViewModel implements Ammunition {
   final int id;
+
+  @override
   int shooterId;
 
+  @override
   Vector2 velocity;
+  @override
   Vector2 startPosition;
 
   Bullet({

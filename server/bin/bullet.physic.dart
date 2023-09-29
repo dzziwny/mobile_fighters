@@ -1,24 +1,8 @@
-import 'dart:math';
-
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'actions/bomb_actions.dart';
 import 'setup.dart';
-
-void createBullet(int bulletId, int playerId) {
-  final player = players[playerId];
-  final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-    ..scale(initBulletVelocity);
-
-  final position = Vector2(player.x, player.y);
-  bullets[bulletId]
-    ..shooterId = playerId
-    ..velocity = velocity
-    ..angle = player.angle
-    ..startPosition = position
-    ..position = position;
-}
 
 void bulletPhysicUpdate(Bullet bullet, double dt) {
   final velocityUpdate = bullet.velocity * dt;

@@ -1,4 +1,5 @@
 export 'actions_state.dart';
+export 'ammunition.dart';
 export 'bomb.dart';
 export 'bullet.dart';
 export 'device.dart';

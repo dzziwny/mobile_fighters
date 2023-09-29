@@ -5,20 +5,6 @@ import 'package:vector_math/vector_math.dart';
 
 import '../setup.dart';
 
-void createBomb(int bombId, int playerId) {
-  final player = players[playerId];
-  final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-    ..scale(initBombVelocity);
-
-  final position = Vector2(player.x, player.y);
-  bombs[bombId]
-    ..shooterId = playerId
-    ..velocity = velocity
-    ..angle = player.angle
-    ..startPosition = position
-    ..position = position;
-}
-
 void bombPhysicUpdate(Bomb bomb, double dt) {
   final velocityUpdate = bomb.velocity * dt;
   final position = bomb.position + velocityUpdate;

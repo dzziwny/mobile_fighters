@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/frags_layer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'controls_layer.dart';
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          GamePhysicsColumn(),
+          if (kDebugMode) GamePhysicsColumn(),
         ],
       ),
     );

@@ -3,12 +3,19 @@ import 'dart:typed_data';
 import 'package:core/src/constants.dart';
 import 'package:vector_math/vector_math.dart';
 
-class Bomb {
+import 'ammunition.dart';
+
+class Bomb implements Ammunition {
   int id;
+  @override
   int shooterId;
+  @override
   double angle;
+  @override
   Vector2 startPosition;
+  @override
   Vector2 position;
+  @override
   Vector2 velocity;
   bool isActive;
 
