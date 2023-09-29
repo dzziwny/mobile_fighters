@@ -43,8 +43,9 @@ class GameBoard extends StatelessWidget {
             height: boardHeight,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.jpeg'),
-                fit: BoxFit.fitHeight,
+                image: AssetImage('assets/background_castle.webp'),
+                // fit: BoxFit.fitHeight,
+                fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.all(
                 Radius.circular(16.0),
