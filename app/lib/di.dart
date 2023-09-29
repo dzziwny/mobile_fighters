@@ -33,5 +33,3 @@ final isMobile = defaultTargetPlatform == TargetPlatform.android ||
     defaultTargetPlatform == TargetPlatform.iOS;
 
 final nickWindowController = NickWindowController();
-
-// final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));

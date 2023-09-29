@@ -8,7 +8,6 @@ import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'actions/bomb_actions.dart';
-import 'bomb.physic.dart';
 import 'bullet.physic.dart';
 import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
@@ -147,9 +146,8 @@ void startBulletLoop(PlayerControlsState state, int playerId) {
   final firstBullet = playerId * maxBullePerPlayer;
   final resetCounter = (playerId + 1) * maxBullePerPlayer;
 
-  // createBullet(currentBullet, state.playerId);
   bulletTimers[state.playerId] = Timer.periodic(
-    Duration(milliseconds: bulletsCooldownMilisesconds),
+    bulletsCooldown,
     (timer) {
       if (!state.isBullet) {
         timer.cancel();
@@ -171,7 +169,7 @@ void startBombLoop(PlayerControlsState state, int playerId) {
   final resetCounter = (playerId + 1) * maxBombsPerPlayer;
 
   bombTimers[state.playerId] = Timer.periodic(
-    Duration(milliseconds: bombCooldownMiliseconds),
+    bombCooldown,
     (timer) {
       if (!state.isBomb) {
         timer.cancel();

@@ -1,4 +1,5 @@
 import 'package:bubble_fight/di.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'auto_refresh_state.dart';
@@ -17,14 +18,14 @@ class _BulletsLayerState extends AutoRefreshState<BulletsLayer> {
       children: gameService.gameState.bullets.map(
         (bullet) {
           return Positioned(
-            top: bullet.position.y - 15.0,
-            left: bullet.position.x - 15.0,
-            height: 30.0,
-            width: 30.0,
+            top: bullet.position.y - bulletRadius,
+            left: bullet.position.x - bulletRadius,
+            height: bulletDiameter,
+            width: bulletDiameter,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue,
-                borderRadius: BorderRadius.circular(15.0),
+                borderRadius: BorderRadius.circular(bulletRadius),
               ),
             ),
           );

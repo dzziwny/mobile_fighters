@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:core/core.dart';
@@ -9,7 +8,7 @@ import '../setup.dart';
 void createBomb(int bombId, int playerId) {
   final player = players[playerId];
   final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-    ..scale(initBombVelocityScale);
+    ..scale(initBombVelocity);
 
   final position = Vector2(player.x, player.y);
   bombs[bombId]
@@ -23,16 +22,16 @@ void createBomb(int bombId, int playerId) {
 void bombPhysicUpdate(Bomb bomb, double dt) {
   final velocityUpdate = bomb.velocity * dt;
   final position = bomb.position + velocityUpdate;
-  if (position.x < 0.0 ||
-      position.x > boardWidth ||
-      position.y < 0.0 ||
-      position.y > boardHeight) {
+  if (position.x < boardStartX ||
+      position.x > boardEndX ||
+      position.y < boardStartY ||
+      position.y > boardEndY) {
     bombs[bomb.id].isActive = false;
     return;
   }
 
   final distance = bomb.startPosition.distanceToSquared(position);
-  if (distance > 100000.0) {
+  if (distance > bombDistanceSquare) {
     bombs[bomb.id].isActive = false;
     return;
   }
@@ -60,7 +59,7 @@ Player? _isHit(Bomb bomb) {
             physic.y.toDouble(),
           ),
         ) <
-        bombRange) {
+        bombRadius) {
       return physic;
     }
   }

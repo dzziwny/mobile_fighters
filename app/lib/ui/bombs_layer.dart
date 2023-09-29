@@ -18,14 +18,14 @@ class _BombsLayerState extends AutoRefreshState<BombsLayer> {
     return Stack(
       children: gameService.gameState.bombs.map((attack) {
         return Positioned(
-          top: attack.y.toDouble() - bombAreaRadius,
-          left: attack.x.toDouble() - bombAreaRadius,
+          top: attack.y.toDouble() - bombRadius,
+          left: attack.x.toDouble() - bombRadius,
           child: Card(
             shape: const CircleBorder(),
             color: theme.colorScheme.error,
             child: const SizedBox(
-              height: bombAreaDiameter,
-              width: bombAreaDiameter,
+              height: bombDiameter,
+              width: bombDiameter,
             ),
           ),
         );

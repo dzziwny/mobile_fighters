@@ -2,7 +2,7 @@ import 'package:bubble_fight/ui/players_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'attacks_bottom_layer.dart';
+import 'bombs_layer.dart';
 import 'bullets.layer.dart';
 import 'respawns_layer.dart';
 

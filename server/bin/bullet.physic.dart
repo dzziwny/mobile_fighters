@@ -9,7 +9,7 @@ import 'setup.dart';
 void createBullet(int bulletId, int playerId) {
   final player = players[playerId];
   final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-    ..scale(initBulletScale);
+    ..scale(initBulletVelocity);
 
   final position = Vector2(player.x, player.y);
   bullets[bulletId]
@@ -23,16 +23,16 @@ void createBullet(int bulletId, int playerId) {
 void bulletPhysicUpdate(Bullet bullet, double dt) {
   final velocityUpdate = bullet.velocity * dt;
   final position = bullet.position + velocityUpdate;
-  if (position.x < 0.0 ||
-      position.x > boardWidth ||
-      position.y < 0.0 ||
-      position.y > boardHeight) {
+  if (position.x < boardStartX ||
+      position.x > boardEndX ||
+      position.y < boardStartY ||
+      position.y > boardEndY) {
     bullets[bullet.id].isActive = false;
     return;
   }
 
   final distance = bullet.startPosition.distanceToSquared(position);
-  if (distance > 100000.0) {
+  if (distance > bulletDistanceSquared) {
     bullets[bullet.id].isActive = false;
     return;
   }
@@ -54,13 +54,12 @@ Player? _isHit(Bullet bullet) {
     }
 
     final physic = players[i];
-    if (bullet.position.distanceToSquared(
-          Vector2(
-            physic.x.toDouble(),
-            physic.y.toDouble(),
-          ),
-        ) <
-        bombRange) {
+    final position = Vector2(
+      physic.x.toDouble(),
+      physic.y.toDouble(),
+    );
+
+    if (bullet.position.distanceToSquared(position) < bulletRadiusSquared) {
       return physic;
     }
   }
