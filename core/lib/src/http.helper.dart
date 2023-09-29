@@ -16,7 +16,7 @@ final host = '0.0.0.0';
 // final host = '192.168.1.25';
 
 // sii warszawa
-// final host = '10.254.33.55';
+// final host = '10.254.33.19';
 final base = 'http://$host:$port';
 
 Future<ConnectFromServerDto> connect$(String guid) async {
