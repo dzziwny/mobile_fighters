@@ -6,9 +6,11 @@ class PlayerControlsState {
   double angle = 0.0;
 
   bool isBullet = false;
+  bool isBomb = false;
 
   PlayerControlsState(this.playerId);
 
   @override
-  String toString() => 'x: $x, y: $y, angle: $angle, isBullet: $isBullet';
+  String toString() =>
+      'x: $x, y: $y, angle: $angle, isBullet: $isBullet, isBomb: $isBomb';
 }

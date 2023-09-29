@@ -5,24 +5,28 @@ import 'package:vector_math/vector_math.dart';
 
 class Bomb {
   int id;
+  int shooterId;
+  double angle;
+  Vector2 startPosition;
   Vector2 position;
   Vector2 velocity;
-  Vector2 target;
   bool isActive;
 
   Bomb({
     required this.id,
+    required this.shooterId,
+    required this.angle,
     required this.position,
     required this.velocity,
-    required this.target,
     required this.isActive,
-  });
+  }) : startPosition = position;
 
   factory Bomb.empty(int id) => Bomb(
         id: id,
+        shooterId: 0,
+        angle: 0.0,
         position: Vector2.zero(),
         velocity: Vector2.zero(),
-        target: Vector2.zero(),
         isActive: false,
       );
 

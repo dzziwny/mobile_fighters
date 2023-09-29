@@ -53,7 +53,7 @@ class GameBoard extends StatelessWidget {
             child: const Stack(
               children: [
                 RespawnsLayer(),
-                AttacksBottomLayer(),
+                BombsLayer(),
                 BulletsLayer(),
                 PlayersLayer(),
               ],

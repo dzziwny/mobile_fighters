@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:vector_math/vector_math.dart';
 
 import 'actions/bomb_actions.dart';
 import 'bomb.physic.dart';
@@ -83,41 +81,42 @@ void _executeActions() {
     // TODO sprawdz czy aby nie zatrzymuje za kazdym razem
     if (playerInputs[i].isBullet && !bulletTimers[i].isActive) {
       startBulletLoop(playerInputs[i], i);
-    } else if (!playerInputs[i].isBullet) {
-      playerInputs[i].isBullet = false;
     }
 
-    _registerAction(actionsStates[i]);
+    if (playerInputs[i].isBomb && !bombTimers[i].isActive) {
+      startBombLoop(playerInputs[i], i);
+    }
+    // _registerAction(actionsStates[i]);
   }
 
-  final registrations = actionsStates.map(_registerAction);
-  registrations;
+  // final registrations = actionsStates.map(_registerAction);
+  // registrations;
 }
 
-void _registerAction(ActionsState state) {
-  if (!state.isBombCooldown) {
-    state.isBombCooldown = true;
-    if (state.bomb) {
-      createBomb(state.id);
-      Timer(Duration(seconds: bombCooldownSesconds), () {
-        state.isBombCooldown = false;
-        state.bomb = true;
-      });
-    }
-  }
+// void _registerAction(ActionsState state) {
+//   if (!state.isBombCooldown) {
+//     state.isBombCooldown = true;
+//     if (state.bomb) {
+//       createBomb(state.id);
+//       Timer(Duration(seconds: bombCooldownMiliseconds), () {
+//         state.isBombCooldown = false;
+//         state.bomb = true;
+//       });
+//     }
+//   }
 
-  if (!state.isDashCooldown) {
-    state.isDashCooldown = true;
-    if (state.dash) {
-      // TODO
-      // startDash();
-      Timer(Duration(seconds: dashCooldownSesconds), () {
-        state.isDashCooldown = false;
-        state.dash = true;
-      });
-    }
-  }
-}
+//   if (!state.isDashCooldown) {
+//     state.isDashCooldown = true;
+//     if (state.dash) {
+//       // TODO
+//       // startDash();
+//       Timer(Duration(seconds: dashCooldownSeconds), () {
+//         state.isDashCooldown = false;
+//         state.dash = true;
+//       });
+//     }
+//   }
+// }
 
 void _physicUpdate() {
   _bulletsPhysicUpdate();
@@ -167,18 +166,26 @@ void startBulletLoop(PlayerControlsState state, int playerId) {
   );
 }
 
-void createBullet(int id, int playerId) {
-  final player = players[playerId];
-  final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-    ..scale(initBulletScale);
+void startBombLoop(PlayerControlsState state, int playerId) {
+  final firstBomb = playerId * maxBombsPerPlayer;
+  final resetCounter = (playerId + 1) * maxBombsPerPlayer;
 
-  final position = Vector2(player.x, player.y);
-  bullets[id]
-    ..shooterId = playerId
-    ..velocity = velocity
-    ..angle = player.angle
-    ..startPosition = position
-    ..position = position;
+  bombTimers[state.playerId] = Timer.periodic(
+    Duration(milliseconds: bombCooldownMiliseconds),
+    (timer) {
+      if (!state.isBomb) {
+        timer.cancel();
+      }
+
+      var currentBomb = currentBombs[playerId];
+      if (currentBomb == resetCounter) {
+        currentBomb = firstBomb;
+      }
+
+      createBomb(currentBomb, state.playerId);
+      currentBombs[playerId] = ++currentBomb;
+    },
+  );
 }
 
 void draw() {

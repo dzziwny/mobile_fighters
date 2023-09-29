@@ -11,7 +11,8 @@ abstract class ControlsBloc {
   void stopGun();
   void rotate(double angle);
   void dash();
-  void bomb();
+  void startBomb();
+  void stopBomb();
 }
 
 class MobileControlsBloc extends ControlsBloc {
@@ -44,8 +45,13 @@ class MobileControlsBloc extends ControlsBloc {
   }
 
   @override
-  void bomb() {
+  void startBomb() {
     acitionsWs.send([Bits.bomb].toBytes());
+  }
+
+  @override
+  void stopBomb() {
+    // TODO: implement stopBomb
   }
 
   // TODO use int's
@@ -74,10 +80,11 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
     PhysicalKeyboardKey.keyA: Bits.a,
     PhysicalKeyboardKey.keyD: Bits.d,
     PhysicalKeyboardKey.keyP: Bits.bullet,
+    PhysicalKeyboardKey.keyB: Bits.bomb,
   };
 
   final actionsMap = {
-    PhysicalKeyboardKey.keyB: Bits.bomb,
+    // PhysicalKeyboardKey.keyB: Bits.bomb,
     PhysicalKeyboardKey.space: Bits.dash,
   };
 
@@ -140,8 +147,15 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
   }
 
   @override
-  void bomb() {
-    acitionsWs.send([Bits.bomb].toBytes());
+  void startBomb() {
+    _keys = _keys | Bits.bomb;
+    _sendPlayerState();
+  }
+
+  @override
+  void stopBomb() {
+    _keys = _keys & ~Bits.bomb;
+    _sendPlayerState();
   }
 
   void _sendPlayerState() {

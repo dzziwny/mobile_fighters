@@ -30,6 +30,7 @@ class DesktopControlsConnection extends OnConnection {
       ..x = x
       ..y = y
       ..angle = angle
-      ..isBullet = state.on(Bits.bullet);
+      ..isBullet = state.on(Bits.bullet)
+      ..isBomb = state.on(Bits.bomb);
   }
 }

@@ -18,16 +18,16 @@ const int sliceTimeMicroseconds = 5000;
 const double sliceTimeMicrosecondsDouble = sliceTimeMicroseconds + 0.0;
 const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 
-const int bombCooldownSesconds = 2;
-const int dashCooldownSesconds = 1;
+const int dashCooldownSeconds = 1;
 const int pushCooldownMilisesconds = 20;
 const int bulletsCooldownMilisesconds = 100;
+const int bombCooldownMiliseconds = 2000;
 
 // DIMENSIONS
 const double attackLength = 200.0;
-const double attackAreaRadius = 100.0;
-const double attackAreaDiameter = attackAreaRadius * 2;
-const double attackAreaRadiusSquared = attackAreaRadius * attackAreaRadius;
+const double bombAreaRadius = 100.0;
+const double bombAreaDiameter = bombAreaRadius * 2;
+const double bombAreaRadiusSquared = bombAreaRadius * bombAreaRadius;
 const double bombRange = 1000;
 
 // PLAYERS FEATURES
@@ -68,4 +68,4 @@ final gamePhysics = GamePhysics();
 
 // ATTACKS
 const initBulletScale = 2000.0;
-const initBombScale = 200.0;
+const initBombVelocityScale = 1000.0;

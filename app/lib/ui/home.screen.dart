@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:bubble_fight/di.dart';
@@ -137,6 +138,12 @@ class _GamePhysicsColumnState extends State<GamePhysicsColumn> {
             },
             child: const Text('Apply'),
           ),
+          MaterialButton(
+            onPressed: () {
+              exit(0);
+            },
+            child: const Text('Exit'),
+          ),
         ],
       ),
     );
@@ -161,7 +168,7 @@ class _AttacksButtons extends StatelessWidget {
         const SizedBox(width: 32.0),
         IconButton(
           color: theme.colorScheme.background,
-          onPressed: player.isBombCooldown == 1 ? null : controlsBloc.bomb,
+          onPressed: player.isBombCooldown == 1 ? null : controlsBloc.startBomb,
           icon: const Icon(Icons.sunny),
         ),
         const SizedBox(width: 32.0),

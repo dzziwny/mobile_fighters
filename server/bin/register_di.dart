@@ -8,7 +8,12 @@ final playerInputs = List.generate(10, (id) => PlayerControlsState(id));
 final actionsStates = List.generate(10, (id) => ActionsState(id));
 
 final bulletTimers = List.generate(
-  10,
+  maxPlayers,
+  (_) => Timer(Duration.zero, () {})..cancel(),
+);
+
+final bombTimers = List.generate(
+  maxPlayers,
   (_) => Timer(Duration.zero, () {})..cancel(),
 );
 

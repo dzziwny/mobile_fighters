@@ -10,14 +10,13 @@ class Bits {
   // 0x00010000
   static const int d = 0x10;
 
-  // 0x00001000
-  static const int bullet = 0x08;
-
   // ---------------- ATTACKS ----------------
 
+  // 0x00001000
+  static const int bullet = 0x08;
   // 0x00000100
   static const int bomb = 0x04;
-  // 0x00000100
+  // 0x00000010
   static const int dash = 0x02;
 
   static const int x = a | d;

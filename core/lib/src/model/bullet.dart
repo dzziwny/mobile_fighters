@@ -61,6 +61,7 @@ class BulletViewModel {
 class Bullet extends BulletViewModel {
   final int id;
   int shooterId;
+
   Vector2 velocity;
   Vector2 startPosition;
 

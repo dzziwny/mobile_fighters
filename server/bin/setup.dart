@@ -8,16 +8,13 @@ final guids = <String, int>{};
 final playerMetadatas =
     UnmodifiableListView(List.generate(maxPlayers, Player.empty));
 final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));
-final currentBullets = List.generate(
-  maxPlayers,
-  (index) => index * maxBullePerPlayer,
-);
-
+final currentBullets = List.generate(maxPlayers, (i) => i * maxBullePerPlayer);
+final bombs = UnmodifiableListView(List.generate(maxBombs, Bomb.empty));
+final currentBombs = List.generate(maxPlayers, (i) => i * maxBombsPerPlayer);
 final players = UnmodifiableListView(List.generate(maxPlayers, Player.empty));
 final frags = List.filled(maxPlayers, 0);
 final actions =
     UnmodifiableListView(List.generate(maxPlayers, (id) => ActionsState(id)));
-final bombs = UnmodifiableListView(List.generate(maxPlayers, Bomb.empty));
 final hits = UnmodifiableListView(List.generate(maxPlayers, HitDto.empty));
 
 /*
