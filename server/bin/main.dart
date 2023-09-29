@@ -77,7 +77,6 @@ void update() {
 
 void _executeActions() {
   for (var i = 0; i < maxPlayers; i++) {
-    // TODO sprawdz czy aby nie zatrzymuje za kazdym razem
     if (playerInputs[i].isBullet && !bulletTimers[i].isActive) {
       startBulletLoop(playerInputs[i], i);
     }
@@ -85,37 +84,8 @@ void _executeActions() {
     if (playerInputs[i].isBomb && !bombTimers[i].isActive) {
       startBombLoop(playerInputs[i], i);
     }
-    // _registerAction(actionsStates[i]);
   }
-
-  // final registrations = actionsStates.map(_registerAction);
-  // registrations;
 }
-
-// void _registerAction(ActionsState state) {
-//   if (!state.isBombCooldown) {
-//     state.isBombCooldown = true;
-//     if (state.bomb) {
-//       createBomb(state.id);
-//       Timer(Duration(seconds: bombCooldownMiliseconds), () {
-//         state.isBombCooldown = false;
-//         state.bomb = true;
-//       });
-//     }
-//   }
-
-//   if (!state.isDashCooldown) {
-//     state.isDashCooldown = true;
-//     if (state.dash) {
-//       // TODO
-//       // startDash();
-//       Timer(Duration(seconds: dashCooldownSeconds), () {
-//         state.isDashCooldown = false;
-//         state.dash = true;
-//       });
-//     }
-//   }
-// }
 
 void _physicUpdate() {
   _bulletsPhysicUpdate();
@@ -144,24 +114,33 @@ void _playersPhysicUpdate() {
 
 void startBulletLoop(PlayerControlsState state, int playerId) {
   final firstBullet = playerId * maxBullePerPlayer;
-  final resetCounter = (playerId + 1) * maxBullePerPlayer;
-
+  final reset = (playerId + 1) * maxBullePerPlayer;
+  final timer = bulletTimers[state.playerId];
+  executeBulletStep(state, playerId, timer, firstBullet, reset);
   bulletTimers[state.playerId] = Timer.periodic(
     bulletsCooldown,
-    (timer) {
-      if (!state.isBullet) {
-        timer.cancel();
-      }
-
-      var currentBullet = currentBullets[playerId];
-      if (currentBullet == resetCounter) {
-        currentBullet = firstBullet;
-      }
-
-      createBullet(currentBullet, state.playerId);
-      currentBullets[playerId] = ++currentBullet;
-    },
+    (timer) => executeBulletStep(state, playerId, timer, firstBullet, reset),
   );
+}
+
+void executeBulletStep(
+  PlayerControlsState state,
+  int playerId,
+  Timer timer,
+  int firstBullet,
+  int resetCounter,
+) {
+  if (!state.isBullet) {
+    timer.cancel();
+  }
+
+  var currentBullet = currentBullets[playerId];
+  if (currentBullet == resetCounter) {
+    currentBullet = firstBullet;
+  }
+
+  createBullet(currentBullet, state.playerId);
+  currentBullets[playerId] = ++currentBullet;
 }
 
 void startBombLoop(PlayerControlsState state, int playerId) {
