@@ -7,7 +7,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'actions/bomb_actions.dart';
+import 'bomb.physic.dart';
 import 'bomb_loop.dart';
 import 'bullet.physic.dart';
 import 'bullet_loop.dart';
@@ -15,7 +15,6 @@ import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
 import 'handler/mobile_controls.connection.dart';
 import 'handler/on_connection.dart';
-import 'inputs/player_state_input.dart';
 import 'register_di.dart';
 import 'setup.dart';
 import 'updates/_updates.dart';
@@ -85,27 +84,16 @@ void _executeActions() {
 }
 
 void _physicUpdate() {
-  _bulletsPhysicUpdate();
-  _bombsPhysicUpdate();
-  _playersPhysicUpdate();
-}
-
-void _bulletsPhysicUpdate() {
   for (var i = 0; i < maxBullets; i++) {
     bulletPhysicUpdate(bullets[i], sliceTimeSeconds);
   }
-}
 
-void _bombsPhysicUpdate() {
-  for (var i = 0; i < maxPlayers; i++) {
+  for (var i = 0; i < maxBombs; i++) {
     bombPhysicUpdate(bombs[i], sliceTimeSeconds);
   }
-}
 
-void _playersPhysicUpdate() {
   for (var i = 0; i < maxPlayers; i++) {
-    final state = playerInputs[i];
-    playerPhysicUpdate(state);
+    playerPhysicUpdate(playerInputs[i]);
   }
 }
 

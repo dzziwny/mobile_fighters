@@ -90,6 +90,12 @@ class Bullet extends BulletViewModel implements Ammunition {
       );
 
   static int bytesCount = Bullet.empty(0).toBytes().length * maxBullets;
+
+  @override
+  void reset() {
+    position = Vector2.zero();
+    velocity = Vector2.zero();
+  }
 }
 
 extension BulletsToBytes on List<Bullet> {

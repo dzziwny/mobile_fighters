@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import 'actions/bomb_actions.dart';
+import 'bomb.physic.dart';
 import 'setup.dart';
 
 void bulletPhysicUpdate(Bullet bullet, double dt) {
@@ -25,6 +25,7 @@ void bulletPhysicUpdate(Bullet bullet, double dt) {
   if (player != null) {
     _hitPlayer(bullet, player, player.id);
     bullets[bullet.id].isActive = false;
+    bullet.reset();
     return;
   }
 
@@ -43,7 +44,8 @@ Player? _isHit(Bullet bullet) {
       physic.y.toDouble(),
     );
 
-    if (bullet.position.distanceToSquared(position) < bulletRadiusSquared) {
+    if (bullet.position.distanceToSquared(position) <
+        bulletPlayerCollisionDistanceSquare) {
       return physic;
     }
   }

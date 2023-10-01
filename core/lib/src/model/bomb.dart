@@ -5,28 +5,18 @@ import 'package:vector_math/vector_math.dart';
 
 import 'ammunition.dart';
 
-class Bomb implements Ammunition {
+class Bomb extends Ammunition {
   int id;
-  @override
-  int shooterId;
-  @override
-  double angle;
-  @override
-  Vector2 startPosition;
-  @override
-  Vector2 position;
-  @override
-  Vector2 velocity;
   bool isActive;
 
   Bomb({
     required this.id,
-    required this.shooterId,
-    required this.angle,
-    required this.position,
-    required this.velocity,
+    required super.shooterId,
     required this.isActive,
-  }) : startPosition = position;
+    required super.angle,
+    required super.position,
+    required super.velocity,
+  }) : super(startPosition: position);
 
   factory Bomb.empty(int id) => Bomb(
         id: id,

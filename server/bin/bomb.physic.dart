@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../setup.dart';
+import 'setup.dart';
 
 void bombPhysicUpdate(Bomb bomb, double dt) {
   final velocityUpdate = bomb.velocity * dt;
@@ -26,6 +26,7 @@ void bombPhysicUpdate(Bomb bomb, double dt) {
   if (player != null) {
     _hitPlayer(bomb, player, player.id);
     bombs[bomb.id].isActive = false;
+    bomb.reset();
     return;
   }
 
@@ -45,7 +46,7 @@ Player? _isHit(Bomb bomb) {
             physic.y.toDouble(),
           ),
         ) <
-        bombRadius) {
+        bombPlayerCollisionDistanceSquare) {
       return physic;
     }
   }

@@ -14,4 +14,9 @@ abstract class Ammunition {
     required this.position,
     required this.velocity,
   });
+
+  void reset() {
+    position = Vector2.zero();
+    velocity = Vector2.zero();
+  }
 }

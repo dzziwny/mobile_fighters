@@ -19,6 +19,7 @@ const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
 
 const playerRadius = 40.0;
+const playerRadiusSquare = playerRadius * playerRadius;
 const playerDiameter = playerRadius * 2;
 const playerPhoneHeight = playerDiameter + 64.0;
 const playerPhoneWidth = playerDiameter + 9.0;
@@ -64,6 +65,8 @@ const double bulletDiameter = 2 * bulletRadius;
 const double bulletRadiusSquared = bulletRadius * bulletRadius;
 const double bulletDistance = 316.0;
 const double bulletDistanceSquared = bulletDistance * bulletDistance;
+const double bulletPlayerCollisionDistanceSquare =
+    bulletRadiusSquared + playerRadiusSquare;
 const bulletsCooldown = Duration(milliseconds: 100);
 const int bulletPower = 10;
 
@@ -76,5 +79,7 @@ const double bombDiameter = bombRadius * 2;
 const double bombRadiusSquared = bombRadius * bombRadius;
 const double bombDistance = 500.0;
 const double bombDistanceSquare = bombDistance * bombDistance;
+const double bombPlayerCollisionDistanceSquare =
+    bombRadiusSquared + playerRadiusSquare;
 const bombCooldown = Duration(seconds: 2);
 const int bombPower = 70;
