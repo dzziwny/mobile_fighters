@@ -7,10 +7,10 @@ import 'setup.dart';
 void bulletPhysicUpdate(Bullet bullet, double dt) {
   final velocityUpdate = bullet.velocity * dt;
   final position = bullet.position + velocityUpdate;
-  if (position.x < boardStartX ||
-      position.x > boardEndX ||
-      position.y < boardStartY ||
-      position.y > boardEndY) {
+  if (position.x < battleGroundStartX ||
+      position.x > battleGroundEndX ||
+      position.y < battleGroundStartY ||
+      position.y > battleGroundEndY) {
     bullets[bullet.id].isActive = false;
     return;
   }

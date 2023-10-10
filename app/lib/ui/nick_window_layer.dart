@@ -40,8 +40,8 @@ class _NickWindowLayerState extends State<NickWindowLayer> {
       child: Center(
         child: FittedBox(
           child: SizedBox(
-            width: borderWidth,
-            height: borderHeight,
+            width: screenWidth,
+            height: screenHeight,
             child: Center(
               child: SizedBox(
                 height: 500.0,

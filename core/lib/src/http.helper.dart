@@ -19,9 +19,9 @@ final host = '0.0.0.0';
 // final host = '10.254.33.19';
 final base = 'http://$host:$port';
 
-Future<ConnectFromServerDto> connect$(String guid) async {
+Future<ConnectFromServerDto> connect$(String guid, String ip) async {
   final response = await post(
-    Uri.parse('$base${Endpoint.connect}'),
+    Uri.parse('$ip${Endpoint.connect}'),
     body: jsonEncode(
       ConnectToServerDto(guid: guid).toJson(),
     ),

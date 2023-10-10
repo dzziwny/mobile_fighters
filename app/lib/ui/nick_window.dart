@@ -19,6 +19,9 @@ class _NickWindowState extends State<NickWindow> {
   final nickController = TextEditingController(
     text: kDebugMode ? defaultTargetPlatform.name : null,
   );
+  final ipController = TextEditingController(
+    text: base,
+  );
 
   int selectedIndex = 0;
   var selectedDevice = Device.pixel;
@@ -51,6 +54,30 @@ class _NickWindowState extends State<NickWindow> {
                           ),
                           onChanged: (value) => setState(() {}),
                           maxLength: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
+                Flexible(
+                  child: Card(
+                    child: SizedBox(
+                      width: 240.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TextField(
+                          controller: ipController,
+                          decoration: const InputDecoration(
+                            labelText: 'Server',
+                            counterText: '',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) => setState(() {}),
                         ),
                       ),
                     ),
@@ -116,7 +143,8 @@ class _NickWindowState extends State<NickWindow> {
                               label: const Text('Play'),
                               onPressed: nickController.text == ''
                                   ? null
-                                  : () {
+                                  : () async {
+                                      await client.connect(ipController.text);
                                       client.createPlayer(
                                         nickController.text,
                                         selectedDevice,

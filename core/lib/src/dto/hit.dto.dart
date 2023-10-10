@@ -14,7 +14,7 @@ class HitDto {
   factory HitDto.fromBytes(Uint8List bytes) =>
       HitDto(playerId: bytes[0], hp: bytes[1].toDouble());
 
-  factory HitDto.empty(int id) => HitDto(playerId: id, hp: startHpDouble);
+  factory HitDto.empty(int id) => HitDto(playerId: id, hp: startHp);
 
   static List<HitDto> hitsFromBytes(Uint8List bytes) {
     final hits = <HitDto>[];

@@ -15,8 +15,8 @@ class ServerClient implements Disposable {
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
 
-  Future<void> connect() async {
-    final response = await connect$(_guid);
+  Future<void> connect(String ip) async {
+    final response = await connect$(_guid, ip);
     id = response.id;
   }
 

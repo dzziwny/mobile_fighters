@@ -30,10 +30,10 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
   final team = _selectTeam();
   var x = Random().nextInt(respawnWidth);
   if (team == Team.red) {
-    x = boardWidth - x;
+    x = battleGroundWidth - x;
   }
 
-  final y = Random().nextInt(boardHeight);
+  final y = Random().nextInt(battleGroundHeight);
   final angle = Random().nextInt(100) / 10.0;
 
   players[id]
@@ -45,7 +45,7 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
     ..nick = dto.nick
     ..team = team
     ..device = dto.device
-    ..hp = startHpDouble;
+    ..hp = startHp;
 
   shareGameData();
 }

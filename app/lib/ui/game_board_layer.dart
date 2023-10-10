@@ -2,6 +2,7 @@ import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/game_board.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math.dart';
@@ -27,15 +28,15 @@ class GameBoardLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final halfWidth = mediaQuery.size.width / 2;
-    final halfHeight = mediaQuery.size.height / 2;
+    final halfScreenWidth = mediaQuery.size.width / 2;
+    final halfScreenHeight = mediaQuery.size.height / 2;
     const frame = GameFrame(
-      sizex: boardWidth,
-      sizey: boardHeight,
+      sizex: battleGroundWidth,
+      sizey: battleGroundHeight,
     );
 
-    double frameWidth = frame.sizex + borderHorizontalPadding * 2;
-    double frameHeight = frame.sizey + borderVerticalPadding * 2;
+    double frameWidth = frame.sizex + battleGroundFrameHorizontalThickness * 2;
+    double frameHeight = frame.sizey + battleGroundFrameVerticalThickness * 2;
 
     return Positioned.fill(
       child: Listener(
@@ -44,11 +45,11 @@ class GameBoardLayer extends StatelessWidget {
         onPointerMove: isMobile
             ? null
             : (PointerMoveEvent event) =>
-                onPointerMove(event, halfWidth, halfHeight),
+                onPointerMove(event, halfScreenWidth, halfScreenHeight),
         onPointerHover: isMobile
             ? null
             : (PointerHoverEvent event) =>
-                onPointerMove(event, halfWidth, halfHeight),
+                onPointerMove(event, halfScreenWidth, halfScreenHeight),
         child: KeyboardListener(
           focusNode: gameBoardFocusNode,
           child: FittedBox(
@@ -61,8 +62,8 @@ class GameBoardLayer extends StatelessWidget {
                   image: AssetImage("assets/cosmos_background.gif"),
                 ),
               ),
-              width: borderWidth,
-              height: borderHeight,
+              width: screenWidth,
+              height: screenHeight,
               child: ClipRect(
                 child: ClippedBoard(
                   frameWidth: frameWidth,
@@ -126,9 +127,9 @@ class _ClippedBoardState extends AutoRefreshState<ClippedBoard> {
   Widget build(BuildContext context) {
     final player = gameService.gameState.players[client.id];
     var x = (player.x - widget.frame.sizex / 2) /
-        ((widget.frameWidth - borderWidth) / 2);
+        ((widget.frameWidth - screenWidth) / 2);
     var y = (player.y - widget.frame.sizey / 2) /
-        ((widget.frameHeight - borderHeight) / 2);
+        ((widget.frameHeight - screenHeight) / 2);
     return OverflowBox(
       maxWidth: double.infinity,
       maxHeight: double.infinity,

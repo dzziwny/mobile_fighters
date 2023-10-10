@@ -34,8 +34,8 @@ class GameBoard extends StatelessWidget {
             ],
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: borderVerticalPadding,
-            horizontal: borderHorizontalPadding,
+            vertical: battleGroundFrameVerticalThickness,
+            horizontal: battleGroundFrameHorizontalThickness,
           ),
           child: Container(
             clipBehavior: Clip.hardEdge,

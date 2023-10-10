@@ -95,7 +95,7 @@ class Player extends PlayerViewModel {
     super.x = 0.0,
     super.y = 0.0,
     super.angle = 0.0,
-    super.hp = startHpDouble,
+    super.hp = startHp,
     super.isDashCooldown = 0,
     super.isBombCooldown = 0,
   });

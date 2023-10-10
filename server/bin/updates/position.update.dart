@@ -7,39 +7,41 @@ import '../inputs/player_state_input.dart';
 import '../setup.dart';
 
 double _resolveX(Player player, double dt, Vector2 momentum) {
+  // TODO co to jest xd ???
   if (momentum.isNaN) {
-    return 0.0;
-  }
-  var x = player.x + momentum.x * dt;
-  if (x > boardWidthDouble) {
-    return boardWidthDouble;
+    return battleGroundStartX;
   }
 
-  if (x < 0.0) {
-    return 0.0;
+  var x = player.x + momentum.x * dt;
+  if (x > battleGroundEndX) {
+    return battleGroundEndX;
+  }
+
+  if (x < battleGroundStartX) {
+    return battleGroundStartX;
   }
 
   return x;
 }
 
 double _resolveY(Player physic, double dt, Vector2 force) {
+  // TODO co to jest xd ???
+
   if (force.isNaN) {
-    return 0.0;
+    return battleGroundStartY;
   }
 
   var y = physic.y + force.y * dt;
-  if (y > boardHeightDouble) {
-    return boardHeightDouble;
+  if (y > battleGroundEndY) {
+    return battleGroundEndY;
   }
 
-  if (y < 0.0) {
-    return 0.0;
+  if (y < battleGroundStartY) {
+    return battleGroundStartY;
   }
 
   return y;
 }
-
-int lastX = 0;
 
 Future<void> playerPhysicUpdate(
   PlayerControlsState state,
@@ -65,10 +67,10 @@ Future<void> playerPhysicUpdate(
     ..angle = state.angle;
 
   /// Boundary bouncing
-  if (player.y == boardHeight || player.y == 0.0) {
+  if (player.y == battleGroundStartY || player.y == battleGroundEndY) {
     player.velocityY = -player.velocityY;
   }
-  if (player.x == boardWidth || player.x == 0.0) {
+  if (player.x == battleGroundStartX || player.x == battleGroundEndX) {
     player.velocityX = -player.velocityX;
   }
 }

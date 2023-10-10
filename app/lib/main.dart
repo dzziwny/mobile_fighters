@@ -15,7 +15,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  await client.connect();
+  // await client.connect();
   runApp(const App());
 }
 

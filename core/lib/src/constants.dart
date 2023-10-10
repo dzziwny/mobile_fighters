@@ -3,17 +3,15 @@ import 'package:core/src/model/_model.dart';
 
 const maxPlayers = 10;
 
-// If there are lags, try make sliceTime smaller
+/// Set the desired frame rate (e.g., 60 frames per second)
+const frameRate = Duration(milliseconds: 1000 ~/ 60);
+
+/// If there are lags, try make sliceTime smaller
 const int sliceTimeMicroseconds = 5000;
-const double sliceTimeMicrosecondsDouble = sliceTimeMicroseconds + 0.0;
 const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 
-const int dashCooldownSeconds = 1;
-const int pushCooldownMilisesconds = 20;
-
 // PLAYERS FEATURES
-const int startHp = 210;
-const double startHpDouble = 210.0;
+const double startHp = 210.0;
 
 const double normalSpeed = 0.00001;
 const double dashSpeed = 0.00005;
@@ -25,26 +23,23 @@ const playerPhoneHeight = playerDiameter + 64.0;
 const playerPhoneWidth = playerDiameter + 9.0;
 
 // BOARD
-const int boardWidth = 0xfff;
-const int boardHeight = 0x777;
+const int battleGroundWidth = 0xfff;
+const int battleGroundHeight = 0x777;
 
-const double boardWidthDouble = boardWidth + 0.0;
-const double boardHeightDouble = boardHeight + 0.0;
+const double battleGroundStartX = 0.0;
+const double battleGroundEndX = battleGroundStartX + battleGroundWidth;
 
-const double boardStartX = 0.0;
-const double boardEndX = boardStartX + boardWidthDouble;
+const double battleGroundStartY = 0.0;
+const double battleGroundEndY = battleGroundStartY + battleGroundHeight;
 
-const double boardStartY = 0.0;
-const double boardEndY = boardStartY + boardHeightDouble;
+const double battleGroundFrameHorizontalThickness = 40.0;
+const double battleGroundFrameVerticalThickness = 10.0;
 
-const double borderHorizontalPadding = 40.0;
-const double borderVerticalPadding = 10.0;
-
-const boardScreenRatio = boardHeight / boardWidth;
+const battleGroundScreenRatio = battleGroundHeight / battleGroundWidth;
 
 // Ultra HD xddd
-const borderWidth = 1000.0;
-const borderHeight = borderWidth * boardScreenRatio;
+const screenWidth = 1000.0;
+const screenHeight = screenWidth * battleGroundScreenRatio;
 
 // RESPAWNS
 const int respawnWidth = 150;

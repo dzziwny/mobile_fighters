@@ -54,9 +54,6 @@ void main(List<String> args) async {
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
 
-  // Set the desired frame rate (e.g., 60 frames per second)
-  final frameRate = Duration(milliseconds: 1000 ~/ 60);
-
   Timer.periodic(frameRate, (_) {
     final now = DateTime.now().microsecondsSinceEpoch;
     final dt = now - lastUpdateTime;

@@ -16,7 +16,9 @@ Future<Response> connectHandler(Request request) async {
 
   for (var i = 0; i < maxPlayers; i++) {
     if (!playerMetadatas[i].isActive) {
+      playerMetadatas[i].isActive = true;
       id = i;
+      break;
     }
   }
 

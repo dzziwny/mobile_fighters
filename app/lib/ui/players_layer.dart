@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 
 import 'auto_refresh_state.dart';
 
-class PlayersLayer extends StatelessWidget {
+class PlayersLayer extends StatefulWidget {
   const PlayersLayer({super.key});
 
+  @override
+  State<PlayersLayer> createState() => _PlayersLayerState();
+}
+
+class _PlayersLayerState extends AutoRefreshState<PlayersLayer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -22,7 +27,7 @@ class PlayersLayer extends StatelessWidget {
   }
 }
 
-class _Player extends StatefulWidget {
+class _Player extends StatelessWidget {
   const _Player({
     required this.id,
     required this.theme,
@@ -35,13 +40,8 @@ class _Player extends StatefulWidget {
   static const _playerWidthOffest = fullPlayerAreaWidth / 2.0;
 
   @override
-  State<_Player> createState() => _PlayerState();
-}
-
-class _PlayerState extends AutoRefreshState<_Player> {
-  @override
   Widget build(BuildContext context) {
-    final player = gameService.gameState.players[widget.id];
+    final player = gameService.gameState.players[id];
     return Positioned(
       top: player.y - _Player._playerHeightOffest,
       left: player.x - _Player._playerWidthOffest,
@@ -57,11 +57,11 @@ class _PlayerState extends AutoRefreshState<_Player> {
                 child: SizedBox(
                   width: 300.0,
                   child: Slider(
-                    thumbColor: widget.theme.colorScheme.error,
-                    activeColor: widget.theme.colorScheme.error,
+                    thumbColor: theme.colorScheme.error,
+                    activeColor: theme.colorScheme.error,
                     value:
                         gameService.gameState.players[player.id].hp.toDouble(),
-                    max: startHpDouble,
+                    max: startHp,
                     onChanged: (double value) {},
                   ),
                 ),

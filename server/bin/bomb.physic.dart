@@ -8,10 +8,10 @@ import 'setup.dart';
 void bombPhysicUpdate(Bomb bomb, double dt) {
   final velocityUpdate = bomb.velocity * dt;
   final position = bomb.position + velocityUpdate;
-  if (position.x < boardStartX ||
-      position.x > boardEndX ||
-      position.y < boardStartY ||
-      position.y > boardEndY) {
+  if (position.x < battleGroundStartX ||
+      position.x > battleGroundEndX ||
+      position.y < battleGroundStartY ||
+      position.y > battleGroundEndY) {
     bombs[bomb.id].isActive = false;
     return;
   }
@@ -121,17 +121,17 @@ void handlePlayerDead(int enemyId, int killerId) {
   final playerMetadata = playerMetadatas[enemyId];
 
   // recreate player
-  var respawnX = Random().nextInt((respawnWidth).toInt());
+  var respawnX = battleGroundStartX + Random().nextInt(respawnWidth);
   if (playerMetadata.team == Team.red) {
-    respawnX = boardWidth - respawnX;
+    respawnX = battleGroundEndX - respawnX;
   }
-  final randomY = Random().nextInt((boardHeight).toInt());
-  final randomAngle = Random().nextInt(100) / 10.0;
+  final respawnY = battleGroundStartY + Random().nextInt(battleGroundHeight);
+  final respawnAngle = Random().nextInt(100) / 10.0;
   player
-    ..x = respawnX.toDouble()
-    ..y = randomY.toDouble()
-    ..angle = randomAngle
-    ..hp = startHpDouble
+    ..x = respawnX
+    ..y = respawnY
+    ..angle = respawnAngle
+    ..hp = startHp
     ..isBombCooldown = 0
     ..isDashCooldown = 0;
 
