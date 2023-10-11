@@ -10,13 +10,13 @@ import 'player.dart';
 class GameState {
   final List<PlayerViewModel> players;
   final List<BombView> bombs;
-  final List<HitDto> hits;
+  final List<int> hits;
   final List<BulletViewModel> bullets;
 
   factory GameState.empty() => GameState(
         List.generate(maxPlayers, PlayerViewModel.empty),
         List.generate(maxBombs, BombView.empty),
-        List.generate(maxPlayers, HitDto.empty),
+        List.filled(maxPlayers, 0),
         List.generate(maxBullets, Bullet.empty),
       );
 
@@ -39,30 +39,17 @@ class GameState {
     neededBytes = leftBytes.sublist(0, Bomb.allBytesCount);
     final bombs = BombView.listFromBytes(neededBytes);
 
-    // var leftBytes = bytes.sublist(positionsBytesLength);
-    // const bombsBytesLength = 4 * maxPlayers;
-    // final bombsBytes = leftBytes.sublist(0, bombsBytesLength);
-    // final bombs = BombView.listFromBytes(bombsBytes);
+    leftBytes = leftBytes.sublist(neededBytes.length);
+    neededBytes = leftBytes.sublist(0, maxPlayers);
+    final hits = neededBytes;
 
-    // leftBytes = leftBytes.sublist(1 + bombsBytesLength);
-    // final hitsLenght = leftBytes[0];
-    // final hitsBytesLength = hitsLenght * 2;
-    // final hitsBytes = leftBytes.sublist(1, 1 + hitsBytesLength);
-    // final hits = HitDto.hitsFromBytes(hitsBytes);
-
-    // leftBytes = leftBytes.sublist(1 + bulletsBytesLength);
-    // final fragsLenght = leftBytes[0];
-    // final fragsBytesLength = fragsLenght * 2;
-    // final frags = leftBytes.sublist(1, 1 + fragsBytesLength);
-
-    // return GameState(positions, bombs, hits, bullets, frags);
-    return GameState(players, bombs, [], bullets);
+    return GameState(players, bombs, hits, bullets);
   }
 
   static Uint8List bytes(
     List<Player> players,
     List<Bomb> bombs,
-    List<HitDto> hits,
+    List<int> hits,
     List<Bullet> bullets,
     List<int> frags,
   ) {
@@ -70,6 +57,7 @@ class GameState {
     builder.add(players.toBytes());
     builder.add(bullets.toBytes());
     builder.add(bombs.toBytes());
+    builder.add(hits);
 
     return builder.toBytes();
   }

@@ -10,12 +10,19 @@ class MobileControlsConnection extends OnConnection {
   void onData(int playerId, Uint8List data) {
     final keysState = data[0];
     final x = data.toDouble(1, 5);
-    final y = data.toDouble(5, 9);
-    final angle = data.toDouble(9, 13);
+    if (x > 1.0 || x < -1.0) {
+      return;
+    }
 
+    final y = data.toDouble(5, 9);
+    if (y > 1.0 || y < -1.0) {
+      return;
+    }
+
+    final angle = data.toDouble(9, 13);
     playerInputs[playerId]
-      ..x = x
-      ..y = y
+      ..x = x * gamePhysics.f
+      ..y = y * gamePhysics.f
       ..angle = angle
       ..isBullet = keysState.on(Bits.bullet);
   }

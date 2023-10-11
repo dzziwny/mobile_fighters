@@ -13,9 +13,9 @@ final bombs = UnmodifiableListView(List.generate(maxBombs, Bomb.empty));
 final currentBombs = List.generate(maxPlayers, (i) => i * maxBombsPerPlayer);
 final players = UnmodifiableListView(List.generate(maxPlayers, Player.empty));
 final frags = List.filled(maxPlayers, 0);
+final hits = List.filled(maxPlayers, 0);
 final actions =
     UnmodifiableListView(List.generate(maxPlayers, (id) => ActionsState(id)));
-final hits = UnmodifiableListView(List.generate(maxPlayers, HitDto.empty));
 
 /*
 * Teams

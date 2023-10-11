@@ -9,8 +9,8 @@ class ControlsLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 70.0,
-      left: 70.0,
+      bottom: 32.0,
+      left: 32.0,
       child: Opacity(
         opacity: 0.8,
         child: isMobile ? const Joystic() : const Keyboard(),

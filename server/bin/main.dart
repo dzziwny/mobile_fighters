@@ -103,9 +103,8 @@ void draw() {
     frags,
   );
 
-  // TODO
   // bombs = [];
-  // hits = [];
+  hits.fillRange(0, maxPlayers.bitLength, 0);
 
   for (var channel in gameStateChannels) {
     channel.sink.add(bytes);

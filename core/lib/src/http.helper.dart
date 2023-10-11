@@ -33,12 +33,13 @@ Future<ConnectFromServerDto> connect$(String guid, String ip) async {
 
 Future<void> createPlayer$(
   String guid,
+  String ip,
   int id,
   String nick,
   Device device,
 ) async {
   final response = await post(
-    Uri.parse('$base${Endpoint.startGame}'),
+    Uri.parse('$ip${Endpoint.startGame}'),
     body: jsonEncode(
       CreatePlayerDtoRequest(
         guid: guid,
@@ -54,23 +55,25 @@ Future<void> createPlayer$(
   }
 }
 
-Future<GameFrame> gameFrame$() async {
+Future<GameFrame> gameFrame$(
+  String ip,
+) async {
   final response = await get(
-    Uri.parse('$base${Endpoint.gameFrame}'),
+    Uri.parse('$ip${Endpoint.gameFrame}'),
   );
 
   final frame = GameFrame.fromJson(jsonDecode(response.body));
   return frame;
 }
 
-Future<void> leaveGame$(String guid, int id) => post(
-      Uri.parse('$base${Endpoint.leaveGame}'),
+Future<void> leaveGame$(String guid, int id, String ip) => post(
+      Uri.parse('$ip${Endpoint.leaveGame}'),
       body: jsonEncode(
         LeaveGameDtoRequest(guid: guid, id: id).toJson(),
       ),
     );
 
-Future<void> setGamePhysics(GamePhysics physics) => post(
-      Uri.parse('$base${Endpoint.setGamePhysics}'),
+Future<void> setGamePhysics$(GamePhysics physics, String ip) => post(
+      Uri.parse('$ip${Endpoint.setGamePhysics}'),
       body: physics.toString(),
     );

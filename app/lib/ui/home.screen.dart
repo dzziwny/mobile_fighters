@@ -43,22 +43,22 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.onBackground,
-      body: const Row(
+      body: Row(
         children: [
           Expanded(
             child: Stack(
               children: [
-                GameBoardLayer(),
-                SightLayer(),
-                HitReactionLayer(),
-                ControlsLayer(),
-                NickWindowLayer(),
+                const GameBoardLayer(),
+                if (!isMobile) const SightLayer(),
+                const HitReactionLayer(),
+                const ControlsLayer(),
+                const NickWindowLayer(),
                 // LinesLayer(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [_AttacksButtons(), SizedBox(height: 32.0)],
-                ),
-                Padding(
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [_AttacksButtons(), SizedBox(height: 32.0)],
+                // ),
+                const Padding(
                   padding: EdgeInsets.all(32.0),
                   child: Row(
                     children: [
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          if (kDebugMode) GamePhysicsColumn(),
+          if (kDebug) const GamePhysicsColumn(),
         ],
       ),
     );
@@ -126,7 +126,7 @@ class _GamePhysicsColumnState extends State<GamePhysicsColumn> {
           ),
           MaterialButton(
             onPressed: () async {
-              await setGamePhysics(gamepPhysics);
+              await client.setGamePhysics(gamepPhysics);
               if (!mounted) {
                 return;
               }

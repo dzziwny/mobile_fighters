@@ -17,74 +17,51 @@ class _JoysticState extends State<Joystic> {
   var knobPosition = const Offset(65.0, 65.0);
   double angle = 0.0;
 
+  final controlBloc = controlsBloc as MobileControlsBloc;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (TapDownDetails details) {
-        var offset = details.localPosition;
-        const center = Offset(65.0, 65.0);
-        final relativeOffset = (offset - center) / 10.0;
-        angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
-        (controlsBloc as MobileControlsBloc)
-            .updateKnob(relativeOffset.dx, relativeOffset.dy);
-        positionBloc.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
-
-        setState(() {
-          knobPosition = details.localPosition;
-        });
-      },
-      onTapUp: (_) {
-        const offset = Offset(65.0, 65.0);
-        updateKnobButAngle(offset);
-        setState(() {
-          knobPosition = offset;
-        });
+        update(details.localPosition);
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
-        var offset = details.localFocalPoint;
-        update(offset);
+        update(details.localFocalPoint);
+      },
+      onTapUp: (_) {
+        update(const Offset(65.0, 65.0), skipAngle: true);
       },
       onScaleEnd: (_) {
-        const offset = Offset(65.0, 65.0);
-        updateKnobButAngle(offset);
-        setState(() {
-          knobPosition = offset;
-        });
+        update(const Offset(65.0, 65.0), skipAngle: true);
       },
       child: _Joystic(knobPosition: knobPosition),
     );
   }
 
-  void update(Offset offset) {
+  void update(Offset offset, {skipAngle = false}) {
     const center = Offset(65.0, 65.0);
-    final relativeOffset = offset - center;
+    final relativeOffset = (offset - center) / 10.0 / 5;
     final distance = relativeOffset.distance;
-    angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
-    if (distance <= 50.0) {
+    if (!skipAngle) {
+      angle = screenAngle(Vector2(relativeOffset.dx, relativeOffset.dy));
+    }
+
+    if (distance <= 1.0) {
       setState(() {
         knobPosition = offset;
       });
-      positionBloc.updateKnob(
+      controlBloc.updateKnob(relativeOffset.dx, relativeOffset.dy, angle);
+    } else {
+      final fixedRelative = relativeOffset / distance;
+      setState(() {
+        knobPosition = fixedRelative * 50.0 + center;
+      });
+      controlBloc.updateKnob(
+        fixedRelative.dx,
+        fixedRelative.dy,
         angle,
-        relativeOffset.dx / 10.0,
-        relativeOffset.dy / 10.0,
       );
-      return;
     }
-
-    final fixedRelative = relativeOffset / distance;
-    setState(() {
-      knobPosition = fixedRelative * 50.0 + center;
-    });
-
-    positionBloc.updateKnob(
-        angle, fixedRelative.dx * 5.0, fixedRelative.dy * 5.0);
-  }
-
-  void updateKnobButAngle(Offset offset) {
-    const center = Offset(65.0, 65.0);
-    final relativeOffset = (offset - center) / 10.0;
-    positionBloc.updateKnob(angle, relativeOffset.dx, relativeOffset.dy);
   }
 
   double screenAngle(Vector2 x) =>

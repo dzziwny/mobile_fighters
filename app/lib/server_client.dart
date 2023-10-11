@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'di.dart';
@@ -10,18 +11,22 @@ class ServerClient implements Disposable {
   final _guid = uuid.v4();
 
   int id = 0;
+  String ip = '';
   bool isInGame = false;
+  final connected = Completer();
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
 
   Future<void> connect(String ip) async {
-    final response = await connect$(_guid, ip);
+    this.ip = ip;
+    final response = await connect$(_guid, 'http://$ip');
     id = response.id;
+    connected.complete();
   }
 
   Future<void> createPlayer(String nick, Device device) async {
-    await createPlayer$(_guid, id, nick, device);
+    await createPlayer$(_guid, 'http://$ip', id, nick, device);
     isInGame = true;
   }
 
@@ -31,9 +36,12 @@ class ServerClient implements Disposable {
   }
 
   Future<void> leaveGame() async {
-    await leaveGame$(_guid, id);
+    await leaveGame$(_guid, id, 'http://$ip');
     isInGame = false;
   }
+
+  Future<void> setGamePhysics(GamePhysics physics) =>
+      setGamePhysics$(physics, 'http://$ip');
 
   @override
   Future onDispose() async {
@@ -43,13 +51,14 @@ class ServerClient implements Disposable {
     ]);
   }
 
-  Stream<WebSocketChannel> channel(Socket socket) {
-    final uri = Uri.parse('ws://$host:$port${socket.route(id: id)}');
+  Stream<WebSocketChannel> channel(Socket socket) async* {
+    await connected.future;
+    final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
     var channel = WebSocketChannel.connect(uri);
-    return Stream.periodic(const Duration(seconds: 2)).map(
+    yield* Stream.periodic(const Duration(seconds: 2)).map(
       (_) {
         if (channel.closeCode != null || channel.closeReason != null) {
-          final uri = Uri.parse('ws://$host:$port${socket.route(id: id)}');
+          final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
           channel = WebSocketChannel.connect(uri);
         }
 

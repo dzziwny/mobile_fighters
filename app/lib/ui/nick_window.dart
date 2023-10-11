@@ -17,10 +17,12 @@ class NickWindow extends StatefulWidget {
 
 class _NickWindowState extends State<NickWindow> {
   final nickController = TextEditingController(
-    text: kDebugMode ? defaultTargetPlatform.name : null,
+    // text: kDebug ? defaultTargetPlatform.name : null,
+    text: 'elo',
   );
   final ipController = TextEditingController(
-    text: base,
+    // text: base,
+    text: '10.254.33.188:8080',
   );
 
   int selectedIndex = 0;

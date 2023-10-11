@@ -9,6 +9,7 @@ import 'server_client.dart';
 import 'ws.dart';
 
 final client = ServerClient();
+const kDebug = kDebugMode;
 
 final mobileControlsWs =
     Ws(Socket.mobilePlayerStateWs, PlayerViewModel.manyFromBytes);

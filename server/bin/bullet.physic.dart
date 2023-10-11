@@ -63,6 +63,6 @@ void _hitPlayer(
   if (targetPlayer.hp <= 0) {
     handlePlayerDead(targetId, bullet.shooterId);
   } else {
-    drawPlayerHit(targetId, targetPlayer.hp);
+    hits[targetId] = 1;
   }
 }

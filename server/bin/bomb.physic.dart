@@ -64,7 +64,7 @@ void _hitPlayer(
   if (targetPlayer.hp <= 0) {
     handlePlayerDead(targetId, bomb.shooterId);
   } else {
-    drawPlayerHit(targetId, targetPlayer.hp);
+    hits[targetId] = 1;
   }
 }
 
@@ -136,11 +136,4 @@ void handlePlayerDead(int enemyId, int killerId) {
     ..isDashCooldown = 0;
 
   shareGameData();
-
-  // share new hp after respawn
-  drawPlayerHit(enemyId, player.hp);
-}
-
-void drawPlayerHit(int playerId, double hp) {
-  hits[playerId].hp = hp;
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 
 class HitReactionLayer extends StatefulWidget {
@@ -30,15 +31,13 @@ class _HitReactionState extends State<HitReactionLayer>
       vsync: this,
     );
 
-    // TODO
-    // hitSubscription = gameDataWs.data().listen((state) {
-    //   state.players.
-    //   for (var hit in state.hits) {
-    //     if (hit.playerId == id) {
-    //       animateHit();
-    //     }
-    //   }
-    // });
+    hitSubscription = gameStateWs.data().listen(
+      (state) {
+        if (state.hits[client.id] == 1) {
+          animateHit();
+        }
+      },
+    );
   }
 
   Future<void> animateHit() async {

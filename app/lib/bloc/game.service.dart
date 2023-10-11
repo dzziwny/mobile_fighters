@@ -28,6 +28,7 @@ class GameService {
           gameState.players[i].hp = state.players[i].hp;
           gameState.players[i].isDashCooldown = state.players[i].isDashCooldown;
           gameState.players[i].isBombCooldown = state.players[i].isBombCooldown;
+          gameState.hits[i] = state.hits[i];
         }
 
         for (var i = 0; i < maxBullets; i++) {
