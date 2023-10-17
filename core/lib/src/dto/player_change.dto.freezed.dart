@@ -80,22 +80,22 @@ class _$PlayerChangeDtoCopyWithImpl<$Res, $Val extends PlayerChangeDto>
 }
 
 /// @nodoc
-abstract class _$$_PlayerChangeDtoCopyWith<$Res>
+abstract class _$$PlayerChangeDtoImplCopyWith<$Res>
     implements $PlayerChangeDtoCopyWith<$Res> {
-  factory _$$_PlayerChangeDtoCopyWith(
-          _$_PlayerChangeDto value, $Res Function(_$_PlayerChangeDto) then) =
-      __$$_PlayerChangeDtoCopyWithImpl<$Res>;
+  factory _$$PlayerChangeDtoImplCopyWith(_$PlayerChangeDtoImpl value,
+          $Res Function(_$PlayerChangeDtoImpl) then) =
+      __$$PlayerChangeDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, PlayerChangeType type, String nick, Team team});
 }
 
 /// @nodoc
-class __$$_PlayerChangeDtoCopyWithImpl<$Res>
-    extends _$PlayerChangeDtoCopyWithImpl<$Res, _$_PlayerChangeDto>
-    implements _$$_PlayerChangeDtoCopyWith<$Res> {
-  __$$_PlayerChangeDtoCopyWithImpl(
-      _$_PlayerChangeDto _value, $Res Function(_$_PlayerChangeDto) _then)
+class __$$PlayerChangeDtoImplCopyWithImpl<$Res>
+    extends _$PlayerChangeDtoCopyWithImpl<$Res, _$PlayerChangeDtoImpl>
+    implements _$$PlayerChangeDtoImplCopyWith<$Res> {
+  __$$PlayerChangeDtoImplCopyWithImpl(
+      _$PlayerChangeDtoImpl _value, $Res Function(_$PlayerChangeDtoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -106,7 +106,7 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
     Object? nick = null,
     Object? team = null,
   }) {
-    return _then(_$_PlayerChangeDto(
+    return _then(_$PlayerChangeDtoImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -129,15 +129,15 @@ class __$$_PlayerChangeDtoCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PlayerChangeDto implements _PlayerChangeDto {
-  const _$_PlayerChangeDto(
+class _$PlayerChangeDtoImpl implements _PlayerChangeDto {
+  const _$PlayerChangeDtoImpl(
       {required this.id,
       required this.type,
       required this.nick,
       required this.team});
 
-  factory _$_PlayerChangeDto.fromJson(Map<String, dynamic> json) =>
-      _$$_PlayerChangeDtoFromJson(json);
+  factory _$PlayerChangeDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerChangeDtoImplFromJson(json);
 
   @override
   final int id;
@@ -157,7 +157,7 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlayerChangeDto &&
+            other is _$PlayerChangeDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.nick, nick) || other.nick == nick) &&
@@ -171,12 +171,13 @@ class _$_PlayerChangeDto implements _PlayerChangeDto {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerChangeDtoCopyWith<_$_PlayerChangeDto> get copyWith =>
-      __$$_PlayerChangeDtoCopyWithImpl<_$_PlayerChangeDto>(this, _$identity);
+  _$$PlayerChangeDtoImplCopyWith<_$PlayerChangeDtoImpl> get copyWith =>
+      __$$PlayerChangeDtoImplCopyWithImpl<_$PlayerChangeDtoImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PlayerChangeDtoToJson(
+    return _$$PlayerChangeDtoImplToJson(
       this,
     );
   }
@@ -187,10 +188,10 @@ abstract class _PlayerChangeDto implements PlayerChangeDto {
       {required final int id,
       required final PlayerChangeType type,
       required final String nick,
-      required final Team team}) = _$_PlayerChangeDto;
+      required final Team team}) = _$PlayerChangeDtoImpl;
 
   factory _PlayerChangeDto.fromJson(Map<String, dynamic> json) =
-      _$_PlayerChangeDto.fromJson;
+      _$PlayerChangeDtoImpl.fromJson;
 
   @override
   int get id;
@@ -202,6 +203,6 @@ abstract class _PlayerChangeDto implements PlayerChangeDto {
   Team get team;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerChangeDtoCopyWith<_$_PlayerChangeDto> get copyWith =>
+  _$$PlayerChangeDtoImplCopyWith<_$PlayerChangeDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
