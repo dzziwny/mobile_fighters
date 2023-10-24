@@ -22,12 +22,7 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
     throw Exception();
   }
 
-  var prevPlayer = playerMetadatas[id];
-  if (prevPlayer.isActive) {
-    return;
-  }
-
-  final team = _selectTeam();
+  final team = _selectTeam(id);
   var x = Random().nextInt(respawnWidth);
   if (team == Team.red) {
     x = battleGroundWidth - x;
@@ -50,4 +45,4 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
   shareGameData();
 }
 
-Team _selectTeam() => blueTeam.length <= redTeam.length ? Team.blue : Team.red;
+Team _selectTeam(int id) => id.isEven ? Team.blue : Team.red;

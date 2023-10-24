@@ -22,6 +22,8 @@ import 'updates/_updates.dart';
 int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
 int accumulatorTime = 0;
 
+
+
 extension WithWeb on Router {
   void ws(Socket endpoint, OnConnection onConnection) =>
       get(endpoint.route(), onConnection.handler());
@@ -32,6 +34,7 @@ void main(List<String> args) async {
   final ip = '0.0.0.0';
 
   final router = Router()
+    ..get('/ping', (Request req) => Response.ok('ping'))
     ..get(Endpoint.gameFrame, gameFrameHandler)
     ..post(Endpoint.connect, connectHandler)
     ..post(Endpoint.startGame, createPlayerHandler)
@@ -54,18 +57,21 @@ void main(List<String> args) async {
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
 
-  Timer.periodic(frameRate, (_) {
-    final now = DateTime.now().microsecondsSinceEpoch;
-    final dt = now - lastUpdateTime;
-    lastUpdateTime = now;
-    accumulatorTime += dt;
-    while (accumulatorTime > sliceTimeMicroseconds) {
-      update();
-      accumulatorTime -= sliceTimeMicroseconds;
-    }
+  final timer = Timer.periodic(
+    frameRate,
+    (_) {
+      final now = DateTime.now().microsecondsSinceEpoch;
+      final dt = now - lastUpdateTime;
+      lastUpdateTime = now;
+      accumulatorTime += dt;
+      while (accumulatorTime > sliceTimeMicroseconds) {
+        update();
+        accumulatorTime -= sliceTimeMicroseconds;
+      }
 
-    draw();
-  });
+      draw();
+    },
+  );
 }
 
 void update() {

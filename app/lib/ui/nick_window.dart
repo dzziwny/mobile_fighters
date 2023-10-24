@@ -21,8 +21,7 @@ class _NickWindowState extends State<NickWindow> {
     text: 'elo',
   );
   final ipController = TextEditingController(
-    // text: base,
-    text: '10.254.33.188:8080',
+    text: '$host:$port',
   );
 
   int selectedIndex = 0;

@@ -25,6 +25,13 @@ abstract class OnConnection implements Disposable {
             onInit(intId, channel);
             _mobileSubscription = channel.stream.listen(
               (data) => onData(intId, data),
+              onError: (error) {
+                print('Error: $error');
+              },
+              onDone: () {
+                // TODO dac userowi np. minute i kick
+                print('Done');
+              },
             );
           },
         );
