@@ -12,20 +12,19 @@ void bombPhysicUpdate(Bomb bomb, double dt) {
       position.x > battleGroundEndX ||
       position.y < battleGroundStartY ||
       position.y > battleGroundEndY) {
-    bombs[bomb.id].isActive = false;
+    bomb.reset();
     return;
   }
 
   final distance = bomb.startPosition.distanceToSquared(position);
   if (distance > bombDistanceSquare) {
-    bombs[bomb.id].isActive = false;
+    bomb.reset();
     return;
   }
 
   final player = _isHit(bomb);
   if (player != null) {
     _hitPlayer(bomb, player, player.id);
-    bombs[bomb.id].isActive = false;
     bomb.reset();
     return;
   }
@@ -68,59 +67,11 @@ void _hitPlayer(
   }
 }
 
-// void createBomb(int bombId, int playerId) async {
-//   final player = players[playerId];
-
-//   double x = attackLength * sin(player.angle);
-//   double y = -attackLength * cos(player.angle);
-//   final target = Vector2(x + player.x, y + player.y);
-
-//   Timer(attackUntilBoomDuration, () {
-//     explodeBomb(playerId, target);
-//   });
-
-//   final response = Bomb(
-//     id: playerId,
-//     position: Vector2(player.x, player.y),
-//     target: Vector2(target.x, target.y),
-//     velocity: Vector2(sin(player.angle), -cos(player.angle)).normalized()
-//       ..scale(initBombScale),
-//     isActive: true,
-//   );
-
-//   bombs.add(response);
-// }
-
-// void explodeBomb(
-//   int bombId,
-//   Vector2 attackCenter,
-// ) {
-//   for (var id = 0; id < maxPlayers; id++) {
-//     final target = players[id];
-//     final targetPosition = Vector2(target.x.toDouble(), target.y.toDouble());
-//     final isHit = targetPosition.distanceToSquared(attackCenter) <
-//         attackAreaRadiusSquared;
-//     if (isHit) {
-//       target.hp = target.hp - bombPower;
-//       if (target.hp <= 0) {
-//         handlePlayerDead(id, bombId);
-//       } else {
-//         drawPlayerHit(id, target.hp);
-//       }
-//     }
-//   }
-
-//   final response = Bomb.empty(bombId);
-
-//   bombs.add(response);
-// }
-
 void handlePlayerDead(int enemyId, int killerId) {
   frags[killerId] |= Bits.frags[enemyId];
   final player = players[enemyId];
   final playerMetadata = playerMetadatas[enemyId];
 
-  // recreate player
   var respawnX = battleGroundStartX + Random().nextInt(respawnWidth);
   if (playerMetadata.team == Team.red) {
     respawnX = battleGroundEndX - respawnX;

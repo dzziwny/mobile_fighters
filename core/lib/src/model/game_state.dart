@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:core/src/constants.dart';
 
-import '../dto/hit.dto.dart';
 import 'bomb.dart';
 import 'bullet.dart';
 import 'player.dart';

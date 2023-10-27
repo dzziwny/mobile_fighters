@@ -1,5 +1,6 @@
 // GAME RULES
 import 'package:core/src/model/_model.dart';
+import 'package:vector_math/vector_math.dart';
 
 const maxPlayers = 10;
 
@@ -26,11 +27,19 @@ const playerPhoneWidth = playerDiameter + 9.0;
 const int battleGroundWidth = 0xfff;
 const int battleGroundHeight = 0x777;
 
-const double battleGroundStartX = 0.0;
+const int battleGroundStartXInt = 0;
+const double battleGroundStartX = battleGroundStartXInt + 0.0;
 const double battleGroundEndX = battleGroundStartX + battleGroundWidth;
+const int battleGroundEndXInt = battleGroundStartXInt + battleGroundWidth;
 
-const double battleGroundStartY = 0.0;
+const int battleGroundStartYInt = 0;
+const double battleGroundStartY = battleGroundStartYInt + 0.0;
 const double battleGroundEndY = battleGroundStartY + battleGroundHeight;
+const int battleGroundEndYInt = battleGroundStartYInt + battleGroundHeight;
+
+const double resetX = battleGroundEndX + 200;
+const double resetY = battleGroundEndY + 200;
+get resetPosition => Vector2(resetX, resetY);
 
 const double battleGroundFrameHorizontalThickness = 40.0;
 const double battleGroundFrameVerticalThickness = 10.0;

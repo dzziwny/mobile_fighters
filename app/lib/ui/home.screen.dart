@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:core/core.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/frags_layer.dart';
-import 'package:flutter/foundation.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'controls_layer.dart';
@@ -22,21 +21,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final StreamSubscription myPlayerSubscription;
-
-  // @override
-  // void initState() {
-  //   myPlayerSubscription = serverClient.myPlayer$.listen(
-  //     (player) {
-  //       if (player != null) {
-  //         gameBoardFocusNode.requestFocus();
-  //       } else {
-  //         gameBoardFocusNode.unfocus();
-  //       }
-  //     },
-  //   );
-
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          if (kDebug) const GamePhysicsColumn(),
+          // if (kDebug) const GamePhysicsColumn(),
         ],
       ),
     );

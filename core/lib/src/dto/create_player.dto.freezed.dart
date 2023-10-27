@@ -82,25 +82,23 @@ class _$CreatePlayerDtoRequestCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$CreatePlayerDtoRequestImplCopyWith<$Res>
+abstract class _$$_CreatePlayerDtoRequestCopyWith<$Res>
     implements $CreatePlayerDtoRequestCopyWith<$Res> {
-  factory _$$CreatePlayerDtoRequestImplCopyWith(
-          _$CreatePlayerDtoRequestImpl value,
-          $Res Function(_$CreatePlayerDtoRequestImpl) then) =
-      __$$CreatePlayerDtoRequestImplCopyWithImpl<$Res>;
+  factory _$$_CreatePlayerDtoRequestCopyWith(_$_CreatePlayerDtoRequest value,
+          $Res Function(_$_CreatePlayerDtoRequest) then) =
+      __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String guid, String nick, Device device});
 }
 
 /// @nodoc
-class __$$CreatePlayerDtoRequestImplCopyWithImpl<$Res>
+class __$$_CreatePlayerDtoRequestCopyWithImpl<$Res>
     extends _$CreatePlayerDtoRequestCopyWithImpl<$Res,
-        _$CreatePlayerDtoRequestImpl>
-    implements _$$CreatePlayerDtoRequestImplCopyWith<$Res> {
-  __$$CreatePlayerDtoRequestImplCopyWithImpl(
-      _$CreatePlayerDtoRequestImpl _value,
-      $Res Function(_$CreatePlayerDtoRequestImpl) _then)
+        _$_CreatePlayerDtoRequest>
+    implements _$$_CreatePlayerDtoRequestCopyWith<$Res> {
+  __$$_CreatePlayerDtoRequestCopyWithImpl(_$_CreatePlayerDtoRequest _value,
+      $Res Function(_$_CreatePlayerDtoRequest) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -111,7 +109,7 @@ class __$$CreatePlayerDtoRequestImplCopyWithImpl<$Res>
     Object? nick = null,
     Object? device = null,
   }) {
-    return _then(_$CreatePlayerDtoRequestImpl(
+    return _then(_$_CreatePlayerDtoRequest(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -134,15 +132,15 @@ class __$$CreatePlayerDtoRequestImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$CreatePlayerDtoRequestImpl implements _CreatePlayerDtoRequest {
-  const _$CreatePlayerDtoRequestImpl(
+class _$_CreatePlayerDtoRequest implements _CreatePlayerDtoRequest {
+  const _$_CreatePlayerDtoRequest(
       {required this.id,
       required this.guid,
       required this.nick,
       required this.device});
 
-  factory _$CreatePlayerDtoRequestImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CreatePlayerDtoRequestImplFromJson(json);
+  factory _$_CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =>
+      _$$_CreatePlayerDtoRequestFromJson(json);
 
   @override
   final int id;
@@ -162,7 +160,7 @@ class _$CreatePlayerDtoRequestImpl implements _CreatePlayerDtoRequest {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CreatePlayerDtoRequestImpl &&
+            other is _$_CreatePlayerDtoRequest &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.guid, guid) || other.guid == guid) &&
             (identical(other.nick, nick) || other.nick == nick) &&
@@ -176,13 +174,13 @@ class _$CreatePlayerDtoRequestImpl implements _CreatePlayerDtoRequest {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CreatePlayerDtoRequestImplCopyWith<_$CreatePlayerDtoRequestImpl>
-      get copyWith => __$$CreatePlayerDtoRequestImplCopyWithImpl<
-          _$CreatePlayerDtoRequestImpl>(this, _$identity);
+  _$$_CreatePlayerDtoRequestCopyWith<_$_CreatePlayerDtoRequest> get copyWith =>
+      __$$_CreatePlayerDtoRequestCopyWithImpl<_$_CreatePlayerDtoRequest>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CreatePlayerDtoRequestImplToJson(
+    return _$$_CreatePlayerDtoRequestToJson(
       this,
     );
   }
@@ -193,10 +191,10 @@ abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
       {required final int id,
       required final String guid,
       required final String nick,
-      required final Device device}) = _$CreatePlayerDtoRequestImpl;
+      required final Device device}) = _$_CreatePlayerDtoRequest;
 
   factory _CreatePlayerDtoRequest.fromJson(Map<String, dynamic> json) =
-      _$CreatePlayerDtoRequestImpl.fromJson;
+      _$_CreatePlayerDtoRequest.fromJson;
 
   @override
   int get id;
@@ -208,6 +206,6 @@ abstract class _CreatePlayerDtoRequest implements CreatePlayerDtoRequest {
   Device get device;
   @override
   @JsonKey(ignore: true)
-  _$$CreatePlayerDtoRequestImplCopyWith<_$CreatePlayerDtoRequestImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$_CreatePlayerDtoRequestCopyWith<_$_CreatePlayerDtoRequest> get copyWith =>
+      throw _privateConstructorUsedError;
 }

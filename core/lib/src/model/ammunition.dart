@@ -1,3 +1,4 @@
+import 'package:core/src/constants.dart';
 import 'package:vector_math/vector_math.dart';
 
 abstract class Ammunition {
@@ -16,7 +17,7 @@ abstract class Ammunition {
   });
 
   void reset() {
-    position = Vector2.zero();
+    position = resetPosition;
     velocity = Vector2.zero();
   }
 }

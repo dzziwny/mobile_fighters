@@ -2,7 +2,6 @@ import 'package:bubble_fight/di.dart';
 import 'package:bubble_fight/ui/game_board.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math.dart';
@@ -13,10 +12,6 @@ class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
 
   void onPointerMove(PointerEvent event, double halfWidth, double halfHeight) {
-    // if (gameBoardFocusNode.hasFocus) {
-    //   return;
-    // }
-
     final x = event.position.dx - halfWidth;
     final y = event.position.dy - halfHeight;
     final angle =

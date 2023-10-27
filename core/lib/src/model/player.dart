@@ -46,8 +46,8 @@ class PlayerViewModel {
 
   factory PlayerViewModel.empty(int playerId) => PlayerViewModel(
         id: playerId,
-        x: 0,
-        y: 0,
+        x: resetX,
+        y: resetY,
         angle: 0.0,
         isBombCooldown: 0,
         isDashCooldown: 0,
@@ -92,8 +92,8 @@ class Player extends PlayerViewModel {
 
   Player({
     required super.id,
-    super.x = 0.0,
-    super.y = 0.0,
+    super.x = resetX,
+    super.y = resetY,
     super.angle = 0.0,
     super.hp = startHp,
     super.isDashCooldown = 0,

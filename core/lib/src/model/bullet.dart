@@ -9,18 +9,15 @@ import 'ammunition.dart';
 class BulletViewModel {
   Vector2 position;
   double angle;
-  bool isActive;
 
   BulletViewModel({
     required this.position,
     required this.angle,
-    required this.isActive,
   });
 
   factory BulletViewModel.empty() => BulletViewModel(
         angle: 0.0,
-        isActive: false,
-        position: Vector2(0.0, 0.0),
+        position: resetPosition,
       );
 
   static int bytesCount = BulletViewModel.empty().toBytes().length;
@@ -31,7 +28,6 @@ class BulletViewModel {
       ...position.x.toBytes(),
       ...position.y.toBytes(),
       ...angle.toBytes(),
-      isActive ? 1 : 0,
     ].toBytes();
 
     return bytes;
@@ -53,7 +49,6 @@ class BulletViewModel {
     final instance = BulletViewModel(
       position: Vector2(bytes.toDouble(0, 4), bytes.toDouble(4, 8)),
       angle: bytes.toDouble(8, 12),
-      isActive: bytes[12] == 1,
     );
 
     return instance;
@@ -77,23 +72,23 @@ class Bullet extends BulletViewModel implements Ammunition {
     required this.id,
     required this.shooterId,
     required this.velocity,
-    super.isActive = true,
   }) : startPosition = position;
 
-  factory Bullet.empty(int id) => Bullet(
-        id: id,
-        shooterId: 0,
-        velocity: Vector2.zero(),
-        angle: 0.0,
-        position: Vector2.zero(),
-        isActive: false,
-      );
+  factory Bullet.empty(int id) {
+    return Bullet(
+      id: id,
+      shooterId: 0,
+      velocity: Vector2.zero(),
+      angle: 0.0,
+      position: resetPosition,
+    );
+  }
 
   static int bytesCount = Bullet.empty(0).toBytes().length * maxBullets;
 
   @override
   void reset() {
-    position = Vector2.zero();
+    position = resetPosition;
     velocity = Vector2.zero();
   }
 }

@@ -68,22 +68,22 @@ class _$LeaveGameDtoRequestCopyWithImpl<$Res, $Val extends LeaveGameDtoRequest>
 }
 
 /// @nodoc
-abstract class _$$LeaveGameDtoRequestImplCopyWith<$Res>
+abstract class _$$_LeaveGameDtoRequestCopyWith<$Res>
     implements $LeaveGameDtoRequestCopyWith<$Res> {
-  factory _$$LeaveGameDtoRequestImplCopyWith(_$LeaveGameDtoRequestImpl value,
-          $Res Function(_$LeaveGameDtoRequestImpl) then) =
-      __$$LeaveGameDtoRequestImplCopyWithImpl<$Res>;
+  factory _$$_LeaveGameDtoRequestCopyWith(_$_LeaveGameDtoRequest value,
+          $Res Function(_$_LeaveGameDtoRequest) then) =
+      __$$_LeaveGameDtoRequestCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String guid, int id});
 }
 
 /// @nodoc
-class __$$LeaveGameDtoRequestImplCopyWithImpl<$Res>
-    extends _$LeaveGameDtoRequestCopyWithImpl<$Res, _$LeaveGameDtoRequestImpl>
-    implements _$$LeaveGameDtoRequestImplCopyWith<$Res> {
-  __$$LeaveGameDtoRequestImplCopyWithImpl(_$LeaveGameDtoRequestImpl _value,
-      $Res Function(_$LeaveGameDtoRequestImpl) _then)
+class __$$_LeaveGameDtoRequestCopyWithImpl<$Res>
+    extends _$LeaveGameDtoRequestCopyWithImpl<$Res, _$_LeaveGameDtoRequest>
+    implements _$$_LeaveGameDtoRequestCopyWith<$Res> {
+  __$$_LeaveGameDtoRequestCopyWithImpl(_$_LeaveGameDtoRequest _value,
+      $Res Function(_$_LeaveGameDtoRequest) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$LeaveGameDtoRequestImplCopyWithImpl<$Res>
     Object? guid = null,
     Object? id = null,
   }) {
-    return _then(_$LeaveGameDtoRequestImpl(
+    return _then(_$_LeaveGameDtoRequest(
       guid: null == guid
           ? _value.guid
           : guid // ignore: cast_nullable_to_non_nullable
@@ -107,11 +107,11 @@ class __$$LeaveGameDtoRequestImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
-  const _$LeaveGameDtoRequestImpl({required this.guid, required this.id});
+class _$_LeaveGameDtoRequest implements _LeaveGameDtoRequest {
+  const _$_LeaveGameDtoRequest({required this.guid, required this.id});
 
-  factory _$LeaveGameDtoRequestImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LeaveGameDtoRequestImplFromJson(json);
+  factory _$_LeaveGameDtoRequest.fromJson(Map<String, dynamic> json) =>
+      _$$_LeaveGameDtoRequestFromJson(json);
 
   @override
   final String guid;
@@ -127,7 +127,7 @@ class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LeaveGameDtoRequestImpl &&
+            other is _$_LeaveGameDtoRequest &&
             (identical(other.guid, guid) || other.guid == guid) &&
             (identical(other.id, id) || other.id == id));
   }
@@ -139,13 +139,13 @@ class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LeaveGameDtoRequestImplCopyWith<_$LeaveGameDtoRequestImpl> get copyWith =>
-      __$$LeaveGameDtoRequestImplCopyWithImpl<_$LeaveGameDtoRequestImpl>(
+  _$$_LeaveGameDtoRequestCopyWith<_$_LeaveGameDtoRequest> get copyWith =>
+      __$$_LeaveGameDtoRequestCopyWithImpl<_$_LeaveGameDtoRequest>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LeaveGameDtoRequestImplToJson(
+    return _$$_LeaveGameDtoRequestToJson(
       this,
     );
   }
@@ -154,10 +154,10 @@ class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
 abstract class _LeaveGameDtoRequest implements LeaveGameDtoRequest {
   const factory _LeaveGameDtoRequest(
       {required final String guid,
-      required final int id}) = _$LeaveGameDtoRequestImpl;
+      required final int id}) = _$_LeaveGameDtoRequest;
 
   factory _LeaveGameDtoRequest.fromJson(Map<String, dynamic> json) =
-      _$LeaveGameDtoRequestImpl.fromJson;
+      _$_LeaveGameDtoRequest.fromJson;
 
   @override
   String get guid;
@@ -165,6 +165,6 @@ abstract class _LeaveGameDtoRequest implements LeaveGameDtoRequest {
   int get id;
   @override
   @JsonKey(ignore: true)
-  _$$LeaveGameDtoRequestImplCopyWith<_$LeaveGameDtoRequestImpl> get copyWith =>
+  _$$_LeaveGameDtoRequestCopyWith<_$_LeaveGameDtoRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }

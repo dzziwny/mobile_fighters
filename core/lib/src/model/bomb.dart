@@ -7,12 +7,10 @@ import 'ammunition.dart';
 
 class Bomb extends Ammunition {
   int id;
-  bool isActive;
 
   Bomb({
     required this.id,
     required super.shooterId,
-    required this.isActive,
     required super.angle,
     required super.position,
     required super.velocity,
@@ -22,9 +20,8 @@ class Bomb extends Ammunition {
         id: id,
         shooterId: 0,
         angle: 0.0,
-        position: Vector2.zero(),
+        position: resetPosition,
         velocity: Vector2.zero(),
-        isActive: false,
       );
 
   Uint8List toBytes() {
@@ -35,9 +32,7 @@ class Bomb extends Ammunition {
         .buffer
         .asUint8List();
 
-    final isActive = this.isActive ? 1 : 0;
-
-    final bytes = Uint8List.fromList([...x, ...y, isActive]);
+    final bytes = Uint8List.fromList([...x, ...y]);
     return bytes;
   }
 
@@ -48,20 +43,21 @@ class Bomb extends Ammunition {
 class BombView {
   int x;
   int y;
-  bool isActive;
 
-  BombView(this.x, this.y, this.isActive);
+  BombView(this.x, this.y);
 
   factory BombView.fromBytes(Uint8List bytes) {
     final position = bytes.sublist(0, 4).buffer.asUint16List();
     final x = position[0];
     final y = position[1];
-    final isActive = bytes[4] == 1;
-    final instance = BombView(x, y, isActive);
+    final instance = BombView(x, y);
     return instance;
   }
 
-  factory BombView.empty(int id) => BombView(0, 0, false);
+  factory BombView.empty(int id) => BombView(
+        battleGroundEndXInt,
+        battleGroundEndYInt,
+      );
 
   static List<BombView> listFromBytes(Uint8List bytes) {
     final bombs = <BombView>[];

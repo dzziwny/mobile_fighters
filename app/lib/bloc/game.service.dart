@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 
@@ -35,13 +33,11 @@ class GameService {
           gameState.bullets[i].position.x = state.bullets[i].position.x;
           gameState.bullets[i].position.y = state.bullets[i].position.y;
           gameState.bullets[i].angle = state.bullets[i].angle;
-          gameState.bullets[i].isActive = state.bullets[i].isActive;
         }
 
         for (var i = 0; i < maxBombs; i++) {
           gameState.bombs[i].x = state.bombs[i].x;
           gameState.bombs[i].y = state.bombs[i].y;
-          gameState.bombs[i].isActive = state.bullets[i].isActive;
         }
       },
     );

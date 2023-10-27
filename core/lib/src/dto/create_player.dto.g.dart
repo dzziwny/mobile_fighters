@@ -6,17 +6,17 @@ part of 'create_player.dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CreatePlayerDtoRequestImpl _$$CreatePlayerDtoRequestImplFromJson(
+_$_CreatePlayerDtoRequest _$$_CreatePlayerDtoRequestFromJson(
         Map<String, dynamic> json) =>
-    _$CreatePlayerDtoRequestImpl(
+    _$_CreatePlayerDtoRequest(
       id: json['id'] as int,
       guid: json['guid'] as String,
       nick: json['nick'] as String,
       device: $enumDecode(_$DeviceEnumMap, json['device']),
     );
 
-Map<String, dynamic> _$$CreatePlayerDtoRequestImplToJson(
-        _$CreatePlayerDtoRequestImpl instance) =>
+Map<String, dynamic> _$$_CreatePlayerDtoRequestToJson(
+        _$_CreatePlayerDtoRequest instance) =>
     <String, dynamic>{
       'id': instance.id,
       'guid': instance.guid,

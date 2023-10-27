@@ -11,20 +11,19 @@ void bulletPhysicUpdate(Bullet bullet, double dt) {
       position.x > battleGroundEndX ||
       position.y < battleGroundStartY ||
       position.y > battleGroundEndY) {
-    bullets[bullet.id].isActive = false;
+    bullet.reset();
     return;
   }
 
   final distance = bullet.startPosition.distanceToSquared(position);
   if (distance > bulletDistanceSquared) {
-    bullets[bullet.id].isActive = false;
+    bullet.reset();
     return;
   }
 
   final player = _isHit(bullet);
   if (player != null) {
     _hitPlayer(bullet, player, player.id);
-    bullets[bullet.id].isActive = false;
     bullet.reset();
     return;
   }
