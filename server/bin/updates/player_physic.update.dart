@@ -6,6 +6,52 @@ import 'package:vector_math/vector_math.dart';
 import '../inputs/player_state_input.dart';
 import '../setup.dart';
 
+Future<void> playerPhysicUpdate(
+  PlayerControlsState state,
+) async {
+  final player = players[state.playerId];
+  if (!player.isActive) {
+    return;
+  }
+
+  const dt = sliceTimeSeconds;
+  final velocity = Vector2(player.velocityX, player.velocityY);
+  final friction = _calculateFriction(player, velocity);
+  final netForce = Vector2(state.x, state.y) + friction;
+  final netVelocity = velocity..add(netForce);
+
+  player
+    ..velocityX = netVelocity.x
+    ..velocityY = netVelocity.y;
+
+  final x = _resolveX(player, dt, netVelocity);
+  final y = _resolveY(player, dt, netVelocity);
+
+  final position = Vector2(x, y);
+  player
+    ..x = position.x
+    ..y = position.y
+    ..angle = state.angle;
+
+  /// Boundary bouncing
+  if (player.y == battleGroundStartY || player.y == battleGroundEndY) {
+    player.velocityY = -player.velocityY;
+  }
+  if (player.x == battleGroundStartX || player.x == battleGroundEndX) {
+    player.velocityX = -player.velocityX;
+  }
+}
+
+Vector2 _calculateFriction(Player player, Vector2 velocity) {
+  final scale = -gamePhysics.k *
+      pow(
+        velocity.length2,
+        gamePhysics.n,
+      );
+
+  return velocity.normalized().scaled(scale);
+}
+
 double _resolveX(Player player, double dt, Vector2 momentum) {
   // TODO co to jest xd ???
   if (momentum.isNaN) {
@@ -41,46 +87,4 @@ double _resolveY(Player physic, double dt, Vector2 force) {
   }
 
   return y;
-}
-
-Future<void> playerPhysicUpdate(
-  PlayerControlsState state,
-) async {
-  const dt = sliceTimeSeconds;
-  final player = players[state.playerId];
-  final velocity = Vector2(player.velocityX, player.velocityY);
-  final friction = calculateFriction(player, velocity);
-  final netForce = Vector2(state.x, state.y) + friction;
-  final netVelocity = velocity..add(netForce);
-
-  player
-    ..velocityX = netVelocity.x
-    ..velocityY = netVelocity.y;
-
-  final x = _resolveX(player, dt, netVelocity);
-  final y = _resolveY(player, dt, netVelocity);
-
-  final position = Vector2(x, y);
-  player
-    ..x = position.x
-    ..y = position.y
-    ..angle = state.angle;
-
-  /// Boundary bouncing
-  if (player.y == battleGroundStartY || player.y == battleGroundEndY) {
-    player.velocityY = -player.velocityY;
-  }
-  if (player.x == battleGroundStartX || player.x == battleGroundEndX) {
-    player.velocityX = -player.velocityX;
-  }
-}
-
-Vector2 calculateFriction(Player player, Vector2 velocity) {
-  final scale = -gamePhysics.k *
-      pow(
-        velocity.length2,
-        gamePhysics.n,
-      );
-
-  return velocity.normalized().scaled(scale);
 }

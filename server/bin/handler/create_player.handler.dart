@@ -40,7 +40,8 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
     ..nick = dto.nick
     ..team = team
     ..device = dto.device
-    ..hp = startHp;
+    ..hp = startHp
+    ..isActive = true;
 
   shareGameData();
 }
