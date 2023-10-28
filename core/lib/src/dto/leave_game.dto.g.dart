@@ -6,15 +6,15 @@ part of 'leave_game.dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_LeaveGameDtoRequest _$$_LeaveGameDtoRequestFromJson(
+_$LeaveGameDtoRequestImpl _$$LeaveGameDtoRequestImplFromJson(
         Map<String, dynamic> json) =>
-    _$_LeaveGameDtoRequest(
+    _$LeaveGameDtoRequestImpl(
       guid: json['guid'] as String,
       id: json['id'] as int,
     );
 
-Map<String, dynamic> _$$_LeaveGameDtoRequestToJson(
-        _$_LeaveGameDtoRequest instance) =>
+Map<String, dynamic> _$$LeaveGameDtoRequestImplToJson(
+        _$LeaveGameDtoRequestImpl instance) =>
     <String, dynamic>{
       'guid': instance.guid,
       'id': instance.id,
