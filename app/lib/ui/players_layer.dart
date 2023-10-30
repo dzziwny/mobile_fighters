@@ -42,6 +42,7 @@ class _Player extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = gameService.gameState.players[id];
+    final metadata = gameService.gameData.players[id];
     return Positioned(
       top: player.y - _Player._playerHeightOffest,
       left: player.x - _Player._playerWidthOffest,
@@ -72,13 +73,10 @@ class _Player extends StatelessWidget {
               child: Transform.rotate(
                 angle: player.angle,
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        // color:
-                        //     player.team == Team.blue ? Colors.blue : Colors.red,
-                        // TODO
-                        color: Colors.blue,
+                        color: playerColors[metadata.team.index],
                         spreadRadius: 10.0,
                         blurRadius: 25.0,
                         blurStyle: BlurStyle.normal,
@@ -87,9 +85,7 @@ class _Player extends StatelessWidget {
                   ),
                   height: playerPhoneHeight,
                   width: playerPhoneWidth,
-                  // TODO
-                  // child: FittedBox(child: deviceWidget(player.device)),
-                  child: const FittedBox(child: GooglePixel7()),
+                  child: FittedBox(child: playerWidgets[metadata.device.index]),
                 ),
               ),
             ),
@@ -97,16 +93,5 @@ class _Player extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget deviceWidget(Device device) {
-    switch (device) {
-      case Device.pixel:
-        return const GooglePixel7();
-      case Device.iphone:
-        return const IPhone14();
-      default:
-        throw Exception('Unknown device.');
-    }
   }
 }

@@ -1,4 +1,4 @@
 enum Team {
-  red,
   blue,
+  red,
 }

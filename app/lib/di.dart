@@ -1,3 +1,5 @@
+import 'package:bubble_fight/ui/google_pixel_7.dart';
+import 'package:bubble_fight/ui/iphone_14.dart';
 import 'package:bubble_fight/ui/nick_window.controller.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -34,3 +36,13 @@ final isMobile = defaultTargetPlatform == TargetPlatform.android ||
     defaultTargetPlatform == TargetPlatform.iOS;
 
 final nickWindowController = NickWindowController();
+
+final playerWidgets = [
+  const GooglePixel7(),
+  const IPhone14(),
+];
+
+final playerColors = [
+  Colors.blue,
+  Colors.red,
+];
