@@ -29,25 +29,27 @@ abstract class AmmunitionLoop<T extends Ammunition> {
 
   void toggle(int playerId, bool state) {
     states[playerId] = state;
-    if (!state) {
-      return timers[playerId].cancel();
-    }
-
-    if (timers[playerId].isActive) {
+    if (timers[playerId].isActive || !state) {
       return;
     }
 
-    startLoop(playerId);
+    _startLoop(playerId);
   }
 
-  void startLoop(int playerId) {
+  void _startLoop(int playerId) {
     final firstAmmo = playerId * ammunitionPerPlayer;
     final reset = (playerId + 1) * ammunitionPerPlayer;
     final timer = timers[playerId];
     executeStep(playerId, timer, firstAmmo, reset);
     timers[playerId] = Timer.periodic(
       cooldown,
-      (timer) => executeStep(playerId, timer, firstAmmo, reset),
+      (timer) {
+        if (states[playerId]) {
+          executeStep(playerId, timer, firstAmmo, reset);
+        } else {
+          timers[playerId].cancel();
+        }
+      },
     );
   }
 

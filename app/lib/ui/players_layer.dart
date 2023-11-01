@@ -1,7 +1,5 @@
 import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/di.dart';
-import 'package:bubble_fight/ui/google_pixel_7.dart';
-import 'package:bubble_fight/ui/iphone_14.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
