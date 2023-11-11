@@ -1,17 +1,12 @@
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/bloc/game.service.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'auto_refresh_state.dart';
+class BulletsLayer extends StatelessWidget {
+  const BulletsLayer({super.key, required this.gameService});
 
-class BulletsLayer extends StatefulWidget {
-  const BulletsLayer({super.key});
+  final GameService gameService;
 
-  @override
-  State<BulletsLayer> createState() => _BulletsLayerState();
-}
-
-class _BulletsLayerState extends AutoRefreshState<BulletsLayer> {
   @override
   Widget build(BuildContext context) {
     return Stack(

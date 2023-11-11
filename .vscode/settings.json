@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/Users/michaldziwota/git/bubble_fight/app/windows"
+    "cmake.sourceDirectory": "/Users/michaldziwota/git/bubble_fight/app/windows",
+    "cmake.configureOnOpen": false
 }

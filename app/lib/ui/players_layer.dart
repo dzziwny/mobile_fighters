@@ -1,25 +1,29 @@
+import 'package:bubble_fight/bloc/game.service.dart';
 import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'auto_refresh_state.dart';
+class PlayersLayer extends StatelessWidget {
+  const PlayersLayer({
+    super.key,
+    required this.theme,
+    required this.gameService,
+  });
 
-class PlayersLayer extends StatefulWidget {
-  const PlayersLayer({super.key});
+  final GameService gameService;
+  final ThemeData theme;
 
-  @override
-  State<PlayersLayer> createState() => _PlayersLayerState();
-}
-
-class _PlayersLayerState extends AutoRefreshState<PlayersLayer> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Stack(
       children: List.generate(
         maxPlayers,
-        (id) => _Player(id: id, theme: theme),
+        (id) => _Player(
+          id: id,
+          theme: theme,
+          gameService: gameService,
+        ),
       ).toList(),
     );
   }
@@ -29,9 +33,11 @@ class _Player extends StatelessWidget {
   const _Player({
     required this.id,
     required this.theme,
+    required this.gameService,
   });
 
   final int id;
+  final GameService gameService;
   final ThemeData theme;
 
   static const _playerHeightOffest = hpBarHeight + (playerAreaHeight / 2.0);

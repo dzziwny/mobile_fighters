@@ -6,8 +6,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math.dart';
 
-import 'auto_refresh_state.dart';
-
 class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
 
@@ -22,6 +20,7 @@ class GameBoardLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
     final halfScreenWidth = mediaQuery.size.width / 2;
     final halfScreenHeight = mediaQuery.size.height / 2;
@@ -63,6 +62,7 @@ class GameBoardLayer extends StatelessWidget {
                 child: ClippedBoard(
                   frameWidth: frameWidth,
                   frameHeight: frameHeight,
+                  theme: theme,
                   frame: frame,
                 ),
               ),
@@ -75,61 +75,64 @@ class GameBoardLayer extends StatelessWidget {
 }
 
 class ClippedBoard extends StatefulWidget {
-  const ClippedBoard({
+  ClippedBoard({
     super.key,
     required this.frameWidth,
     required this.frameHeight,
     required this.frame,
+    required this.theme,
   });
 
   final double frameWidth;
   final double frameHeight;
+  final ThemeData theme;
   final GameFrame frame;
+
+  late final playerOffsetx = frame.sizex / 2;
+  late final playerOffsety = frame.sizey / 2;
+  late final frameOffsetx = (frameWidth - screenWidth) / 2;
+  late final frameOffsety = (frameHeight - screenHeight) / 2;
 
   @override
   State<ClippedBoard> createState() => _ClippedBoardState();
 }
 
-class _ClippedBoardState extends AutoRefreshState<ClippedBoard> {
+class _ClippedBoardState extends State<ClippedBoard>
+    with TickerProviderStateMixin {
   late final Ticker _ticker;
-
-  late final child = SizedBox(
-    width: widget.frameWidth,
-    height: widget.frameHeight,
-    child: GameBoard(
-      boardWidth: widget.frame.sizex.toDouble(),
-      boardHeight: widget.frame.sizey.toDouble(),
-    ),
-  );
 
   @override
   void initState() {
     super.initState();
-    _ticker = createTicker((Duration elapsed) {
-      setState(() {});
-    });
-
+    _ticker = createTicker((_) => setState(() {}));
     _ticker.start();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final player = gameService.gameState.players[client.id];
+    var x = (player.x - widget.playerOffsetx) / widget.frameOffsetx;
+    var y = (player.y - widget.playerOffsety) / widget.frameOffsety;
+    return OverflowBox(
+      maxWidth: double.infinity,
+      maxHeight: double.infinity,
+      alignment: Alignment(x, y),
+      child: SizedBox(
+        width: widget.frameWidth,
+        height: widget.frameHeight,
+        child: GameBoard(
+          boardWidth: widget.frame.sizex + 0.0,
+          boardHeight: widget.frame.sizey + 0.0,
+          theme: widget.theme,
+          gameService: gameService,
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _ticker.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final player = gameService.gameState.players[client.id];
-    var x = (player.x - widget.frame.sizex / 2) /
-        ((widget.frameWidth - screenWidth) / 2);
-    var y = (player.y - widget.frame.sizey / 2) /
-        ((widget.frameHeight - screenHeight) / 2);
-    return OverflowBox(
-      maxWidth: double.infinity,
-      maxHeight: double.infinity,
-      alignment: Alignment(x, y),
-      child: child,
-    );
   }
 }
