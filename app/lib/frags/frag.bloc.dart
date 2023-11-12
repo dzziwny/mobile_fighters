@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/game_state/game_state_ws.dart';
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
@@ -37,3 +37,5 @@ class FragBloc implements Disposable {
     await _handlerSubscription.cancel();
   }
 }
+
+final fragBloc = FragBloc();

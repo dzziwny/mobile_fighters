@@ -1,8 +1,10 @@
-import 'package:bubble_fight/bloc/game.service.dart';
 import 'package:bubble_fight/consts.dart';
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+
+import 'google_pixel_7.dart';
+import 'iphone_14.dart';
 
 class PlayersLayer extends StatelessWidget {
   const PlayersLayer({
@@ -11,7 +13,7 @@ class PlayersLayer extends StatelessWidget {
     required this.gameService,
   });
 
-  final GameService gameService;
+  final GameStateService gameService;
   final ThemeData theme;
 
   @override
@@ -37,7 +39,7 @@ class _Player extends StatelessWidget {
   });
 
   final int id;
-  final GameService gameService;
+  final GameStateService gameService;
   final ThemeData theme;
 
   static const _playerHeightOffest = hpBarHeight + (playerAreaHeight / 2.0);
@@ -99,3 +101,13 @@ class _Player extends StatelessWidget {
     );
   }
 }
+
+const playerWidgets = [
+  GooglePixel7(),
+  IPhone14(),
+];
+
+final playerColors = [
+  Colors.blue,
+  Colors.red,
+];

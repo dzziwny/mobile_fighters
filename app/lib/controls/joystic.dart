@@ -1,8 +1,8 @@
-import 'package:bubble_fight/bloc/_bloc.dart';
-import 'package:bubble_fight/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:vector_math/vector_math.dart';
+
+import 'controls.bloc.dart';
 
 class Joystic extends StatefulWidget {
   const Joystic({

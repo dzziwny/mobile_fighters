@@ -1,4 +1,4 @@
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/config.dart';
 import 'package:flutter/material.dart';
 
 import 'joystic.dart';

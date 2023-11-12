@@ -1,4 +1,5 @@
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/start_window/start_window.controller.dart';
 import 'package:flutter/material.dart';
 
 class LeaveButton extends StatelessWidget {
@@ -8,8 +9,8 @@ class LeaveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        client.leaveGame();
-        nickWindowController.set(true);
+        serverClient.leaveGame();
+        startWindowController.set(true);
       },
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Leave'),

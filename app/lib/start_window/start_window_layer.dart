@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'nick_window.dart';
+import 'start_window.controller.dart';
+import 'start_window.dart';
 
-class NickWindowLayer extends StatefulWidget {
-  const NickWindowLayer({
+class StartWindowLayer extends StatefulWidget {
+  const StartWindowLayer({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NickWindowLayer> createState() => _NickWindowLayerState();
+  State<StartWindowLayer> createState() => _StartWindowLayerState();
 }
 
-class _NickWindowLayerState extends State<NickWindowLayer> {
+class _StartWindowLayerState extends State<StartWindowLayer> {
   var show = true;
 
   late final StreamSubscription _subscription;
@@ -23,7 +23,7 @@ class _NickWindowLayerState extends State<NickWindowLayer> {
   @override
   void initState() {
     super.initState();
-    _subscription = nickWindowController.show().listen((state) {
+    _subscription = startWindowController.show().listen((state) {
       setState(() {
         show = state;
       });
@@ -49,7 +49,7 @@ class _NickWindowLayerState extends State<NickWindowLayer> {
                   child: SizedBox(
                     width: 600 * goldenRatio,
                     height: 600,
-                    child: NickWindow(),
+                    child: StartWindow(),
                   ),
                 ),
               ),

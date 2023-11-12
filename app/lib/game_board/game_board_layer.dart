@@ -1,10 +1,16 @@
-import 'package:bubble_fight/di.dart';
-import 'package:bubble_fight/ui/game_board.dart';
+import 'package:bubble_fight/controls/controls.bloc.dart';
+import 'package:bubble_fight/config.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:vector_math/vector_math.dart';
+
+import 'game_board.dart';
+
+final gameBoardFocusNode = FocusNode();
 
 class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
@@ -110,7 +116,7 @@ class _ClippedBoardState extends State<ClippedBoard>
 
   @override
   Widget build(BuildContext context) {
-    final player = gameService.gameState.players[client.id];
+    final player = gameService.gameState.players[serverClient.id];
     var x = (player.x - widget.playerOffsetx) / widget.frameOffsetx;
     var y = (player.y - widget.playerOffsety) / widget.frameOffsety;
     return OverflowBox(

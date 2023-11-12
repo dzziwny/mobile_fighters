@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/game_state/game_state_ws.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:flutter/material.dart';
 
 class HitReactionLayer extends StatefulWidget {
@@ -33,7 +34,7 @@ class _HitReactionState extends State<HitReactionLayer>
 
     hitSubscription = gameStateWs.data().listen(
       (state) {
-        if (state.hits[client.id] == 1) {
+        if (state.hits[serverClient.id] == 1) {
           animateHit();
         }
       },

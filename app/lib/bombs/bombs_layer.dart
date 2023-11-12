@@ -1,4 +1,4 @@
-import 'package:bubble_fight/bloc/game.service.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class BombsLayer extends StatelessWidget {
     required this.theme,
   });
 
-  final GameService gameService;
+  final GameStateService gameService;
   final ThemeData theme;
 
   @override

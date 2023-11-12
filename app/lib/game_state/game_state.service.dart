@@ -1,11 +1,12 @@
-import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 
-class GameService {
+import 'game_state_ws.dart';
+
+class GameStateService {
   final gameData = GameData();
   final gameState = GameState.empty();
 
-  GameService() {
+  GameStateService() {
     gameDataWs.data().listen(
       (state) {
         for (var i = 0; i < maxPlayers; i++) {
@@ -43,3 +44,5 @@ class GameService {
     );
   }
 }
+
+final gameService = GameStateService();

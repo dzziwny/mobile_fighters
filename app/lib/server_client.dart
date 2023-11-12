@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'di.dart';
+import 'game_state/game_state.service.dart';
 
 class ServerClient implements Disposable {
-  final _guid = uuid.v4();
+  final _guid = const Uuid().v4();
 
   int id = 0;
   String ip = '';
@@ -42,14 +43,6 @@ class ServerClient implements Disposable {
   Future<void> setGamePhysics(GamePhysics physics) =>
       setGamePhysics$(physics, 'http://$ip');
 
-  @override
-  Future onDispose() async {
-    await Future.wait([
-      positionsSubscription.cancel(),
-      myPositionSubscription.cancel(),
-    ]);
-  }
-
   Stream<WebSocketChannel> channel(Socket socket) async* {
     await connected.future;
     final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
@@ -65,4 +58,14 @@ class ServerClient implements Disposable {
       },
     ).distinct();
   }
+
+  @override
+  Future onDispose() async {
+    await Future.wait([
+      positionsSubscription.cancel(),
+      myPositionSubscription.cancel(),
+    ]);
+  }
 }
+
+final serverClient = ServerClient();

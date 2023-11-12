@@ -1,12 +1,18 @@
 import 'dart:typed_data';
 
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/config.dart';
+import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/ws.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import 'controls_ws.dart';
+
 abstract class ControlsBloc {
+  final actionsWs = Ws(Socket.actionsWs, (_) => Object());
+
   void startGun();
   void stopGun();
   void rotate(double angle);
@@ -113,7 +119,7 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
       return null;
     }
 
-    acitionsWs.send([bit].toBytes());
+    actionsWs.send([bit].toBytes());
     return KeyEventResult.handled;
   }
 
@@ -149,7 +155,7 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
 
   @override
   void dash() {
-    acitionsWs.send([Bits.dash].toBytes());
+    actionsWs.send([Bits.dash].toBytes());
   }
 
   @override
@@ -176,3 +182,5 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
     gameBoardFocusNode.dispose();
   }
 }
+
+final controlsBloc = isMobile ? MobileControlsBloc() : DesktopControlsBloc();

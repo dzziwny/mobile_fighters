@@ -1,10 +1,10 @@
-import 'package:bubble_fight/bloc/game.service.dart';
-import 'package:bubble_fight/ui/players_layer.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
+import 'package:bubble_fight/player/players_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'bombs_layer.dart';
-import 'bullets.layer.dart';
+import '../bombs/bombs_layer.dart';
+import '../bullets/bullets.layer.dart';
 import 'game_board_tablet_frame.dart';
 import 'respawns_layer.dart';
 
@@ -20,7 +20,7 @@ class GameBoard extends StatelessWidget {
   final double boardWidth;
   final double boardHeight;
   final ThemeData theme;
-  final GameService gameService;
+  final GameStateService gameService;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class GameBoardBattleGround extends StatelessWidget {
   final double boardWidth;
   final double boardHeight;
   final ThemeData theme;
-  final GameService gameService;
+  final GameStateService gameService;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class AutoRefreshLayer extends StatelessWidget {
   });
 
   final ThemeData theme;
-  final GameService gameService;
+  final GameStateService gameService;
 
   @override
   Widget build(BuildContext context) {

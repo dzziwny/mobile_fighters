@@ -1,8 +1,8 @@
-import 'package:bubble_fight/bloc/frag.bloc.dart';
-import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:value_stream_builder/value_stream_builder.dart';
+
+import 'frag.bloc.dart';
 
 class FragsLayer extends StatelessWidget {
   const FragsLayer({super.key});

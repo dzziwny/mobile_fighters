@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bubble_fight/di.dart';
-import 'package:bubble_fight/ui/frags_layer.dart';
+import 'package:bubble_fight/controls/controls.bloc.dart';
+import 'package:bubble_fight/controls/controls_layer.dart';
+import 'package:bubble_fight/config.dart';
+import 'package:bubble_fight/frags/frags_layer.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
+import 'package:bubble_fight/server_client.dart';
+import 'package:bubble_fight/start_window/_start_window.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'controls_layer.dart';
 import 'game_board_layer.dart';
 import 'hit_reaction_layer.dart';
-import 'nick_window_layer.dart';
 import 'sight_layer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (!isMobile) const SightLayer(),
                 const HitReactionLayer(),
                 const ControlsLayer(),
-                const NickWindowLayer(),
+                const StartWindowLayer(),
                 // LinesLayer(),
                 // Column(
                 //   mainAxisAlignment: MainAxisAlignment.end,
@@ -110,7 +113,7 @@ class _GamePhysicsColumnState extends State<GamePhysicsColumn> {
           ),
           MaterialButton(
             onPressed: () async {
-              await client.setGamePhysics(gamepPhysics);
+              await serverClient.setGamePhysics(gamepPhysics);
               if (!mounted) {
                 return;
               }
@@ -141,7 +144,7 @@ class _AttacksButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final player = gameService.gameState.players[client.id];
+    final player = gameService.gameState.players[serverClient.id];
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -159,7 +162,7 @@ class _AttacksButtons extends StatelessWidget {
         const SizedBox(width: 32.0),
         IconButton(
           color: theme.colorScheme.background,
-          onPressed: client.leaveGame,
+          onPressed: serverClient.leaveGame,
           icon: const Icon(Icons.logout_rounded),
         ),
       ],

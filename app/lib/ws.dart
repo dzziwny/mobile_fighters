@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +18,7 @@ class Ws<DtoType, DataType> implements Disposable {
     Socket socket,
     DtoType Function(DataType) instanceBuilder,
   ) {
-    _channel = client.channel(socket).publishReplay(maxSize: 1);
+    _channel = serverClient.channel(socket).publishReplay(maxSize: 1);
 
     _data = _channel
         .switchMap((channel) => channel.stream)

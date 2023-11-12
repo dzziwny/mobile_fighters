@@ -1,11 +1,11 @@
-import 'package:bubble_fight/bloc/game.service.dart';
+import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class BulletsLayer extends StatelessWidget {
   const BulletsLayer({super.key, required this.gameService});
 
-  final GameService gameService;
+  final GameStateService gameService;
 
   @override
   Widget build(BuildContext context) {

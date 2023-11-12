@@ -1,4 +1,4 @@
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/game_state/game_state_ws.dart';
 import 'package:flutter/material.dart';
 
 class DebugInfo extends StatelessWidget {

@@ -1,20 +1,21 @@
-import 'package:bubble_fight/di.dart';
+import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/player/_player.dart';
+import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'google_pixel_7.dart';
-import 'iphone_14.dart';
+import 'start_window.controller.dart';
 
-class NickWindow extends StatefulWidget {
-  const NickWindow({
+class StartWindow extends StatefulWidget {
+  const StartWindow({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NickWindow> createState() => _NickWindowState();
+  State<StartWindow> createState() => _StartWindowState();
 }
 
-class _NickWindowState extends State<NickWindow> {
+class _StartWindowState extends State<StartWindow> {
   final nickController = TextEditingController(
     // text: kDebug ? defaultTargetPlatform.name : null,
     text: 'elo',
@@ -144,13 +145,14 @@ class _NickWindowState extends State<NickWindow> {
                               onPressed: nickController.text == ''
                                   ? null
                                   : () async {
-                                      await client.connect(ipController.text);
-                                      client.createPlayer(
+                                      await serverClient
+                                          .connect(ipController.text);
+                                      serverClient.createPlayer(
                                         nickController.text,
                                         selectedDevice,
                                       );
 
-                                      nickWindowController.set(false);
+                                      startWindowController.set(false);
                                       gameBoardFocusNode.requestFocus();
                                     },
                               icon: const Icon(Icons.play_arrow_rounded),

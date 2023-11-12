@@ -1,4 +1,4 @@
-import 'package:bubble_fight/ui/home.screen.dart';
+import 'package:bubble_fight/game_board/game_board.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
