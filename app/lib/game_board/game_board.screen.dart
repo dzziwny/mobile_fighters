@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:bubble_fight/config.dart';
 import 'package:bubble_fight/controls/controls.bloc.dart';
 import 'package:bubble_fight/controls/controls_layer.dart';
-import 'package:bubble_fight/config.dart';
+import 'package:bubble_fight/debug_tools/debug_game_settings.dart';
+import 'package:bubble_fight/debug_tools/lines_layer.dart';
 import 'package:bubble_fight/frags/frags_layer.dart';
 import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/start_window/_start_window.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'game_board_layer.dart';
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const HitReactionLayer(),
                 const ControlsLayer(),
                 const StartWindowLayer(),
-                // LinesLayer(),
+                if (showDebugLines) const LinesLayer(),
                 // Column(
                 //   mainAxisAlignment: MainAxisAlignment.end,
                 //   children: [_AttacksButtons(), SizedBox(height: 32.0)],
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          // if (kDebug) const GamePhysicsColumn(),
+          if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),
     );
@@ -66,75 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> dispose() async {
     await myPlayerSubscription.cancel();
     super.dispose();
-  }
-}
-
-class GamePhysicsColumn extends StatefulWidget {
-  const GamePhysicsColumn({super.key});
-
-  @override
-  State<GamePhysicsColumn> createState() => _GamePhysicsColumnState();
-}
-
-class _GamePhysicsColumnState extends State<GamePhysicsColumn> {
-  var gamepPhysics = GamePhysics();
-
-  late final _kController =
-      TextEditingController(text: gamepPhysics.k.toString());
-  late final _nController =
-      TextEditingController(text: gamepPhysics.n.toString());
-  late final _fController =
-      TextEditingController(text: gamepPhysics.f.toString());
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      width: 200.0,
-      child: Column(
-        children: [
-          TextField(
-            controller: _kController,
-            onChanged: (value) {
-              gamepPhysics.k = double.tryParse(value) ?? 0;
-            },
-          ),
-          TextField(
-            controller: _nController,
-            onChanged: (value) {
-              gamepPhysics.n = double.tryParse(value) ?? 0;
-            },
-          ),
-          TextField(
-            controller: _fController,
-            onChanged: (value) {
-              gamepPhysics.f = double.tryParse(value) ?? 0;
-            },
-          ),
-          MaterialButton(
-            onPressed: () async {
-              await serverClient.setGamePhysics(gamepPhysics);
-              if (!mounted) {
-                return;
-              }
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Success')),
-              );
-
-              gameBoardFocusNode.requestFocus();
-            },
-            child: const Text('Apply'),
-          ),
-          MaterialButton(
-            onPressed: () {
-              exit(0);
-            },
-            child: const Text('Exit'),
-          ),
-        ],
-      ),
-    );
   }
 }
 

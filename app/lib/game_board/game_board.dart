@@ -1,10 +1,10 @@
+import 'package:bubble_fight/attacks/bombs_layer.dart';
+import 'package:bubble_fight/attacks/bullets.layer.dart';
 import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:bubble_fight/player/players_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import '../bombs/bombs_layer.dart';
-import '../bullets/bullets.layer.dart';
 import 'game_board_tablet_frame.dart';
 import 'respawns_layer.dart';
 
