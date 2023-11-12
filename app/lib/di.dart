@@ -37,9 +37,9 @@ final isMobile = defaultTargetPlatform == TargetPlatform.android ||
 
 final nickWindowController = NickWindowController();
 
-final playerWidgets = [
-  const GooglePixel7(),
-  const IPhone14(),
+const playerWidgets = [
+  GooglePixel7(),
+  IPhone14(),
 ];
 
 final playerColors = [

@@ -15,20 +15,22 @@ class BombsLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: gameService.gameState.bombs.map((attack) {
-        return Positioned(
-          top: attack.y - bombRadius,
-          left: attack.x - bombRadius,
-          child: Card(
-            shape: const CircleBorder(),
-            color: theme.colorScheme.error,
-            child: const SizedBox(
-              height: bombDiameter,
-              width: bombDiameter,
+      children: gameService.gameState.bombs.map(
+        (attack) {
+          return Positioned(
+            top: attack.y - bombRadius,
+            left: attack.x - bombRadius,
+            child: const Card(
+              shape: CircleBorder(),
+              color: Colors.deepPurple,
+              child: SizedBox(
+                height: bombDiameter,
+                width: bombDiameter,
+              ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        },
+      ).toList(),
     );
   }
 }

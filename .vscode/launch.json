@@ -12,12 +12,29 @@
             "cwd": "${workspaceFolder}/app"
         },
         {
+            "name": "app (profile)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/app",
+            "flutterMode": "profile"
+        },
+        {
             "name": "server",
             "type": "dart",
             "request": "launch",
             "program": "bin/main.dart",
             "cwd": "${workspaceFolder}/server",
             "preLaunchTask": "killProcessOnPort8080"
+        },
+        {
+            "name": "server (release)",
+            "type": "dart",
+            "request": "launch",
+            "program": "bin/main.dart",
+            "cwd": "${workspaceFolder}/server",
+            "preLaunchTask": "killProcessOnPort8080",
+            "flutterMode": "release"
         },
         {
             "name": "ONEPLUS A6000",
@@ -73,6 +90,11 @@
         {
           "name": "app/server",
           "configurations": ["server", "app"],
+          "stopAll": true
+        },
+        {
+          "name": "app/server (profile)",
+          "configurations": ["server (release)", "app (profile)"],
           "stopAll": true
         },
         {

@@ -1,6 +1,5 @@
 import 'package:bubble_fight/di.dart';
 import 'package:core/core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'google_pixel_7.dart';

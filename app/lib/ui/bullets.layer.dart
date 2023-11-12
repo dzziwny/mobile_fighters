@@ -17,10 +17,12 @@ class BulletsLayer extends StatelessWidget {
             left: bullet.position.x - bulletRadius,
             height: bulletDiameter,
             width: bulletDiameter,
-            child: Container(
+            child: const DecoratedBox(
               decoration: BoxDecoration(
                 color: Colors.blue,
-                borderRadius: BorderRadius.circular(bulletRadius),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(bulletRadius),
+                ),
               ),
             ),
           );

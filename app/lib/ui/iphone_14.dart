@@ -20,7 +20,7 @@ class IPhone14 extends StatelessWidget {
     const topLineTop = 4.0;
     const topLineLeft = frameWidth / 2.0 - topLineWidth / 2.0;
     const topLineRadius = 2.0;
-    final topLineColor = CupertinoColors.systemGrey.darkColor;
+    const topLineColor = Color.fromARGB(255, 142, 142, 147);
 
     const notchTop = frameThickness - 1.0;
     const notchWidth = frameWidth / 2.7;
@@ -33,158 +33,172 @@ class IPhone14 extends StatelessWidget {
     const externalFrameHeight = frameHeight + externalFrameThickness * 2;
     const externalFrameWidth = frameWidth + externalFrameThickness * 2;
     const externalFrameRadius = frameRadius + externalFrameThickness;
-    final externalFrameColor = CupertinoColors.systemGrey3.darkColor;
+    const externalFrameColor = Color.fromARGB(255, 72, 72, 74);
 
     const cameraSize = 15.0;
     const cameraRadius = cameraSize / 2;
     const cameraLensSize = cameraSize / 2.2;
     const cameraLensRadius = cameraLensSize / 2;
 
-    return Container(
+    return const SizedBox(
       height: externalFrameHeight,
       width: externalFrameWidth,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(externalFrameRadius),
-          topRight: Radius.circular(externalFrameRadius),
-          bottomRight: Radius.circular(externalFrameRadius),
-          bottomLeft: Radius.circular(externalFrameRadius * 1.2),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(externalFrameRadius),
+            topRight: Radius.circular(externalFrameRadius),
+            bottomRight: Radius.circular(externalFrameRadius),
+            bottomLeft: Radius.circular(externalFrameRadius * 1.2),
+          ),
+          color: externalFrameColor,
         ),
-        color: externalFrameColor,
-      ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(frameRadius)),
-              color: frameColor,
-            ),
-            height: frameHeight,
-            width: frameWidth,
-            child: Center(
-              child: Container(
-                height: deviceHeight,
-                width: deviceWidth,
-                clipBehavior: Clip.hardEdge,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(deviceRadius),
-                  ),
+        child: Stack(
+          children: [
+            SizedBox(
+              height: frameHeight,
+              width: frameWidth,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(frameRadius)),
+                  color: frameColor,
                 ),
-                child: Stack(
-                  children: [
-                    CupertinoApp(
-                      debugShowCheckedModeBanner: false,
-                      theme: const CupertinoThemeData(
-                        // brightness: Brightness.dark,
-                        brightness: Brightness.light,
-                      ),
-                      home: CupertinoPageScaffold(
-                        navigationBar: const CupertinoNavigationBar(),
-                        child: CupertinoTabScaffold(
-                          tabBar: CupertinoTabBar(
-                            iconSize: 24.0,
-                            items: const <BottomNavigationBarItem>[
-                              BottomNavigationBarItem(
-                                icon: Icon(CupertinoIcons.star_fill),
-                                label: 'Favourites',
-                              ),
-                              BottomNavigationBarItem(
-                                icon: Icon(CupertinoIcons.clock_solid),
-                                label: 'Recents',
-                              ),
-                              BottomNavigationBarItem(
-                                icon:
-                                    Icon(CupertinoIcons.person_alt_circle_fill),
-                                label: 'Contacts',
-                              ),
-                              BottomNavigationBarItem(
-                                icon: Icon(CupertinoIcons.circle_grid_3x3_fill),
-                                label: 'Keypad',
-                              ),
-                            ],
-                          ),
-                          tabBuilder: (BuildContext context, int index) {
-                            return Container();
-                          },
-                        ),
-                      ),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(deviceRadius),
                     ),
-                    // Positioned(
-                    //   top: 10.0,
-                    //   left: 155.0,
-                    //   child: Container(
-                    //     width: 14,
-                    //     height: 14,
-                    //     decoration: const BoxDecoration(
-                    //       borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                    //       color: Colors.black,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: topLineTop,
-            left: topLineLeft,
-            child: Container(
-              width: topLineWidth,
-              height: topLineHeight,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(topLineRadius),
-                ),
-                color: topLineColor,
-              ),
-            ),
-          ),
-          Positioned(
-            top: notchTop,
-            left: notchLeft,
-            child: Container(
-              width: notchWidth,
-              height: notchHeight,
-              decoration: const BoxDecoration(
-                color: notchColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(notchRadius),
-                  bottomRight: Radius.circular(notchRadius),
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(width: cameraSize),
-                  Container(
-                    width: cameraSize,
-                    height: cameraSize,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(cameraRadius),
-                      ),
-                      color: CupertinoColors.systemGrey3,
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: cameraLensSize,
-                        height: cameraLensSize,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(cameraLensRadius),
+                    child: SizedBox(
+                      height: deviceHeight,
+                      width: deviceWidth,
+                      child: Stack(
+                        children: [
+                          CupertinoApp(
+                            debugShowCheckedModeBanner: false,
+                            theme: CupertinoThemeData(
+                              // brightness: Brightness.dark,
+                              brightness: Brightness.light,
+                            ),
+                            home: CupertinoPageScaffold(
+                              navigationBar: CupertinoNavigationBar(),
+                              child: SizedBox(),
+                              // child: CupertinoTabScaffold(
+                              //   tabBar: CupertinoTabBar(
+                              //     iconSize: 24.0,
+                              //     items: const <BottomNavigationBarItem>[
+                              //       BottomNavigationBarItem(
+                              //         icon: Icon(CupertinoIcons.star_fill),
+                              //         label: 'Favourites',
+                              //       ),
+                              //       BottomNavigationBarItem(
+                              //         icon: Icon(CupertinoIcons.clock_solid),
+                              //         label: 'Recents',
+                              //       ),
+                              //       BottomNavigationBarItem(
+                              //         icon: Icon(CupertinoIcons
+                              //             .person_alt_circle_fill),
+                              //         label: 'Contacts',
+                              //       ),
+                              //       BottomNavigationBarItem(
+                              //         icon: Icon(CupertinoIcons
+                              //             .circle_grid_3x3_fill),
+                              //         label: 'Keypad',
+                              //       ),
+                              //     ],
+                              //   ),
+                              //   tabBuilder:
+                              //       (BuildContext context, int index) {
+                              //     return Container();
+                              //   },
+                              // ),
+                            ),
                           ),
-                          color: CupertinoColors.systemGrey3.darkColor,
-                        ),
+                          // Positioned(
+                          //   top: 10.0,
+                          //   left: 155.0,
+                          //   child: Container(
+                          //     width: 14,
+                          //     height: 14,
+                          //     decoration: const BoxDecoration(
+                          //       borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                          //       color: Colors.black,
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              top: topLineTop,
+              left: topLineLeft,
+              child: SizedBox(
+                width: topLineWidth,
+                height: topLineHeight,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(topLineRadius),
+                    ),
+                    color: topLineColor,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: notchTop,
+              left: notchLeft,
+              child: SizedBox(
+                width: notchWidth,
+                height: notchHeight,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: notchColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(notchRadius),
+                      bottomRight: Radius.circular(notchRadius),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: cameraSize),
+                      SizedBox(
+                        width: cameraSize,
+                        height: cameraSize,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(cameraRadius),
+                            ),
+                            color: CupertinoColors.systemGrey3,
+                          ),
+                          child: Center(
+                            child: SizedBox(
+                              width: cameraLensSize,
+                              height: cameraLensSize,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(cameraLensRadius),
+                                  ),
+                                  color: Color.fromARGB(255, 72, 72, 74),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
