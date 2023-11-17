@@ -82,7 +82,7 @@ const double bombRadius = 100.0;
 const double bombDiameter = bombRadius * 2;
 const double bombRadiusSquared = bombRadius * bombRadius;
 const double bombDistance = 500.0;
-const double bombDistanceSquare = bombDistance * bombDistance;
+const double bombDistanceSquared = bombDistance * bombDistance;
 const double bombPlayerCollisionDistanceSquare =
     bombRadiusSquared + playerRadiusSquare;
 const bombCooldown = Duration(seconds: 2);

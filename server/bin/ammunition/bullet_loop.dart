@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 
 import 'ammunition_loop.dart';
-import 'setup.dart';
+import '../setup.dart';
 
 class BulletsLoop extends AmmunitionLoop<Bullet> {
   BulletsLoop({

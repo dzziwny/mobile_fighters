@@ -7,10 +7,9 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'bomb.physic.dart';
-import 'bomb_loop.dart';
-import 'bullet.physic.dart';
-import 'bullet_loop.dart';
+import 'ammunition/ammunition.physic.dart';
+import 'ammunition/bomb_loop.dart';
+import 'ammunition/bullet_loop.dart';
 import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
 import 'handler/mobile_controls.connection.dart';
@@ -79,11 +78,23 @@ void _executeActions() {
 
 void _physicUpdate() {
   for (var i = 0; i < maxBullets; i++) {
-    bulletPhysicUpdate(bullets[i], sliceTimeSeconds);
+    ammunitionPhysicUpdate(
+      ammo: bullets[i],
+      dt: sliceTimeSeconds,
+      maxDistance: bulletDistanceSquared,
+      hitDistance: bulletPlayerCollisionDistanceSquare,
+      power: bulletPower,
+    );
   }
 
   for (var i = 0; i < maxBombs; i++) {
-    bombPhysicUpdate(bombs[i], sliceTimeSeconds);
+    ammunitionPhysicUpdate(
+      ammo: bombs[i],
+      dt: sliceTimeSeconds,
+      maxDistance: bombDistanceSquared,
+      hitDistance: bombPlayerCollisionDistanceSquare,
+      power: bombPower,
+    );
   }
 
   for (var i = 0; i < maxPlayers; i++) {

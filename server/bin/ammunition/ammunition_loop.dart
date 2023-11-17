@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import 'setup.dart';
+import '../setup.dart';
 
 abstract class AmmunitionLoop<T extends Ammunition> {
   final int ammunitionPerPlayer;
@@ -36,21 +36,17 @@ abstract class AmmunitionLoop<T extends Ammunition> {
     _startLoop(playerId);
   }
 
-  void _startLoop(int playerId) {
-    final firstAmmo = playerId * ammunitionPerPlayer;
-    final reset = (playerId + 1) * ammunitionPerPlayer;
-    final timer = timers[playerId];
-    executeStep(playerId, timer, firstAmmo, reset);
-    timers[playerId] = Timer.periodic(
-      cooldown,
-      (timer) {
-        if (states[playerId]) {
-          executeStep(playerId, timer, firstAmmo, reset);
-        } else {
-          timers[playerId].cancel();
-        }
-      },
-    );
+  void create(int id, int playerId) {
+    final player = players[playerId];
+    final velocity = initVelocityVector(player.angle, initVelocity);
+    final position = Vector2(player.x, player.y);
+
+    magazine[id]
+      ..shooterId = playerId
+      ..velocity = velocity
+      ..angle = player.angle
+      ..startPosition = position
+      ..position = position;
   }
 
   void executeStep(
@@ -68,17 +64,24 @@ abstract class AmmunitionLoop<T extends Ammunition> {
     currentAmmo[playerId] = ++currentAttack;
   }
 
-  void create(int id, int playerId) {
-    final player = players[playerId];
-    final velocity = Vector2(sin(player.angle), -cos(player.angle)).normalized()
-      ..scale(initVelocity);
+  Vector2 initVelocityVector(double angle, double velocity) {
+    return Vector2(sin(angle), -cos(angle)).normalized()..scale(velocity);
+  }
 
-    final position = Vector2(player.x, player.y);
-    magazine[id]
-      ..shooterId = playerId
-      ..velocity = velocity
-      ..angle = player.angle
-      ..startPosition = position
-      ..position = position;
+  void _startLoop(int playerId) {
+    final firstAmmo = playerId * ammunitionPerPlayer;
+    final reset = (playerId + 1) * ammunitionPerPlayer;
+    final timer = timers[playerId];
+    executeStep(playerId, timer, firstAmmo, reset);
+    timers[playerId] = Timer.periodic(
+      cooldown,
+      (timer) {
+        if (states[playerId]) {
+          executeStep(playerId, timer, firstAmmo, reset);
+        } else {
+          timers[playerId].cancel();
+        }
+      },
+    );
   }
 }
