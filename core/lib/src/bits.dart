@@ -1,5 +1,5 @@
 class Bits {
-  // ---------------- KEYBOARD STATE ----------------
+  // ---------------- MOVEMENT ----------------
 
   // 0x10000000
   static const int w = 0x80;
@@ -41,6 +41,8 @@ class Bits {
   static const int dashCooldown = 0x8;
   // 0x0100
   static const int bombCooldown = 0x4;
+  // 0x0010
+  static const int dashActive = 0x2;
 }
 
 extension LogicOperations on int {

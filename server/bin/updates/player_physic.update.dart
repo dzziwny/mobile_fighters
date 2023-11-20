@@ -17,7 +17,7 @@ Future<void> playerPhysicUpdate(
   const dt = sliceTimeSeconds;
   final velocity = Vector2(player.velocityX, player.velocityY);
   final friction = _calculateFriction(player, velocity);
-  final netForce = Vector2(state.x, state.y) + friction;
+  final netForce = Vector2(state.inputForceX, state.inputForceY) + friction;
   final netVelocity = velocity..add(netForce);
 
   player
@@ -43,10 +43,10 @@ Future<void> playerPhysicUpdate(
 }
 
 Vector2 _calculateFriction(Player player, Vector2 velocity) {
-  final scale = -gamePhysics.k *
+  final scale = -player.frictionK *
       pow(
         velocity.length2,
-        gamePhysics.n,
+        player.frictionN,
       );
 
   return velocity.normalized().scaled(scale);

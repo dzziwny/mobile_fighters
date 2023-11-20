@@ -24,7 +24,8 @@ class PlayersLayer extends StatelessWidget {
         (id) => _Player(
           id: id,
           theme: theme,
-          gameService: gameService,
+          player: gameService.gameState.players[id],
+          metadata: gameService.gameData.players[id],
         ),
       ).toList(),
     );
@@ -32,23 +33,26 @@ class PlayersLayer extends StatelessWidget {
 }
 
 class _Player extends StatelessWidget {
-  const _Player({
+  _Player({
     required this.id,
     required this.theme,
-    required this.gameService,
-  });
+    required this.player,
+    required this.metadata,
+  })  : color = playerColors[metadata.team.index],
+        playerWidget = playerWidgets[metadata.device.index];
 
   final int id;
-  final GameStateService gameService;
   final ThemeData theme;
+  final Player metadata;
+  final PlayerViewModel player;
+  final Color color;
+  final Widget playerWidget;
 
   static const _playerHeightOffest = hpBarHeight + (playerAreaHeight / 2.0);
   static const _playerWidthOffest = fullPlayerAreaWidth / 2.0;
 
   @override
   Widget build(BuildContext context) {
-    final player = gameService.gameState.players[id];
-    final metadata = gameService.gameData.players[id];
     return Positioned(
       top: player.y - _Player._playerHeightOffest,
       left: player.x - _Player._playerWidthOffest,
@@ -66,8 +70,7 @@ class _Player extends StatelessWidget {
                   child: Slider(
                     thumbColor: theme.colorScheme.error,
                     activeColor: theme.colorScheme.error,
-                    value:
-                        gameService.gameState.players[player.id].hp.toDouble(),
+                    value: player.hp.toDouble(),
                     max: startHp,
                     onChanged: (double value) {},
                   ),
@@ -82,7 +85,7 @@ class _Player extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: playerColors[metadata.team.index],
+                        color: player.isDashActive ? Colors.amber : color,
                         spreadRadius: 10.0,
                         blurRadius: 25.0,
                         blurStyle: BlurStyle.normal,
@@ -91,7 +94,14 @@ class _Player extends StatelessWidget {
                   ),
                   height: playerPhoneHeight,
                   width: playerPhoneWidth,
-                  child: FittedBox(child: playerWidgets[metadata.device.index]),
+                  child: FittedBox(
+                    child: Stack(
+                      children: [
+                        playerWidget,
+                        Center(child: Text(metadata.nick)),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

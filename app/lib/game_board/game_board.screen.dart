@@ -81,13 +81,13 @@ class _AttacksButtons extends StatelessWidget {
       children: [
         IconButton(
           color: theme.colorScheme.background,
-          onPressed: player.isDashCooldown == 1 ? null : controlsBloc.dash,
+          onPressed: player.isDashCooldown ? null : controlsBloc.startDash,
           icon: const Icon(Icons.rocket_launch),
         ),
         const SizedBox(width: 32.0),
         IconButton(
           color: theme.colorScheme.background,
-          onPressed: player.isBombCooldown == 1 ? null : controlsBloc.startBomb,
+          onPressed: player.isBombCooldown ? null : controlsBloc.startBomb,
           icon: const Icon(Icons.sunny),
         ),
         const SizedBox(width: 32.0),

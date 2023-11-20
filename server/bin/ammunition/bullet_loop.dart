@@ -3,7 +3,7 @@ import 'package:core/core.dart';
 import 'ammunition_loop.dart';
 import '../setup.dart';
 
-class BulletsLoop extends AmmunitionLoop<Bullet> {
+class BulletsLoop extends AmmunitionCooldown<Bullet> {
   BulletsLoop({
     required super.ammunitionPerPlayer,
     required super.magazine,

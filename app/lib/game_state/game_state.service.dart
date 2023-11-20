@@ -27,6 +27,7 @@ class GameStateService {
           gameState.players[i].hp = state.players[i].hp;
           gameState.players[i].isDashCooldown = state.players[i].isDashCooldown;
           gameState.players[i].isBombCooldown = state.players[i].isBombCooldown;
+          gameState.players[i].isDashActive = state.players[i].isDashActive;
           gameState.hits[i] = state.hits[i];
         }
 

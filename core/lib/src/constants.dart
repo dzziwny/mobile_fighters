@@ -14,9 +14,6 @@ const double sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0;
 // PLAYERS FEATURES
 const double startHp = 210.0;
 
-const double normalSpeed = 0.00001;
-const double dashSpeed = 0.00005;
-
 const playerRadius = 40.0;
 const playerRadiusSquare = playerRadius * playerRadius;
 const playerDiameter = playerRadius * 2;
@@ -57,6 +54,9 @@ const goldenRatio = 1.61803398875;
 
 // PHYSICS
 final gamePhysics = GamePhysics();
+const defaultPlayerFrictionK = 0.1;
+const defaultPlayerFrictionN = 0.25;
+const defaultPlayerForceRatio = 5.0;
 
 // ATTACKS
 
@@ -87,3 +87,9 @@ const double bombPlayerCollisionDistanceSquare =
     bombRadiusSquared + playerRadiusSquare;
 const bombCooldown = Duration(seconds: 2);
 const int bombPower = 70;
+
+// DASH
+const dashFrictionK = 0.0;
+const dashforceRation = 10.0;
+const dashCooldown = Duration(seconds: 2);
+const dashDuration = Duration(seconds: 1);

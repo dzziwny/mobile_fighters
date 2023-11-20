@@ -58,8 +58,8 @@ void handlePlayerDead(int enemyId, int killerId) {
     ..y = respawnY
     ..angle = respawnAngle
     ..hp = startHp
-    ..isBombCooldown = 0
-    ..isDashCooldown = 0;
+    ..isBombCooldownBit = 0
+    ..isDashCooldownBit = 0;
 
   shareGameData();
 }

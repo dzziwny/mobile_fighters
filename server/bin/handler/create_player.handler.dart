@@ -35,8 +35,8 @@ Future<void> createPlayer(CreatePlayerDtoRequest dto) async {
     ..x = x.toDouble()
     ..y = y.toDouble()
     ..angle = angle
-    ..isBombCooldown = 0
-    ..isDashCooldown = 0
+    ..isBombCooldownBit = 0
+    ..isDashCooldownBit = 0
     ..nick = dto.nick
     ..team = team
     ..device = dto.device

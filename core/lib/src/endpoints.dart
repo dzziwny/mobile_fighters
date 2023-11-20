@@ -16,9 +16,6 @@ class Socket {
   /// Mobile player can send state here to move, attack, etc.
   static var desktopPlayerStateWs = Socket('desktopPlayerState');
 
-  /// Mobile player can send state here to move, attack, etc.
-  static var actionsWs = Socket('actions');
-
   /// Player can get game state here about positions, bullets, bombs, frags etc.
   static var gameStateWs = Socket('gameState');
 

@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 
+import '../handler/on_connection.dart';
 import '../register_di.dart';
-import 'on_connection.dart';
 
 class DesktopControlsConnection extends OnConnection {
   @override
@@ -12,25 +12,26 @@ class DesktopControlsConnection extends OnConnection {
     double x = 0.0;
     final xState = state & Bits.x;
     if (xState == Bits.a) {
-      x = -gamePhysics.f;
+      x = -player.forceRatio;
     } else if (xState == Bits.d) {
-      x = gamePhysics.f;
+      x = player.forceRatio;
     }
 
     double y = 0.0;
     final yState = state & Bits.y;
     if (yState == Bits.w) {
-      y = -gamePhysics.f;
+      y = -player.forceRatio;
     } else if (yState == Bits.s) {
-      y = gamePhysics.f;
+      y = player.forceRatio;
     }
 
     final angle = data.toDouble(1, 5);
     playerInputs[playerId]
-      ..x = x
-      ..y = y
+      ..inputForceX = x
+      ..inputForceY = y
       ..angle = angle
       ..isBullet = state.on(Bits.bullet)
-      ..isBomb = state.on(Bits.bomb);
+      ..isBomb = state.on(Bits.bomb)
+      ..isDash = state.on(Bits.dash);
   }
 }

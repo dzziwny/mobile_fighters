@@ -2,13 +2,18 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../setup.dart';
+
 abstract class OnConnection implements Disposable {
   StreamSubscription? _mobileSubscription;
+
+  late final Player player;
 
   void onInit(int playerId, WebSocketChannel channel) {}
 
@@ -20,6 +25,7 @@ abstract class OnConnection implements Disposable {
           return Response(HttpStatus.badRequest);
         }
 
+        player = players[intId];
         final handler = webSocketHandler(
           (WebSocketChannel channel) {
             onInit(intId, channel);

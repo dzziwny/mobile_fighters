@@ -10,9 +10,11 @@ import 'package:shelf_router/shelf_router.dart';
 import 'ammunition/ammunition.physic.dart';
 import 'ammunition/bomb_loop.dart';
 import 'ammunition/bullet_loop.dart';
+import 'ammunition/dash_loop.dart';
+import 'controls/desktop_controls.connection.dart';
+import 'controls/mobile_controls.connection.dart';
 import 'handler/_handler.dart';
 import 'handler/game_data.connection.dart';
-import 'handler/mobile_controls.connection.dart';
 import 'handler/on_connection.dart';
 import 'register_di.dart';
 import 'setup.dart';
@@ -38,8 +40,7 @@ void main(List<String> args) async {
     ..ws(Socket.mobilePlayerStateWs, MobileControlsConnection())
     ..ws(Socket.desktopPlayerStateWs, DesktopControlsConnection())
     ..ws(Socket.gameDataWs, GameDataConnection())
-    ..ws(Socket.gameStateWs, GameStateConnection())
-    ..ws(Socket.actionsWs, ActionsConnection());
+    ..ws(Socket.gameStateWs, GameStateConnection());
 
   final handler = Pipeline().addMiddleware(corsHeaders()).addHandler(router);
 
@@ -73,6 +74,7 @@ void _executeActions() {
   for (var i = 0; i < maxPlayers; i++) {
     bulletsLoop.toggle(i, playerInputs[i].isBullet);
     bombsLoop.toggle(i, playerInputs[i].isBomb);
+    dashLoop.toggle(i, playerInputs[i].isDash);
   }
 }
 

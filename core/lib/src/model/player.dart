@@ -16,8 +16,9 @@ class PlayerViewModel {
   double y;
   double angle;
   double hp;
-  int isDashCooldown;
-  int isBombCooldown;
+  bool isDashActive;
+  bool isDashCooldown;
+  bool isBombCooldown;
 
   PlayerViewModel({
     required this.id,
@@ -25,8 +26,9 @@ class PlayerViewModel {
     required this.y,
     required this.angle,
     required this.hp,
-    required this.isDashCooldown,
-    required this.isBombCooldown,
+    this.isDashActive = false,
+    this.isDashCooldown = false,
+    this.isBombCooldown = false,
   });
 
   factory PlayerViewModel.fromBytes(Uint8List bytes, int id) {
@@ -38,8 +40,9 @@ class PlayerViewModel {
       x: x.toDouble(),
       y: y.toDouble(),
       angle: bytes.toDouble(4, 8),
-      isDashCooldown: bytes[8] & Bits.dashCooldown,
-      isBombCooldown: bytes[8] & Bits.bombCooldown,
+      isDashActive: bytes[8].on(Bits.dashActive),
+      isDashCooldown: bytes[8].on(Bits.dashCooldown),
+      isBombCooldown: bytes[8].on(Bits.bombCooldown),
       hp: bytes[9].toDouble(),
     );
   }
@@ -49,8 +52,9 @@ class PlayerViewModel {
         x: resetX,
         y: resetY,
         angle: 0.0,
-        isBombCooldown: 0,
-        isDashCooldown: 0,
+        isDashActive: false,
+        isBombCooldown: false,
+        isDashCooldown: false,
         hp: 1,
       );
 
@@ -76,6 +80,12 @@ class Player extends PlayerViewModel {
   Team team = Team.blue;
   Device device = Device.iphone;
   bool isActive = false;
+  double forceRatio = defaultPlayerForceRatio;
+  double frictionK = defaultPlayerFrictionK;
+  double frictionN = defaultPlayerFrictionN;
+  int isDashActiveBit = 0;
+  int isDashCooldownBit = 0;
+  int isBombCooldownBit = 0;
 
   /// Proportionality constant that relates the friction force to the velocity
   /// of the object. Its value is determined by the properties of the materials
@@ -96,8 +106,6 @@ class Player extends PlayerViewModel {
     super.y = resetY,
     super.angle = 0.0,
     super.hp = startHp,
-    super.isDashCooldown = 0,
-    super.isBombCooldown = 0,
   });
 
   factory Player.empty(int id) => Player(id: id);
@@ -122,7 +130,7 @@ class Player extends PlayerViewModel {
       ..add(x)
       ..add(y)
       ..add(angle.toBytes())
-      ..addByte(isDashCooldown | isBombCooldown)
+      ..addByte(isBombCooldownBit | isDashCooldownBit | isDashActiveBit)
       ..addByte(hp.toInt());
 
     return builder.toBytes();
