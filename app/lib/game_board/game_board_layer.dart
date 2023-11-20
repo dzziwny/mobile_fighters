@@ -24,58 +24,61 @@ class GameBoardLayer extends StatelessWidget {
     controlsBloc.rotate(angle);
   }
 
+  static const frame = GameFrame(
+    sizex: battleGroundWidth,
+    sizey: battleGroundHeight,
+  );
+
+  static double frameWidth =
+      frame.sizex + battleGroundFrameHorizontalThickness * 2;
+  static double frameHeight =
+      frame.sizey + battleGroundFrameVerticalThickness * 2;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final halfScreenWidth = mediaQuery.size.width / 2;
-    final halfScreenHeight = mediaQuery.size.height / 2;
-    const frame = GameFrame(
-      sizex: battleGroundWidth,
-      sizey: battleGroundHeight,
-    );
-
-    double frameWidth = frame.sizex + battleGroundFrameHorizontalThickness * 2;
-    double frameHeight = frame.sizey + battleGroundFrameVerticalThickness * 2;
-
     return Positioned.fill(
-      child: Listener(
-        onPointerDown: (_) => controlsBloc.startGun(),
-        onPointerUp: (_) => controlsBloc.stopGun(),
-        onPointerMove: isMobile
-            ? null
-            : (PointerMoveEvent event) =>
-                onPointerMove(event, halfScreenWidth, halfScreenHeight),
-        onPointerHover: isMobile
-            ? null
-            : (PointerHoverEvent event) =>
-                onPointerMove(event, halfScreenWidth, halfScreenHeight),
-        child: KeyboardListener(
-          focusNode: gameBoardFocusNode,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            alignment: Alignment.center,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/cosmos_background.gif"),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final halfScreenWidth = constraints.maxWidth / 2;
+        final halfScreenHeight = constraints.maxHeight / 2;
+        return Listener(
+          onPointerDown: (_) => controlsBloc.startGun(),
+          onPointerUp: (_) => controlsBloc.stopGun(),
+          onPointerMove: isMobile
+              ? null
+              : (PointerMoveEvent event) =>
+                  onPointerMove(event, halfScreenWidth, halfScreenHeight),
+          onPointerHover: isMobile
+              ? null
+              : (PointerHoverEvent event) =>
+                  onPointerMove(event, halfScreenWidth, halfScreenHeight),
+          child: KeyboardListener(
+            focusNode: gameBoardFocusNode,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              alignment: Alignment.center,
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/cosmos_background.gif"),
+                  ),
                 ),
-              ),
-              width: screenWidth,
-              height: screenHeight,
-              child: ClipRect(
-                child: ClippedBoard(
-                  frameWidth: frameWidth,
-                  frameHeight: frameHeight,
-                  theme: theme,
-                  frame: frame,
+                width: screenWidth,
+                height: screenHeight,
+                child: ClipRect(
+                  child: ClippedBoard(
+                    frameWidth: frameWidth,
+                    frameHeight: frameHeight,
+                    theme: theme,
+                    frame: frame,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
