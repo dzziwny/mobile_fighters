@@ -21,7 +21,7 @@ abstract class AmmunitionCooldown<T extends Ammunition> extends Cooldown {
   });
 
   @override
-  void action(int playerId) {
+  void onAction(int playerId) {
     final firstAmmo = playerId * ammunitionPerPlayer;
     final reset = (playerId + 1) * ammunitionPerPlayer;
     var currentAttack = currentAmmo[playerId];

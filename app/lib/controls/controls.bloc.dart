@@ -4,8 +4,8 @@ import 'desktop_controls.bloc.dart';
 import 'mobile_controls.bloc.dart';
 
 abstract class ControlsBloc {
-  void startGun();
-  void stopGun();
+  void startBullet();
+  void stopBullet();
   void rotate(double angle);
   void startDash();
   void stopDash();

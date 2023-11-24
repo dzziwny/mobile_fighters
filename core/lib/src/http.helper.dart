@@ -7,7 +7,7 @@ import 'model/_model.dart';
 
 final port = '8080';
 // monte
-// final host = '192.168.0.158';
+// final host = '192.168.1.108';
 
 // no internet
 final host = '0.0.0.0';

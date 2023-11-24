@@ -23,18 +23,20 @@ abstract class Cooldown {
   }
 
   void _startLoop(int playerId) {
-    action(playerId);
+    onAction(playerId);
     timers[playerId] = Timer.periodic(
       cooldown,
       (timer) {
         if (states[playerId]) {
-          action(playerId);
+          onAction(playerId);
         } else {
           timers[playerId].cancel();
+          onCooldownEnd(playerId);
         }
       },
     );
   }
 
-  void action(int playerId);
+  void onAction(int playerId);
+  void onCooldownEnd(int playerId);
 }

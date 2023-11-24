@@ -42,13 +42,13 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
   }
 
   @override
-  void startGun() {
+  void startBullet() {
     _keys = _keys | Bits.bullet;
     _sendPlayerState();
   }
 
   @override
-  void stopGun() {
+  void stopBullet() {
     _keys = _keys & ~Bits.bullet;
     _sendPlayerState();
   }

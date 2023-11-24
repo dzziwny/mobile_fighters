@@ -11,6 +11,17 @@ class BombLoop extends AmmunitionCooldown<Bomb> {
     required super.cooldown,
     required super.initVelocity,
   });
+
+  @override
+  void onAction(int playerId) {
+    super.onAction(playerId);
+    players[playerId].isBombCooldownBit = Bits.bombCooldown;
+  }
+
+  @override
+  void onCooldownEnd(int playerId) {
+    players[playerId].isBombCooldownBit = 0;
+  }
 }
 
 final bombsLoop = BombLoop(

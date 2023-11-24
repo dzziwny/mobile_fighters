@@ -9,19 +9,27 @@ class DashLoop extends Cooldown {
   DashLoop({required super.cooldown});
 
   @override
-  void action(int playerId) {
-    final player = players[playerId];
-    player.frictionK = dashFrictionK;
-    player.forceRatio = dashforceRation;
-    player.isDashActiveBit = Bits.dashActive;
+  void onAction(int playerId) {
+    players[playerId]
+      ..frictionK = dashFrictionK
+      ..forceRatio = dashforceRation
+      ..isDashActiveBit = Bits.dashActive
+      ..isDashCooldownBit = Bits.dashCooldown;
+
     Timer(
       dashDuration,
       () {
-        player.frictionK = defaultPlayerFrictionK;
-        player.forceRatio = defaultPlayerForceRatio;
-        player.isDashActiveBit = 0;
+        players[playerId]
+          ..frictionK = defaultPlayerFrictionK
+          ..forceRatio = defaultPlayerForceRatio
+          ..isDashActiveBit = 0;
       },
     );
+  }
+
+  @override
+  void onCooldownEnd(int playerId) {
+    players[playerId].isDashCooldownBit = 0;
   }
 }
 

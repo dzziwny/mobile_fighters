@@ -11,6 +11,9 @@ class BulletsLoop extends AmmunitionCooldown<Bullet> {
     required super.cooldown,
     required super.initVelocity,
   });
+
+  @override
+  void onCooldownEnd(int playerId) {}
 }
 
 final bulletsLoop = BulletsLoop(

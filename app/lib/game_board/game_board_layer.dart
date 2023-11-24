@@ -1,3 +1,4 @@
+import 'package:bubble_fight/attacks/attack_buttons.dart';
 import 'package:bubble_fight/controls/controls.bloc.dart';
 import 'package:bubble_fight/config.dart';
 import 'package:bubble_fight/game_state/game_state.service.dart';
@@ -11,6 +12,24 @@ import 'package:vector_math/vector_math.dart';
 import 'game_board.dart';
 
 final gameBoardFocusNode = FocusNode();
+
+class Playground extends StatelessWidget {
+  const Playground({super.key, required this.theme});
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          child: GameBoardLayer(),
+        ),
+        if (showAttackButtons) AttacksButtons(theme: theme),
+      ],
+    );
+  }
+}
 
 class GameBoardLayer extends StatelessWidget {
   const GameBoardLayer({super.key});
@@ -42,8 +61,8 @@ class GameBoardLayer extends StatelessWidget {
         final halfScreenWidth = constraints.maxWidth / 2;
         final halfScreenHeight = constraints.maxHeight / 2;
         return Listener(
-          onPointerDown: (_) => controlsBloc.startGun(),
-          onPointerUp: (_) => controlsBloc.stopGun(),
+          onPointerDown: (_) => controlsBloc.startBullet(),
+          onPointerUp: (_) => controlsBloc.stopBullet(),
           onPointerMove: isMobile
               ? null
               : (PointerMoveEvent event) =>

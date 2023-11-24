@@ -14,13 +14,13 @@ class MobileControlsBloc extends ControlsBloc {
   final _bytesBuilder = BytesBuilder();
 
   @override
-  void startGun() {
+  void startBullet() {
     _keys = _keys | Bits.bullet;
     _sendPlayerState();
   }
 
   @override
-  void stopGun() {
+  void stopBullet() {
     _keys = _keys & ~Bits.bullet;
     _sendPlayerState();
   }
