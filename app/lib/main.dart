@@ -1,3 +1,4 @@
+import 'package:bubble_fight/controls/controls.bloc.dart';
 import 'package:bubble_fight/game_board/game_board.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
 
+  _initializeInstances();
   runApp(const App());
 }
 
@@ -25,4 +27,9 @@ class App extends StatelessWidget {
       home: const HomeScreen(),
     );
   }
+}
+
+// Just call to create instances
+void _initializeInstances() {
+  controlsBloc;
 }
