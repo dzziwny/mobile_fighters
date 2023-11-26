@@ -1,4 +1,4 @@
-import 'package:bubble_fight/60hz_refreshable_playground/playground_controls_wrapper.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_control_wrapper.dart';
 import 'package:bubble_fight/controls/controls.bloc.dart';
 import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:bubble_fight/game_state/game_state_ws.dart';

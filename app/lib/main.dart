@@ -1,7 +1,7 @@
-import 'package:bubble_fight/game_board/game_board.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'home.dart';
 import 'initialize_instances.dart';
 import 'theme.dart';
 
@@ -24,7 +24,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: lightTheme(),
-      home: const HomeScreen(),
+      home: const Home(),
     );
   }
 }

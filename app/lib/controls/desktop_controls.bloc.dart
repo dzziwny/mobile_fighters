@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bubble_fight/60hz_refreshable_playground/playground_controls_wrapper.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_control_wrapper.dart';
 import 'package:bubble_fight/ws.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

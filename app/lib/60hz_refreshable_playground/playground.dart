@@ -5,8 +5,6 @@ import 'package:bubble_fight/player/players_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'respawns_layer.dart';
-
 class Playground extends StatelessWidget {
   const Playground({
     super.key,
@@ -56,7 +54,7 @@ class Playground extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            const RespawnsLayer(),
+            const _Respawns(),
             _AutoRefreshLayer(
               theme: theme,
               gameService: gameService,
@@ -84,6 +82,44 @@ class _AutoRefreshLayer extends StatelessWidget {
         BombsLayer(theme: theme, gameService: gameService),
         BulletsLayer(gameService: gameService),
         PlayersLayer(theme: theme, gameService: gameService),
+      ],
+    );
+  }
+}
+
+class _Respawns extends StatelessWidget {
+  const _Respawns();
+
+  @override
+  Widget build(BuildContext context) {
+    final respWidth = respawnWidth.toDouble();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          width: respWidth,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: respWidth,
+                blurRadius: respWidth,
+                color: Colors.blue.withOpacity(0.6),
+              )
+            ],
+          ),
+        ),
+        Container(
+          width: respWidth,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: respWidth,
+                blurRadius: respWidth,
+                color: Colors.red.withOpacity(0.6),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }

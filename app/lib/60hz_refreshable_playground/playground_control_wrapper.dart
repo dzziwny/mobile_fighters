@@ -9,8 +9,8 @@ import 'playground_auto_refresh_wrapper.dart';
 
 final playgroundFocusNode = FocusNode();
 
-class PlaygroundControlsWrapper extends StatelessWidget {
-  const PlaygroundControlsWrapper({super.key});
+class PlaygroundControlWrapper extends StatelessWidget {
+  const PlaygroundControlWrapper({super.key});
 
   void onPointerMove(PointerEvent event, double halfWidth, double halfHeight) {
     final x = event.position.dx - halfWidth;

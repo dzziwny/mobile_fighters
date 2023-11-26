@@ -1,4 +1,8 @@
+import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
+import 'package:bubble_fight/attacks/hit_reaction_layer.dart';
+import 'package:bubble_fight/attacks/sight_layer.dart';
 import 'package:bubble_fight/config.dart';
+import 'package:bubble_fight/controls/attack_buttons.dart';
 import 'package:bubble_fight/controls/controls_layer.dart';
 import 'package:bubble_fight/debug_tools/debug_game_settings.dart';
 import 'package:bubble_fight/debug_tools/lines_layer.dart';
@@ -6,12 +10,8 @@ import 'package:bubble_fight/frags/frags_layer.dart';
 import 'package:bubble_fight/start_window/_start_window.dart';
 import 'package:flutter/material.dart';
 
-import 'game_board_layer.dart';
-import 'hit_reaction_layer.dart';
-import 'sight_layer.dart';
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class Home extends StatelessWidget {
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,8 @@ class HomeScreen extends StatelessWidget {
             child: Stack(
               children: [
                 PlaygroundLayer(theme: theme),
-                if (!isMobile) const SightLayer(),
                 const HitReactionLayer(),
+                if (!isMobile) const SightLayer(),
                 const ControlsLayer(),
                 const StartWindowLayer(),
                 if (showDebugLines) const LinesLayer(),
@@ -40,6 +40,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          if (showAttackButtons) AttacksButtons(theme: theme),
           if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),
