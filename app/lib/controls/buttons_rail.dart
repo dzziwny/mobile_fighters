@@ -4,8 +4,8 @@ import 'package:bubble_fight/server_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class AttacksButtons extends StatefulWidget {
-  const AttacksButtons({
+class ButtonsRail extends StatefulWidget {
+  const ButtonsRail({
     super.key,
     required this.theme,
   });
@@ -13,10 +13,10 @@ class AttacksButtons extends StatefulWidget {
   final ThemeData theme;
 
   @override
-  State<AttacksButtons> createState() => _AttacksButtonsState();
+  State<ButtonsRail> createState() => _ButtonsRailState();
 }
 
-class _AttacksButtonsState extends State<AttacksButtons>
+class _ButtonsRailState extends State<ButtonsRail>
     with TickerProviderStateMixin {
   final player = gameService.gameState.players[serverClient.id];
 

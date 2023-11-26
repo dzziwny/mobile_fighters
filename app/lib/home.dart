@@ -2,7 +2,7 @@ import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
 import 'package:bubble_fight/attacks/hit_reaction_layer.dart';
 import 'package:bubble_fight/attacks/sight_layer.dart';
 import 'package:bubble_fight/config.dart';
-import 'package:bubble_fight/controls/attack_buttons.dart';
+import 'package:bubble_fight/controls/buttons_rail.dart';
 import 'package:bubble_fight/controls/controls_layer.dart';
 import 'package:bubble_fight/debug_tools/debug_game_settings.dart';
 import 'package:bubble_fight/debug_tools/lines_layer.dart';
@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
-          if (showAttackButtons) AttacksButtons(theme: theme),
+          if (showAttackButtons) ButtonsRail(theme: theme),
           if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),
