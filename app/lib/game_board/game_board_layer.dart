@@ -20,13 +20,15 @@ class Playground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: GameBoardLayer(),
-        ),
-        if (showAttackButtons) AttacksButtons(theme: theme),
-      ],
+    return Positioned.fill(
+      child: Row(
+        children: [
+          const Expanded(
+            child: GameBoardLayer(),
+          ),
+          if (showAttackButtons) AttacksButtons(theme: theme),
+        ],
+      ),
     );
   }
 }
@@ -56,49 +58,47 @@ class GameBoardLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Positioned.fill(
-      child: LayoutBuilder(builder: (context, constraints) {
-        final halfScreenWidth = constraints.maxWidth / 2;
-        final halfScreenHeight = constraints.maxHeight / 2;
-        return Listener(
-          onPointerDown: (_) => controlsBloc.startBullet(),
-          onPointerUp: (_) => controlsBloc.stopBullet(),
-          onPointerMove: isMobile
-              ? null
-              : (PointerMoveEvent event) =>
-                  onPointerMove(event, halfScreenWidth, halfScreenHeight),
-          onPointerHover: isMobile
-              ? null
-              : (PointerHoverEvent event) =>
-                  onPointerMove(event, halfScreenWidth, halfScreenHeight),
-          child: KeyboardListener(
-            focusNode: gameBoardFocusNode,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              alignment: Alignment.center,
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/cosmos_background.gif"),
-                  ),
+    return LayoutBuilder(builder: (context, constraints) {
+      final halfScreenWidth = constraints.maxWidth / 2;
+      final halfScreenHeight = constraints.maxHeight / 2;
+      return Listener(
+        onPointerDown: (_) => controlsBloc.startBullet(),
+        onPointerUp: (_) => controlsBloc.stopBullet(),
+        onPointerMove: isMobile
+            ? null
+            : (PointerMoveEvent event) =>
+                onPointerMove(event, halfScreenWidth, halfScreenHeight),
+        onPointerHover: isMobile
+            ? null
+            : (PointerHoverEvent event) =>
+                onPointerMove(event, halfScreenWidth, halfScreenHeight),
+        child: KeyboardListener(
+          focusNode: gameBoardFocusNode,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            alignment: Alignment.center,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/cosmos_background.gif"),
                 ),
-                width: screenWidth,
-                height: screenHeight,
-                child: ClipRect(
-                  child: ClippedBoard(
-                    frameWidth: frameWidth,
-                    frameHeight: frameHeight,
-                    theme: theme,
-                    frame: frame,
-                  ),
+              ),
+              width: screenWidth,
+              height: screenHeight,
+              child: ClipRect(
+                child: ClippedBoard(
+                  frameWidth: frameWidth,
+                  frameHeight: frameHeight,
+                  theme: theme,
+                  frame: frame,
                 ),
               ),
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }
 
