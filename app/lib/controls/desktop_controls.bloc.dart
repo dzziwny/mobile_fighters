@@ -1,19 +1,22 @@
 import 'dart:typed_data';
 
 import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/ws.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 import 'controls.bloc.dart';
-import 'controls_ws.dart';
 
 class DesktopControlsBloc extends ControlsBloc implements Disposable {
   int _keys = 0;
   Uint8List _angle = [0, 0, 0, 0].toBytes();
 
   final _bytesBuilder = BytesBuilder();
+
+  final desktopControlsWs =
+      Ws(Socket.desktopPlayerStateWs, MovementKeyboard.fromBytes);
 
   final statesMap = {
     PhysicalKeyboardKey.keyW: Bits.w,

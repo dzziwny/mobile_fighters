@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:bubble_fight/ws.dart';
 import 'package:core/core.dart';
 
 import 'controls.bloc.dart';
-import 'controls_ws.dart';
 
 class MobileControlsBloc extends ControlsBloc {
   int _keys = 0;
@@ -12,6 +12,9 @@ class MobileControlsBloc extends ControlsBloc {
   Uint8List _y = [0, 0, 0, 0].toBytes();
 
   final _bytesBuilder = BytesBuilder();
+
+  final mobileControlsWs =
+      Ws(Socket.mobilePlayerStateWs, PlayerViewModel.manyFromBytes);
 
   @override
   void startBullet() {
