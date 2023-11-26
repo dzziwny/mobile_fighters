@@ -19,40 +19,21 @@ final host = '0.0.0.0';
 // final host = '10.254.33.19';
 final base = 'http://$host:$port';
 
-Future<ConnectFromServerDto> connect$(String guid, String ip) async {
+Future<ConnectFromServerDto> connect$(
+    String guid, String ip, String nick, Device device) async {
   final response = await post(
     Uri.parse('$ip${Endpoint.connect}'),
     body: jsonEncode(
-      ConnectToServerDto(guid: guid).toJson(),
+      ConnectToServerDto(
+        guid: guid,
+        nick: nick,
+        device: device,
+      ).toJson(),
     ),
   );
 
   final dto = ConnectFromServerDto.fromJson(jsonDecode(response.body));
   return dto;
-}
-
-Future<void> createPlayer$(
-  String guid,
-  String ip,
-  int id,
-  String nick,
-  Device device,
-) async {
-  final response = await post(
-    Uri.parse('$ip${Endpoint.startGame}'),
-    body: jsonEncode(
-      CreatePlayerDtoRequest(
-        guid: guid,
-        id: id,
-        nick: nick,
-        device: device,
-      ),
-    ),
-  );
-
-  if (response.statusCode != 204) {
-    throw Exception('Cannot create player');
-  }
 }
 
 Future<GameFrame> gameFrame$(

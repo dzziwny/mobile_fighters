@@ -11,11 +11,11 @@ Future<Response> leaveGameHandler(Request request) async {
   final json = jsonDecode(body);
   final dto = LeaveGameDtoRequest.fromJson(json);
 
-  final serverId = guids[dto.guid];
-  if (serverId == null || serverId != dto.id) {
+  final id = guids[dto.guid];
+  if (id == null || id != dto.id) {
     return Response.ok(null);
   }
 
-  removePlayer(serverId);
+  removePlayer(id, dto.guid);
   return Response.ok(null);
 }

@@ -135,6 +135,25 @@ class Player extends PlayerViewModel {
 
     return builder.toBytes();
   }
+
+  void deactivate() {
+    isActive = false;
+    x = resetX;
+    y = resetY;
+    angle = 0.0;
+    hp = startHp;
+    velocityX = 0.0;
+    velocityY = 0.0;
+    nick = '';
+    team = Team.blue;
+    device = Device.iphone;
+    forceRatio = defaultPlayerForceRatio;
+    frictionK = defaultPlayerFrictionK;
+    frictionN = defaultPlayerFrictionN;
+    isDashActiveBit = 0;
+    isDashCooldownBit = 0;
+    isBombCooldownBit = 0;
+  }
 }
 
 extension PlayersToBytes on List<Player> {

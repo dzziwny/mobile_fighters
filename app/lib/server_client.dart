@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'game_state/game_state.service.dart';
 import 'uuid.dart';
 
 class ServerClient implements Disposable {
@@ -12,59 +12,43 @@ class ServerClient implements Disposable {
 
   ServerClient({required this.uuid});
 
-  int id = 0;
+  final _id$ = ReplaySubject<int>(maxSize: 1);
+  var id = 0;
   String ip = '';
-  bool isInGame = false;
-  final connected = Completer();
 
   late final StreamSubscription positionsSubscription;
   late final StreamSubscription myPositionSubscription;
 
   Future<void> connect(String ip, String nick, Device device) async {
     this.ip = ip;
-    final response = await connect$(uuid, 'http://$ip');
+    final response = await connect$(uuid, 'http://$ip', nick, device);
+    _id$.add(response.id);
     id = response.id;
-    if (!response.reconnected) {
-      await createPlayer$(uuid, 'http://$ip', id, nick, device);
-    }
-
-    isInGame = true;
-    connected.complete();
-  }
-
-  Future<void> backToTheGame() async {
-    final player = gameService.gameData.players[id];
-    await createPlayer$(
-      uuid,
-      'http://$ip',
-      id,
-      player.nick,
-      player.device,
-    );
   }
 
   Future<void> leaveGame() async {
+    final id = await _id$.first;
     await leaveGame$(uuid, id, 'http://$ip');
-    isInGame = false;
   }
 
   Future<void> setGamePhysics(GamePhysics physics) =>
       setGamePhysics$(physics, 'http://$ip');
 
-  Stream<WebSocketChannel> channel(Socket socket) async* {
-    await connected.future;
-    final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
-    var channel = WebSocketChannel.connect(uri);
-    yield* Stream.periodic(const Duration(seconds: 2)).map(
-      (_) {
-        if (channel.closeCode != null || channel.closeReason != null) {
-          final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
-          channel = WebSocketChannel.connect(uri);
-        }
+  Stream<WebSocketChannel> channel(Socket socket) {
+    return _id$.switchMap((id) {
+      final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
+      var channel = WebSocketChannel.connect(uri);
+      return Stream.periodic(const Duration(seconds: 2)).map(
+        (_) {
+          if (channel.closeCode != null || channel.closeReason != null) {
+            final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
+            channel = WebSocketChannel.connect(uri);
+          }
 
-        return channel;
-      },
-    ).distinct();
+          return channel;
+        },
+      ).distinct();
+    });
   }
 
   @override

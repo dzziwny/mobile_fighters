@@ -1,3 +1,4 @@
+import 'package:core/src/model/_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'connect.dto.freezed.dart';
@@ -7,6 +8,8 @@ part 'connect.dto.g.dart';
 class ConnectToServerDto with _$ConnectToServerDto {
   const factory ConnectToServerDto({
     required String guid,
+    required String nick,
+    required Device device,
   }) = _ConnectToServerDto;
 
   factory ConnectToServerDto.fromJson(Map<String, dynamic> json) =>
@@ -17,7 +20,6 @@ class ConnectToServerDto with _$ConnectToServerDto {
 class ConnectFromServerDto with _$ConnectFromServerDto {
   const factory ConnectFromServerDto({
     required int id,
-    required bool reconnected,
   }) = _ConnectFromServerDto;
 
   factory ConnectFromServerDto.fromJson(Map<String, dynamic> json) =>

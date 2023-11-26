@@ -4,6 +4,7 @@ import 'package:bubble_fight/attacks/sight_layer.dart';
 import 'package:bubble_fight/config.dart';
 import 'package:bubble_fight/controls/buttons_rail.dart';
 import 'package:bubble_fight/controls/controls_layer.dart';
+import 'package:bubble_fight/controls/leave_button.dart';
 import 'package:bubble_fight/debug_tools/debug_game_settings.dart';
 import 'package:bubble_fight/debug_tools/lines_layer.dart';
 import 'package:bubble_fight/frags/frags_layer.dart';
@@ -37,10 +38,16 @@ class Home extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (showLeaveButton)
+                  const Positioned(
+                    top: 16.0,
+                    right: 16.0,
+                    child: LeaveButton(),
+                  ),
               ],
             ),
           ),
-          if (showButtonsRail) ButtonsRail(theme: theme),
+          if (showButtonsRail) const ButtonsRail(),
           if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),

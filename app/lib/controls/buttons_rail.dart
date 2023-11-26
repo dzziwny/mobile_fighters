@@ -7,12 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'leave_button.dart';
 
 class ButtonsRail extends StatefulWidget {
-  const ButtonsRail({
-    super.key,
-    required this.theme,
-  });
-
-  final ThemeData theme;
+  const ButtonsRail({super.key});
 
   @override
   State<ButtonsRail> createState() => _ButtonsRailState();

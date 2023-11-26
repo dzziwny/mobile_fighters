@@ -46,8 +46,10 @@ void shareGameData() {
   }
 }
 
-void removePlayer(int id) {
-  players[id].isActive = false;
+void removePlayer(int id, String guid) {
+  players[id].deactivate();
+  playerMetadatas[id].deactivate();
+  guids.remove(guid);
   redTeam.remove(id);
   blueTeam.remove(id);
 

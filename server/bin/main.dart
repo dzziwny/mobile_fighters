@@ -34,7 +34,6 @@ void main(List<String> args) async {
     ..get('/ping', (Request req) => Response.ok('ping'))
     ..get(Endpoint.gameFrame, gameFrameHandler)
     ..post(Endpoint.connect, connectHandler)
-    ..post(Endpoint.startGame, createPlayerHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
     ..post(Endpoint.setGamePhysics, setGamePhysicsHandler)
     ..ws(Socket.mobileControlsWs, MobileControlsConnection())
