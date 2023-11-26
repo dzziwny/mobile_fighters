@@ -48,19 +48,31 @@ class _Player extends StatelessWidget {
   final Color color;
   final Widget playerWidget;
 
-  static const _playerHeightOffest = hpBarHeight + (playerAreaHeight / 2.0);
-  static const _playerWidthOffest = fullPlayerAreaWidth / 2.0;
-
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: player.y - _Player._playerHeightOffest,
-      left: player.x - _Player._playerWidthOffest,
+      top: player.y - playerHeightOffest,
+      left: player.x - playerWidthOffest,
       child: SizedBox(
         height: fullPlayerAreaHeight,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(
+              height: playerNickHeight,
+              width: fullPlayerAreaWidth,
+              child: FittedBox(
+                child: Text(
+                  metadata.nick,
+                  style: const TextStyle(
+                    color: Colors.yellow,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: hpBarNickSpace),
             SizedBox(
               height: hpBarHeight,
               width: fullPlayerAreaWidth,
@@ -77,8 +89,9 @@ class _Player extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: nickCharacterSpace),
             SizedBox(
-              height: playerAreaHeight,
+              height: playerPhoneHeight,
               child: Transform.rotate(
                 angle: player.angle,
                 child: Container(
