@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                Playground(theme: theme),
+                PlaygroundLayer(theme: theme),
                 if (!isMobile) const SightLayer(),
                 const HitReactionLayer(),
                 const ControlsLayer(),

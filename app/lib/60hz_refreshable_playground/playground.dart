@@ -5,41 +5,10 @@ import 'package:bubble_fight/player/players_layer.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'game_board_tablet_frame.dart';
 import 'respawns_layer.dart';
 
-class GameBoard extends StatelessWidget {
-  const GameBoard({
-    super.key,
-    required this.boardWidth,
-    required this.boardHeight,
-    required this.gameService,
-    required this.theme,
-  });
-
-  final double boardWidth;
-  final double boardHeight;
-  final ThemeData theme;
-  final GameStateService gameService;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GameBoardBattleGround(
-          boardWidth: boardWidth,
-          boardHeight: boardHeight,
-          theme: theme,
-          gameService: gameService,
-        ),
-        const GameBoardTabletFrame(),
-      ],
-    );
-  }
-}
-
-class GameBoardBattleGround extends StatelessWidget {
-  const GameBoardBattleGround({
+class Playground extends StatelessWidget {
+  const Playground({
     super.key,
     required this.boardWidth,
     required this.boardHeight,
@@ -88,7 +57,7 @@ class GameBoardBattleGround extends StatelessWidget {
         child: Stack(
           children: [
             const RespawnsLayer(),
-            AutoRefreshLayer(
+            _AutoRefreshLayer(
               theme: theme,
               gameService: gameService,
             ),
@@ -99,9 +68,8 @@ class GameBoardBattleGround extends StatelessWidget {
   }
 }
 
-class AutoRefreshLayer extends StatelessWidget {
-  const AutoRefreshLayer({
-    super.key,
+class _AutoRefreshLayer extends StatelessWidget {
+  const _AutoRefreshLayer({
     required this.theme,
     required this.gameService,
   });

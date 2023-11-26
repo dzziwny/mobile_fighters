@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_controls_wrapper.dart';
 import 'package:bubble_fight/ws.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
   };
 
   DesktopControlsBloc() {
-    gameBoardFocusNode.onKey = (_, event) => handleState(event);
+    playgroundFocusNode.onKey = (_, event) => handleState(event);
   }
 
   KeyEventResult handleState(RawKeyEvent event) {
@@ -95,6 +95,6 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
 
   @override
   Future onDispose() async {
-    gameBoardFocusNode.dispose();
+    playgroundFocusNode.dispose();
   }
 }

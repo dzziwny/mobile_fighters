@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GameBoardTabletFrame extends StatelessWidget {
-  const GameBoardTabletFrame({
+class PlaygroundTabletFrame extends StatelessWidget {
+  const PlaygroundTabletFrame({
     super.key,
   });
 

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_controls_wrapper.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +58,7 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
                 const SnackBar(content: Text('Success')),
               );
 
-              gameBoardFocusNode.requestFocus();
+              playgroundFocusNode.requestFocus();
             },
             child: const Text('Apply'),
           ),

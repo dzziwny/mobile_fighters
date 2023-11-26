@@ -1,4 +1,4 @@
-import 'package:bubble_fight/game_board/game_board_layer.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_controls_wrapper.dart';
 import 'package:bubble_fight/player/_player.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
@@ -152,7 +152,7 @@ class _StartWindowState extends State<StartWindow> {
                                       );
 
                                       startWindowController.set(false);
-                                      gameBoardFocusNode.requestFocus();
+                                      playgroundFocusNode.requestFocus();
                                     },
                               icon: const Icon(Icons.play_arrow_rounded),
                             ),
