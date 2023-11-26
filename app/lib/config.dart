@@ -6,7 +6,6 @@ const showDebugGameSettings = false;
 
 final isMobile = defaultTargetPlatform == TargetPlatform.android ||
     defaultTargetPlatform == TargetPlatform.iOS;
-// final showButtonsRail = isMobile;
-final showButtonsRail = true;
+final showButtonsRail = isMobile;
 
 const saveUuidInPrefs = !kDebug;
