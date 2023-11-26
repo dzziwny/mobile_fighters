@@ -1,4 +1,4 @@
-import 'package:bubble_fight/60hz_refreshable_playground/playground_control_wrapper.dart';
+import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
 import 'package:bubble_fight/player/_player.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';

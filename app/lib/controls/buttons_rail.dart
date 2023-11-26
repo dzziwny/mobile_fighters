@@ -4,6 +4,8 @@ import 'package:bubble_fight/server_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'leave_button.dart';
+
 class ButtonsRail extends StatefulWidget {
   const ButtonsRail({
     super.key,
@@ -35,26 +37,33 @@ class _ButtonsRailState extends State<ButtonsRail>
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _AttackButton(
-              enabled: !player.isDashCooldown,
-              icon: const Icon(Icons.rocket_launch),
-              onPointerDown: controlsBloc.startDash,
-              onPointerUp: controlsBloc.stopDash,
-            ),
-            const SizedBox(height: 8.0),
-            _AttackButton(
-              enabled: !player.isBombCooldown,
-              icon: const Icon(Icons.sunny),
-              onPointerDown: controlsBloc.startBomb,
-              onPointerUp: controlsBloc.stopBomb,
-            ),
-            const SizedBox(height: 8.0),
-            _AttackButton(
-              icon: const Icon(Icons.donut_large_rounded),
-              onPointerDown: controlsBloc.startBullet,
-              onPointerUp: controlsBloc.stopBullet,
+            const LeaveButton(),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _AttackButton(
+                    enabled: !player.isDashCooldown,
+                    icon: const Icon(Icons.rocket_launch),
+                    onPointerDown: controlsBloc.startDash,
+                    onPointerUp: controlsBloc.stopDash,
+                  ),
+                  const SizedBox(height: 8.0),
+                  _AttackButton(
+                    enabled: !player.isBombCooldown,
+                    icon: const Icon(Icons.sunny),
+                    onPointerDown: controlsBloc.startBomb,
+                    onPointerUp: controlsBloc.stopBomb,
+                  ),
+                  const SizedBox(height: 8.0),
+                  _AttackButton(
+                    icon: const Icon(Icons.donut_large_rounded),
+                    onPointerDown: controlsBloc.startBullet,
+                    onPointerUp: controlsBloc.stopBullet,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

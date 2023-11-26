@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                PlaygroundLayer(theme: theme),
+                const PlaygroundLayer(),
                 const HitReactionLayer(),
                 if (!isMobile) const SightLayer(),
                 const ControlsLayer(),
@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
-          if (showAttackButtons) ButtonsRail(theme: theme),
+          if (showButtonsRail) ButtonsRail(theme: theme),
           if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),
