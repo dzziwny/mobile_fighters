@@ -22,6 +22,7 @@ dependencies:
   flutter_svg: ^2.0.2
   flutter_shake_animated: ^0.0.5
   value_stream_builder: ^1.0.0
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

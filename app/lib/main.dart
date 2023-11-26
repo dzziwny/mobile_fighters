@@ -13,7 +13,7 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
 
-  initializeInstances();
+  await initializeInstances();
   runApp(const App());
 }
 

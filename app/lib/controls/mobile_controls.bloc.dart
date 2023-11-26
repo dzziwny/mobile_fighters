@@ -14,7 +14,7 @@ class MobileControlsBloc extends ControlsBloc {
   final _bytesBuilder = BytesBuilder();
 
   final mobileControlsWs =
-      Ws(Socket.mobilePlayerStateWs, PlayerViewModel.manyFromBytes);
+      Ws(Socket.mobileControlsWs, PlayerViewModel.manyFromBytes);
 
   @override
   void startBullet() {

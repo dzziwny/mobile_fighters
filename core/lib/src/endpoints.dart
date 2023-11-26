@@ -11,10 +11,10 @@ class Socket {
   static var gameDataWs = Socket('metadata');
 
   /// Mobile player can send state here to move, attack, etc.
-  static var mobilePlayerStateWs = Socket('mobilePlayerState');
+  static var mobileControlsWs = Socket('mobilePlayerControls');
 
   /// Mobile player can send state here to move, attack, etc.
-  static var desktopPlayerStateWs = Socket('desktopPlayerState');
+  static var desktopControlsWs = Socket('desktopPlayerControls');
 
   /// Player can get game state here about positions, bullets, bombs, frags etc.
   static var gameStateWs = Socket('gameState');

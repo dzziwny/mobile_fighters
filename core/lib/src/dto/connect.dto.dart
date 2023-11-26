@@ -17,6 +17,7 @@ class ConnectToServerDto with _$ConnectToServerDto {
 class ConnectFromServerDto with _$ConnectFromServerDto {
   const factory ConnectFromServerDto({
     required int id,
+    required bool reconnected,
   }) = _ConnectFromServerDto;
 
   factory ConnectFromServerDto.fromJson(Map<String, dynamic> json) =>

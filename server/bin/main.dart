@@ -37,12 +37,13 @@ void main(List<String> args) async {
     ..post(Endpoint.startGame, createPlayerHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
     ..post(Endpoint.setGamePhysics, setGamePhysicsHandler)
-    ..ws(Socket.mobilePlayerStateWs, MobileControlsConnection())
-    ..ws(Socket.desktopPlayerStateWs, DesktopControlsConnection())
+    ..ws(Socket.mobileControlsWs, MobileControlsConnection())
+    ..ws(Socket.desktopControlsWs, DesktopControlsConnection())
     ..ws(Socket.gameDataWs, GameDataConnection())
     ..ws(Socket.gameStateWs, GameStateConnection());
 
-  final handler = Pipeline().addMiddleware(corsHeaders()).addHandler(router);
+  final handler =
+      Pipeline().addMiddleware(corsHeaders()).addHandler(router.call);
 
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);

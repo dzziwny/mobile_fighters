@@ -13,7 +13,7 @@ import '../setup.dart';
 abstract class OnConnection implements Disposable {
   StreamSubscription? _mobileSubscription;
 
-  late final Player player;
+  late Player player;
 
   void onInit(int playerId, WebSocketChannel channel) {}
 
@@ -32,6 +32,7 @@ abstract class OnConnection implements Disposable {
             _mobileSubscription = channel.stream.listen(
               (data) => onData(intId, data),
               onError: (error) {
+                // TODO reconnect
                 print('Error: $error');
               },
               onDone: () {

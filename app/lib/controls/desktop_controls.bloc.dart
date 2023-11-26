@@ -16,7 +16,7 @@ class DesktopControlsBloc extends ControlsBloc implements Disposable {
   final _bytesBuilder = BytesBuilder();
 
   final desktopControlsWs =
-      Ws(Socket.desktopPlayerStateWs, MovementKeyboard.fromBytes);
+      Ws(Socket.desktopControlsWs, MovementKeyboard.fromBytes);
 
   final statesMap = {
     PhysicalKeyboardKey.keyW: Bits.w,
