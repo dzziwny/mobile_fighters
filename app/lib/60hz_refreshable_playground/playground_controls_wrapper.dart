@@ -7,7 +7,7 @@ import 'package:vector_math/vector_math.dart';
 
 import 'playground_auto_refresh_wrapper.dart';
 
-late final FocusNode playgroundFocusNode;
+final playgroundFocusNode = FocusNode();
 
 class PlaygroundControlsWrapper extends StatelessWidget {
   const PlaygroundControlsWrapper({super.key});

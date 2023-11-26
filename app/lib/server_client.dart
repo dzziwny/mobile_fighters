@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'game_state/game_state.service.dart';
+import 'uuid.dart';
 
 class ServerClient implements Disposable {
   final String uuid;
@@ -75,4 +76,4 @@ class ServerClient implements Disposable {
   }
 }
 
-late final ServerClient serverClient;
+final serverClient = ServerClient(uuid: uuid);
