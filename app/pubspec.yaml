@@ -30,8 +30,17 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
+
+flutter_launcher_icons:
+  android: true
+  min_sdk_android: 21
+  image_path_android: "assets/logo_no_background.png"
+  ios: true
+  remove_alpha_ios: true
+  image_path_ios: "assets/logo_no_background.png"
