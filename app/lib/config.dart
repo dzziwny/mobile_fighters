@@ -11,3 +11,6 @@ final showButtonsRail = isMobile;
 final showLeaveButton = !isMobile;
 
 const saveUuidInPrefs = !kDebug;
+
+const displaySplash = !kDebug;
+const forceSomeTimeOnSplash = !kDebug;

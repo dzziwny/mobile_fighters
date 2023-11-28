@@ -1,19 +1,23 @@
+import 'package:bubble_fight/home.dart';
+import 'package:bubble_fight/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'home.dart';
+import 'config.dart';
 import 'initialize_instances.dart';
 import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await SystemChrome.setPreferredOrientations([
+  SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
 
-  await initializeInstances();
+  if (!displaySplash) {
+    await initializeInstances();
+  }
+
   runApp(const App());
 }
 
@@ -24,7 +28,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: lightTheme(),
-      home: const Home(),
+      home: displaySplash ? const SplashScreen() : const Home(),
     );
   }
 }
