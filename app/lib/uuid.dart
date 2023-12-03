@@ -2,11 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'config.dart';
-import 'shared_preferences.dart';
 
-final String uuid = _getUuid(prefs);
+late final String uuid;
 
-String _getUuid(SharedPreferences prefs) {
+String getUuid(SharedPreferences prefs) {
   if (!saveUuidInPrefs) {
     return const Uuid().v4();
   }

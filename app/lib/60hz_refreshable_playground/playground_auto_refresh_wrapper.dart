@@ -48,7 +48,7 @@ class _PlaygroundStateAutoRefreshWrapper
 
   @override
   Widget build(BuildContext context) {
-    final player = gameService.gameState.players[serverClient.id];
+    final player = gameService.gameState.players[serverClient.state.value.id];
     var x = (player.x - widget.playerOffsetx) / widget.frameOffsetx;
     var y = (player.y - widget.playerOffsety) / widget.frameOffsety;
     return OverflowBox(

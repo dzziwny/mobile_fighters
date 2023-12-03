@@ -34,7 +34,7 @@ class _HitReactionState extends State<HitReactionLayer>
 
     hitSubscription = gameStateWs.data().listen(
       (state) {
-        if (state.hits[serverClient.id] == 1) {
+        if (state.hits[serverClient.state.value.id] == 1) {
           animateHit();
         }
       },

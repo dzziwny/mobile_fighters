@@ -16,6 +16,6 @@ Future<Response> leaveGameHandler(Request request) async {
     return Response.ok(null);
   }
 
-  removePlayer(id, dto.guid);
+  removePlayer(id);
   return Response.ok(null);
 }

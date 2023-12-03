@@ -46,12 +46,12 @@ void shareGameData() {
   }
 }
 
-void removePlayer(int id, String guid) {
+void removePlayer(int id) {
   players[id].deactivate();
   playerMetadatas[id].deactivate();
-  guids.remove(guid);
   redTeam.remove(id);
   blueTeam.remove(id);
+  guids.removeWhere((key, value) => value == id);
 
   shareGameData();
 }

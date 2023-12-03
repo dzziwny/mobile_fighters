@@ -15,7 +15,7 @@ class ButtonsRail extends StatefulWidget {
 
 class _ButtonsRailState extends State<ButtonsRail>
     with TickerProviderStateMixin {
-  final player = gameService.gameState.players[serverClient.id];
+  final player = gameService.gameState.players[serverClient.state.value.id];
 
   late final Ticker _ticker;
 

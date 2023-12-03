@@ -5,6 +5,7 @@ import 'package:bubble_fight/game_state/game_state_ws.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/start_window/start_window.controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'shared_preferences.dart';
 import 'uuid.dart';
@@ -12,8 +13,17 @@ import 'uuid.dart';
 // Just call to create instances
 Future<void> initializeInstances() async {
   prefs = await SharedPreferences.getInstance();
-  uuid;
-  serverClient;
+  uuid = getUuid(prefs);
+  serverClient = ServerClient(uuid: uuid);
+  final ip = prefs.getString('previousIp');
+  if (ip != null) {
+    final isReconnected = await serverClient.tryReconnect(uuid, ip);
+    if (isReconnected) {
+      startWindowController.set(false);
+      playgroundFocusNode.requestFocus();
+    }
+  }
+
   gameDataWs;
   gameStateWs;
   playgroundFocusNode;
@@ -21,3 +31,5 @@ Future<void> initializeInstances() async {
   gameService;
   startWindowController;
 }
+
+late final WebSocketChannel test;

@@ -19,12 +19,12 @@ final host = '0.0.0.0';
 // final host = '10.254.33.19';
 final base = 'http://$host:$port';
 
-Future<ConnectFromServerDto> connect$(
+Future<PlayFromServerDto> play$(
     String guid, String ip, String nick, Device device) async {
   final response = await post(
-    Uri.parse('$ip${Endpoint.connect}'),
+    Uri.parse('$ip${Endpoint.play}'),
     body: jsonEncode(
-      ConnectToServerDto(
+      PlayToServerDto(
         guid: guid,
         nick: nick,
         device: device,
@@ -32,7 +32,7 @@ Future<ConnectFromServerDto> connect$(
     ),
   );
 
-  final dto = ConnectFromServerDto.fromJson(jsonDecode(response.body));
+  final dto = PlayFromServerDto.fromJson(jsonDecode(response.body));
   return dto;
 }
 

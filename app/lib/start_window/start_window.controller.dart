@@ -1,7 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 
 class StartWindowController {
-  final _show = PublishSubject<bool>();
+  final _show = BehaviorSubject.seeded(true);
 
   Stream<bool> show() => _show.asBroadcastStream();
 

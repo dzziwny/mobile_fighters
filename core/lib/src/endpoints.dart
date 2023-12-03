@@ -1,5 +1,6 @@
 class Endpoint {
   static const connect = '/connect';
+  static const play = '/play';
   static const startGame = '/startGame';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';

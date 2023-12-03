@@ -14,6 +14,7 @@ import 'ammunition/dash_loop.dart';
 import 'controls/desktop_controls.connection.dart';
 import 'controls/mobile_controls.connection.dart';
 import 'handler/_handler.dart';
+import 'handler/connect.handler.dart';
 import 'handler/game_data.connection.dart';
 import 'handler/on_connection.dart';
 import 'register_di.dart';
@@ -34,6 +35,7 @@ void main(List<String> args) async {
     ..get('/ping', (Request req) => Response.ok('ping'))
     ..get(Endpoint.gameFrame, gameFrameHandler)
     ..post(Endpoint.connect, connectHandler)
+    ..post(Endpoint.play, playHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
     ..post(Endpoint.setGamePhysics, setGamePhysicsHandler)
     ..ws(Socket.mobileControlsWs, MobileControlsConnection())

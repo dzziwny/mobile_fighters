@@ -145,7 +145,7 @@ class _StartWindowState extends State<StartWindow> {
                               onPressed: nickController.text == ''
                                   ? null
                                   : () async {
-                                      await serverClient.connect(
+                                      await serverClient.play(
                                         ipController.text,
                                         nickController.text,
                                         selectedDevice,

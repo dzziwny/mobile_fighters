@@ -23,6 +23,7 @@ dependencies:
   flutter_shake_animated: ^0.0.5
   value_stream_builder: ^1.0.0
   shared_preferences: ^2.2.2
+  freezed_annotation: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +32,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
   flutter_launcher_icons: ^0.13.1
+  freezed: ^2.4.5
 
 flutter:
   uses-material-design: true
