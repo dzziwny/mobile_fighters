@@ -20,8 +20,8 @@ class DashLoop extends Cooldown {
       dashDuration,
       () {
         players[playerId]
-          ..frictionK = defaultPlayerFrictionK
-          ..forceRatio = defaultPlayerForceRatio
+          ..frictionK = gamePhysics.k
+          ..forceRatio = gamePhysics.f
           ..isDashActiveBit = 0;
       },
     );

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:core/src/constants.dart';
+import 'package:core/src/constants.dart' as constants;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'game_physics.g.dart';
@@ -10,11 +10,15 @@ class GamePhysics {
   double n;
   double k;
   double f;
+  double dashFrictionK;
+  double dashforceRation;
 
   GamePhysics({
-    this.n = defaultPlayerFrictionN,
-    this.k = defaultPlayerFrictionK,
-    this.f = defaultPlayerForceRatio,
+    this.n = constants.defaultPlayerFrictionN,
+    this.k = constants.defaultPlayerFrictionK,
+    this.f = constants.defaultPlayerForceRatio,
+    this.dashFrictionK = constants.dashFrictionK,
+    this.dashforceRation = constants.dashforceRation,
   });
 
   factory GamePhysics.fromJson(Map<String, dynamic> json) =>

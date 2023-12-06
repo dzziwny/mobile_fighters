@@ -147,12 +147,18 @@ class Player extends PlayerViewModel {
     nick = '';
     team = Team.blue;
     device = Device.iphone;
-    forceRatio = defaultPlayerForceRatio;
-    frictionK = defaultPlayerFrictionK;
-    frictionN = defaultPlayerFrictionN;
+    forceRatio = gamePhysics.f;
+    frictionK = gamePhysics.k;
+    frictionN = gamePhysics.n;
     isDashActiveBit = 0;
     isDashCooldownBit = 0;
     isBombCooldownBit = 0;
+  }
+
+  void resetGamePhysics() {
+    forceRatio = gamePhysics.f;
+    frictionK = gamePhysics.k;
+    frictionN = gamePhysics.n;
   }
 }
 

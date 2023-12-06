@@ -6,70 +6,71 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class DebugGameSettings extends StatefulWidget {
-  const DebugGameSettings({super.key});
+  const DebugGameSettings({
+    super.key,
+    required this.physics,
+  });
+
+  final GamePhysics physics;
 
   @override
   State<DebugGameSettings> createState() => _DebugGameSettingsState();
 }
 
 class _DebugGameSettingsState extends State<DebugGameSettings> {
-  var gamepPhysics = GamePhysics();
-
   late final _kController =
-      TextEditingController(text: gamepPhysics.k.toString());
+      TextEditingController(text: widget.physics.k.toString());
   late final _nController =
-      TextEditingController(text: gamepPhysics.n.toString());
+      TextEditingController(text: widget.physics.n.toString());
   late final _fController =
-      TextEditingController(text: gamepPhysics.f.toString());
+      TextEditingController(text: widget.physics.f.toString());
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      width: 200.0,
-      child: Column(
-        children: [
-          TextField(
-            controller: _kController,
-            onChanged: (value) {
-              gamepPhysics.k = double.tryParse(value) ?? 0;
-            },
+    return Column(
+      children: [
+        TextField(
+          controller: _kController,
+          decoration: const InputDecoration(
+            labelText: 'player default friction k',
+            border: OutlineInputBorder(),
           ),
-          TextField(
-            controller: _nController,
-            onChanged: (value) {
-              gamepPhysics.n = double.tryParse(value) ?? 0;
-            },
+          onChanged: (value) {
+            widget.physics.k = double.tryParse(value) ?? 0;
+          },
+        ),
+        TextField(
+          controller: _nController,
+          decoration: const InputDecoration(
+            labelText: 'player default friction n',
+            border: OutlineInputBorder(),
           ),
-          TextField(
-            controller: _fController,
-            onChanged: (value) {
-              gamepPhysics.f = double.tryParse(value) ?? 0;
-            },
+          onChanged: (value) {
+            widget.physics.n = double.tryParse(value) ?? 0;
+          },
+        ),
+        TextField(
+          controller: _fController,
+          decoration: const InputDecoration(
+            labelText: 'player default move force',
+            border: OutlineInputBorder(),
           ),
-          MaterialButton(
-            onPressed: () async {
-              await serverClient.setGamePhysics(gamepPhysics);
-              if (!mounted) {
-                return;
-              }
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Success')),
-              );
-
-              playgroundFocusNode.requestFocus();
-            },
-            child: const Text('Apply'),
-          ),
-          MaterialButton(
-            onPressed: () {
-              exit(0);
-            },
-            child: const Text('Exit'),
-          ),
-        ],
-      ),
+          onChanged: (value) {
+            widget.physics.f = double.tryParse(value) ?? 0;
+          },
+        ),
+        MaterialButton(
+          onPressed: () {
+            exit(0);
+          },
+          child: const Text('Exit app'),
+        ),
+      ].expand(
+        (element) sync* {
+          yield element;
+          yield const SizedBox(height: 16.0);
+        },
+      ).toList(),
     );
   }
 }

@@ -54,9 +54,9 @@ const goldenRatio = 1.61803398875;
 
 // PHYSICS
 final gamePhysics = GamePhysics();
-const defaultPlayerFrictionK = 0.1;
-const defaultPlayerFrictionN = 0.25;
-const defaultPlayerForceRatio = 5.0;
+const defaultPlayerFrictionK = 0.6;
+const defaultPlayerFrictionN = 0.23;
+const defaultPlayerForceRatio = 12.0;
 
 // ATTACKS
 

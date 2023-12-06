@@ -6,6 +6,7 @@ import 'package:bubble_fight/controls/buttons_rail.dart';
 import 'package:bubble_fight/controls/controls_layer.dart';
 import 'package:bubble_fight/controls/leave_button.dart';
 import 'package:bubble_fight/debug_tools/debug_game_settings.dart';
+import 'package:bubble_fight/debug_tools/debug_game_settings_button.dart';
 import 'package:bubble_fight/debug_tools/lines_layer.dart';
 import 'package:bubble_fight/frags/frags_layer.dart';
 import 'package:bubble_fight/start_window/_start_window.dart';
@@ -42,13 +43,19 @@ class Home extends StatelessWidget {
                   const Positioned(
                     top: 16.0,
                     right: 16.0,
-                    child: LeaveButton(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (showDebugGameSettings) DebugGameSettingsButton(),
+                        SizedBox(width: 16.0),
+                        LeaveButton(),
+                      ],
+                    ),
                   ),
               ],
             ),
           ),
           if (showButtonsRail) const ButtonsRail(),
-          if (showDebugGameSettings) const DebugGameSettings(),
         ],
       ),
     );
