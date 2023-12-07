@@ -18,14 +18,14 @@ class BombsLayer extends StatelessWidget {
       children: gameService.gameState.bombs.map(
         (attack) {
           return Positioned(
-            top: attack.y - bombRadius,
-            left: attack.x - bombRadius,
-            child: const Card(
-              shape: CircleBorder(),
+            top: attack.y - gameSettings.bombRadius,
+            left: attack.x - gameSettings.bombRadius,
+            child: Card(
+              shape: const CircleBorder(),
               color: Colors.deepPurple,
               child: SizedBox(
-                height: bombDiameter,
-                width: bombDiameter,
+                height: gameSettings.bombDiameter,
+                width: gameSettings.bombDiameter,
               ),
             ),
           );

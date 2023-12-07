@@ -34,9 +34,9 @@ class Playground extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(
-        vertical: battleGroundFrameVerticalThickness,
-        horizontal: battleGroundFrameHorizontalThickness,
+      padding: EdgeInsets.symmetric(
+        vertical: gameSettings.battleGroundFrameVerticalThickness,
+        horizontal: gameSettings.battleGroundFrameHorizontalThickness,
       ),
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -92,7 +92,7 @@ class _Respawns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final respWidth = respawnWidth.toDouble();
+    final respWidth = gameSettings.respawnWidth.toDouble();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

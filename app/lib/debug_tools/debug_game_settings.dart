@@ -1,76 +1,135 @@
 import 'dart:io';
 
-import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
-import 'package:bubble_fight/server_client.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
+class DebugGameSettingsController {
+  var settings = const GameSettings();
+}
+
 class DebugGameSettings extends StatefulWidget {
   const DebugGameSettings({
+    required this.controller,
     super.key,
-    required this.physics,
   });
 
-  final GamePhysics physics;
+  final DebugGameSettingsController controller;
 
   @override
   State<DebugGameSettings> createState() => _DebugGameSettingsState();
 }
 
 class _DebugGameSettingsState extends State<DebugGameSettings> {
-  late final _kController =
-      TextEditingController(text: widget.physics.k.toString());
-  late final _nController =
-      TextEditingController(text: widget.physics.n.toString());
-  late final _fController =
-      TextEditingController(text: widget.physics.f.toString());
+  late final _frameRateController = TextEditingController(
+      text: widget.controller.settings.frameRate.toString());
+
+  late final _kController = TextEditingController(
+      text: widget.controller.settings.frictionK.toString());
+  late final _nController = TextEditingController(
+      text: widget.controller.settings.frictionN.toString());
+  late final _fController = TextEditingController(
+      text: widget.controller.settings.forceRatio.toString());
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        TextField(
-          controller: _kController,
-          decoration: const InputDecoration(
-            labelText: 'player default friction k',
-            border: OutlineInputBorder(),
+        Expanded(
+          child: Column(
+            children: [
+              const Text('Frames'),
+              Flexible(
+                child: TextField(
+                  controller: _frameRateController,
+                  decoration: const InputDecoration(
+                    labelText: 'frame rate',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    widget.controller.settings =
+                        widget.controller.settings.copyWith(
+                      frameRate: int.tryParse(value),
+                    );
+                  },
+                ),
+              ),
+            ].expand(
+              (element) sync* {
+                yield element;
+                yield const SizedBox(height: 16.0);
+              },
+            ).toList(),
           ),
-          onChanged: (value) {
-            widget.physics.k = double.tryParse(value) ?? 0;
-          },
         ),
-        TextField(
-          controller: _nController,
-          decoration: const InputDecoration(
-            labelText: 'player default friction n',
-            border: OutlineInputBorder(),
+        const SizedBox(width: 16.0),
+        Expanded(
+          child: Column(
+            children: [
+              const Text('Player'),
+              Flexible(
+                child: TextField(
+                  controller: _kController,
+                  decoration: const InputDecoration(
+                    labelText: 'player default friction k',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    widget.controller.settings =
+                        widget.controller.settings.copyWith(
+                      frictionK: double.tryParse(value),
+                    );
+                  },
+                ),
+              ),
+              TextField(
+                controller: _nController,
+                decoration: const InputDecoration(
+                  labelText: 'player default friction n',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  widget.controller.settings =
+                      widget.controller.settings.copyWith(
+                    frictionN: double.tryParse(value),
+                  );
+                },
+              ),
+              TextField(
+                controller: _fController,
+                decoration: const InputDecoration(
+                  labelText: 'player default move force',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  widget.controller.settings =
+                      widget.controller.settings.copyWith(
+                    forceRatio: double.tryParse(value),
+                  );
+                },
+              ),
+              MaterialButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: const Text('Exit app'),
+              ),
+            ].expand(
+              (element) sync* {
+                yield element;
+                yield const SizedBox(height: 16.0);
+              },
+            ).toList(),
           ),
-          onChanged: (value) {
-            widget.physics.n = double.tryParse(value) ?? 0;
-          },
         ),
-        TextField(
-          controller: _fController,
-          decoration: const InputDecoration(
-            labelText: 'player default move force',
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (value) {
-            widget.physics.f = double.tryParse(value) ?? 0;
-          },
-        ),
-        MaterialButton(
-          onPressed: () {
-            exit(0);
-          },
-          child: const Text('Exit app'),
-        ),
-      ].expand(
-        (element) sync* {
-          yield element;
-          yield const SizedBox(height: 16.0);
-        },
-      ).toList(),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _kController.dispose();
+    _nController.dispose();
+    _fController.dispose();
+    super.dispose();
   }
 }

@@ -78,8 +78,8 @@ class ServerClient implements Disposable {
     await leaveGame$(uuid, state.value.id, 'http://${state.value.lastIp}');
   }
 
-  Future<void> setGamePhysics(GamePhysics physics) =>
-      setGamePhysics$(physics, 'http://${state.value.lastIp}');
+  Future<void> setGameSettings(GameSettings settings) =>
+      setGameSettings$(settings, 'http://${state.value.lastIp}');
 
   Stream<WebSocketChannel> channel(Socket socket) {
     return _stateStream

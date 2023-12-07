@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:core/src/constants.dart';
+import 'package:core/src/game_settings.dart';
 
 import 'bomb.dart';
 import 'bullet.dart';
@@ -13,10 +13,10 @@ class GameState {
   final List<BulletViewModel> bullets;
 
   factory GameState.empty() => GameState(
-        List.generate(maxPlayers, PlayerViewModel.empty),
-        List.generate(maxBombs, BombView.empty),
-        List.filled(maxPlayers, 0),
-        List.generate(maxBullets, Bullet.empty),
+        List.generate(gameSettings.maxPlayers, PlayerViewModel.empty),
+        List.generate(gameSettings.maxBombs, BombView.empty),
+        List.filled(gameSettings.maxPlayers, 0),
+        List.generate(gameSettings.maxBullets, Bullet.empty),
       );
 
   GameState(
@@ -39,7 +39,7 @@ class GameState {
     final bombs = BombView.listFromBytes(neededBytes);
 
     leftBytes = leftBytes.sublist(neededBytes.length);
-    neededBytes = leftBytes.sublist(0, maxPlayers);
+    neededBytes = leftBytes.sublist(0, gameSettings.maxPlayers);
     final hits = neededBytes;
 
     return GameState(players, bombs, hits, bullets);

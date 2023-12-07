@@ -7,9 +7,13 @@ const nickCharacterSpace = 8.0;
 
 const withoutPlayerAreaHeight =
     hpBarHeight + playerNickHeight + hpBarNickSpace + nickCharacterSpace;
-const fullPlayerAreaHeight = withoutPlayerAreaHeight + playerPhoneHeight;
+final fullPlayerAreaHeight =
+    withoutPlayerAreaHeight + gameSettings.playerPhoneHeight;
 
 const fullPlayerAreaWidth = 100.0;
 
-const playerHeightOffest = withoutPlayerAreaHeight + (playerPhoneHeight / 2.0);
+final playerHeightOffest =
+    withoutPlayerAreaHeight + (gameSettings.playerPhoneHeight / 2.0);
 const playerWidthOffest = fullPlayerAreaWidth / 2.0;
+
+const goldenRatio = 1.61803398875;

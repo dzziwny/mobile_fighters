@@ -6,16 +6,21 @@ import 'register_di.dart';
 
 final guids = <String, int>{};
 final playerMetadatas =
-    UnmodifiableListView(List.generate(maxPlayers, Player.empty));
-final bullets = UnmodifiableListView(List.generate(maxBullets, Bullet.empty));
-final currentBullets = List.generate(maxPlayers, (i) => i * maxBullePerPlayer);
-final bombs = UnmodifiableListView(List.generate(maxBombs, Bomb.empty));
-final currentBombs = List.generate(maxPlayers, (i) => i * maxBombsPerPlayer);
-final players = UnmodifiableListView(List.generate(maxPlayers, Player.empty));
-final frags = List.filled(maxPlayers, 0);
-final hits = List.filled(maxPlayers, 0);
-final actions =
-    UnmodifiableListView(List.generate(maxPlayers, (id) => ActionsState(id)));
+    UnmodifiableListView(List.generate(gameSettings.maxPlayers, Player.empty));
+final bullets =
+    UnmodifiableListView(List.generate(gameSettings.maxBullets, Bullet.empty));
+final currentBullets = List.generate(
+    gameSettings.maxPlayers, (i) => i * gameSettings.maxBullePerPlayer);
+final bombs =
+    UnmodifiableListView(List.generate(gameSettings.maxBombs, Bomb.empty));
+final currentBombs = List.generate(
+    gameSettings.maxPlayers, (i) => i * gameSettings.maxBombsPerPlayer);
+final players =
+    UnmodifiableListView(List.generate(gameSettings.maxPlayers, Player.empty));
+final frags = List.filled(gameSettings.maxPlayers, 0);
+final hits = List.filled(gameSettings.maxPlayers, 0);
+final actions = UnmodifiableListView(
+    List.generate(gameSettings.maxPlayers, (id) => ActionsState(id)));
 
 /*
 * Teams

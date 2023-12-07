@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:core/src/bits.dart';
-import 'package:core/src/constants.dart';
 import 'package:core/src/extensions.dart';
+import 'package:core/src/game_settings.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'device.dart';
@@ -49,8 +49,8 @@ class PlayerViewModel {
 
   factory PlayerViewModel.empty(int playerId) => PlayerViewModel(
         id: playerId,
-        x: resetX,
-        y: resetY,
+        x: gameSettings.resetX,
+        y: gameSettings.resetY,
         angle: 0.0,
         isDashActive: false,
         isBombCooldown: false,
@@ -80,9 +80,9 @@ class Player extends PlayerViewModel {
   Team team = Team.blue;
   Device device = Device.iphone;
   bool isActive = false;
-  double forceRatio = defaultPlayerForceRatio;
-  double frictionK = defaultPlayerFrictionK;
-  double frictionN = defaultPlayerFrictionN;
+  double forceRatio = gameSettings.forceRatio;
+  double frictionK = gameSettings.frictionK;
+  double frictionN = gameSettings.frictionN;
   int isDashActiveBit = 0;
   int isDashCooldownBit = 0;
   int isBombCooldownBit = 0;
@@ -102,11 +102,15 @@ class Player extends PlayerViewModel {
 
   Player({
     required super.id,
-    super.x = resetX,
-    super.y = resetY,
+    double? x,
+    double? y,
+    double? hp,
     super.angle = 0.0,
-    super.hp = startHp,
-  });
+  }) : super(
+          x: x ?? gameSettings.resetX,
+          y: y ?? gameSettings.resetY,
+          hp: hp ?? gameSettings.startHp,
+        );
 
   factory Player.empty(int id) => Player(id: id);
 
@@ -115,7 +119,7 @@ class Player extends PlayerViewModel {
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
 
   static int bytesCount = Player.empty(0).toBytes().length;
-  static int allBytesCount = bytesCount * maxPlayers;
+  static int allBytesCount = bytesCount * gameSettings.maxPlayers;
 
   Uint8List toBytes() {
     final x = (ByteData(2)..setInt16(0, this.x.toInt(), Endian.little))
@@ -138,27 +142,27 @@ class Player extends PlayerViewModel {
 
   void deactivate() {
     isActive = false;
-    x = resetX;
-    y = resetY;
+    x = gameSettings.resetX;
+    y = gameSettings.resetY;
     angle = 0.0;
-    hp = startHp;
+    hp = gameSettings.startHp;
     velocityX = 0.0;
     velocityY = 0.0;
     nick = '';
     team = Team.blue;
     device = Device.iphone;
-    forceRatio = gamePhysics.f;
-    frictionK = gamePhysics.k;
-    frictionN = gamePhysics.n;
+    forceRatio = gameSettings.forceRatio;
+    frictionK = gameSettings.frictionK;
+    frictionN = gameSettings.frictionN;
     isDashActiveBit = 0;
     isDashCooldownBit = 0;
     isBombCooldownBit = 0;
   }
 
   void resetGamePhysics() {
-    forceRatio = gamePhysics.f;
-    frictionK = gamePhysics.k;
-    frictionN = gamePhysics.n;
+    forceRatio = gameSettings.forceRatio;
+    frictionK = gameSettings.frictionK;
+    frictionN = gameSettings.frictionN;
   }
 }
 

@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:core/src/game_settings.dart';
 import 'package:http/http.dart';
 
 import 'dto/_dto.dart';
@@ -54,7 +56,7 @@ Future<void> leaveGame$(String guid, int id, String ip) => post(
       ),
     );
 
-Future<void> setGamePhysics$(GamePhysics physics, String ip) => post(
-      Uri.parse('$ip${Endpoint.setGamePhysics}'),
-      body: physics.toString(),
+Future<void> setGameSettings$(GameSettings settings, String ip) => post(
+      Uri.parse('$ip${Endpoint.setGameSettings}'),
+      body: settings.toString(),
     );

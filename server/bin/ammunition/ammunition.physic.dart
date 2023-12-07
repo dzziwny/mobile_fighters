@@ -34,8 +34,8 @@ void ammunitionPhysicUpdate({
 }
 
 bool _isOutOfBound(Vector2 position) {
-  return position.x < battleGroundStartX ||
-      position.x > battleGroundEndX ||
-      position.y < battleGroundStartY ||
-      position.y > battleGroundEndY;
+  return position.x < gameSettings.battleGroundStartX ||
+      position.x > gameSettings.battleGroundEndX ||
+      position.y < gameSettings.battleGroundStartY ||
+      position.y > gameSettings.battleGroundEndY;
 }

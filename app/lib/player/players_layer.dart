@@ -20,7 +20,7 @@ class PlayersLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: List.generate(
-        maxPlayers,
+        gameSettings.maxPlayers,
         (id) => _Player(
           id: id,
           theme: theme,
@@ -83,7 +83,7 @@ class _Player extends StatelessWidget {
                     thumbColor: theme.colorScheme.error,
                     activeColor: theme.colorScheme.error,
                     value: player.hp.toDouble(),
-                    max: startHp,
+                    max: gameSettings.startHp,
                     onChanged: (double value) {},
                   ),
                 ),
@@ -91,7 +91,7 @@ class _Player extends StatelessWidget {
             ),
             const SizedBox(height: nickCharacterSpace),
             SizedBox(
-              height: playerPhoneHeight,
+              height: gameSettings.playerPhoneHeight,
               child: Transform.rotate(
                 angle: player.angle,
                 child: Container(
@@ -105,8 +105,8 @@ class _Player extends StatelessWidget {
                       ),
                     ],
                   ),
-                  height: playerPhoneHeight,
-                  width: playerPhoneWidth,
+                  height: gameSettings.playerPhoneHeight,
+                  width: gameSettings.playerPhoneWidth,
                   child: FittedBox(
                     child: Stack(
                       children: [

@@ -25,9 +25,9 @@ class BombLoop extends AmmunitionCooldown<Bomb> {
 }
 
 final bombsLoop = BombLoop(
-  ammunitionPerPlayer: maxBombsPerPlayer,
+  ammunitionPerPlayer: gameSettings.maxBombsPerPlayer,
   currentAmmo: currentBombs,
   magazine: bombs,
-  cooldown: bombCooldown,
-  initVelocity: initBombVelocity,
+  cooldown: Duration(seconds: gameSettings.bombCooldown),
+  initVelocity: gameSettings.initBombVelocity,
 );

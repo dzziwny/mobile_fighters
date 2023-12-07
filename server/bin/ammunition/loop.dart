@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:core/core.dart';
 
 abstract class Cooldown {
-  final List<bool> states = List.filled(maxPlayers, false);
+  final List<bool> states = List.filled(gameSettings.maxPlayers, false);
   final Duration cooldown;
 
   final timers = List.generate(
-    maxPlayers,
+    gameSettings.maxPlayers,
     (_) => Timer(Duration.zero, () {})..cancel(),
   );
 

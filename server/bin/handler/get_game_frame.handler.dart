@@ -5,8 +5,8 @@ import 'package:shelf/shelf.dart';
 
 Future<Response> gameFrameHandler(Request request) async {
   final frame = GameFrame(
-    sizex: battleGroundWidth,
-    sizey: battleGroundHeight,
+    sizex: gameSettings.battleGroundWidth,
+    sizey: gameSettings.battleGroundHeight,
   );
 
   final data = jsonEncode(frame);

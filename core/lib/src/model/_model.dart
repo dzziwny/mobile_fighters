@@ -6,7 +6,6 @@ export 'device.dart';
 export 'game_data.dart';
 export 'game_frame.dart';
 export 'game_phase.dart';
-export 'game_physics.dart';
 export 'game_state.dart';
 export 'movement_keyboard.dart';
 export 'player.dart';

@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math.dart';
 import '../setup.dart';
 
 Player? isHit(Ammunition ammo, double hitDistance) {
-  for (var i = 0; i < maxPlayers; i++) {
+  for (var i = 0; i < gameSettings.maxPlayers; i++) {
     if (i == ammo.shooterId) {
       continue;
     }
@@ -47,17 +47,19 @@ void handlePlayerDead(int enemyId, int killerId) {
   final player = players[enemyId];
   final playerMetadata = playerMetadatas[enemyId];
 
-  var respawnX = battleGroundStartX + Random().nextInt(respawnWidth);
+  var respawnX = gameSettings.battleGroundStartX +
+      Random().nextInt(gameSettings.respawnWidth);
   if (playerMetadata.team == Team.red) {
-    respawnX = battleGroundEndX - respawnX;
+    respawnX = gameSettings.battleGroundEndX - respawnX;
   }
-  final respawnY = battleGroundStartY + Random().nextInt(battleGroundHeight);
+  final respawnY = gameSettings.battleGroundStartY +
+      Random().nextInt(gameSettings.battleGroundHeight);
   final respawnAngle = Random().nextInt(100) / 10.0;
   player
     ..x = respawnX
     ..y = respawnY
     ..angle = respawnAngle
-    ..hp = startHp
+    ..hp = gameSettings.startHp
     ..isBombCooldownBit = 0
     ..isDashCooldownBit = 0;
 

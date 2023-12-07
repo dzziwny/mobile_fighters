@@ -4,7 +4,7 @@ class Endpoint {
   static const startGame = '/startGame';
   static const leaveGame = '/leaveGame';
   static const gameFrame = '/gameFrame';
-  static const setGamePhysics = '/setGamePhysics';
+  static const setGameSettings = '/setGameSettings';
 }
 
 class Socket {

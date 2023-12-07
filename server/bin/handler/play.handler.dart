@@ -31,7 +31,7 @@ Future<Response> playHandler(Request request) async {
 }
 
 int? assignPlayerId() {
-  for (var i = 0; i < maxPlayers; i++) {
+  for (var i = 0; i < gameSettings.maxPlayers; i++) {
     if (!playerMetadatas[i].isActive) {
       playerMetadatas[i].isActive = true;
       return i;
@@ -43,12 +43,12 @@ int? assignPlayerId() {
 
 Future<void> _createPlayer(int id, PlayToServerDto dto) async {
   final team = _selectTeam(id);
-  var x = Random().nextInt(respawnWidth);
+  var x = Random().nextInt(gameSettings.respawnWidth);
   if (team == Team.red) {
-    x = battleGroundWidth - x;
+    x = gameSettings.battleGroundWidth - x;
   }
 
-  final y = Random().nextInt(battleGroundHeight);
+  final y = Random().nextInt(gameSettings.battleGroundHeight);
   final angle = Random().nextInt(100) / 10.0;
 
   players[id]
@@ -60,7 +60,7 @@ Future<void> _createPlayer(int id, PlayToServerDto dto) async {
     ..nick = dto.nick
     ..team = team
     ..device = dto.device
-    ..hp = startHp
+    ..hp = gameSettings.startHp
     ..isActive = true;
 
   shareGameData();

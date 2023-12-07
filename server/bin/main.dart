@@ -21,8 +21,8 @@ import 'register_di.dart';
 import 'setup.dart';
 import 'updates/_updates.dart';
 
-int lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
-int accumulatorTime = 0;
+int _lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
+int _accumulatorTime = 0;
 
 extension WithWeb on Router {
   void ws(Socket endpoint, OnConnection onConnection) =>
@@ -37,7 +37,7 @@ void main(List<String> args) async {
     ..post(Endpoint.connect, connectHandler)
     ..post(Endpoint.play, playHandler)
     ..post(Endpoint.leaveGame, leaveGameHandler)
-    ..post(Endpoint.setGamePhysics, setGamePhysicsHandler)
+    ..post(Endpoint.setGameSettings, setGameSettingsHandler)
     ..ws(Socket.mobileControlsWs, MobileControlsConnection())
     ..ws(Socket.desktopControlsWs, DesktopControlsConnection())
     ..ws(Socket.gameDataWs, GameDataConnection())
@@ -49,22 +49,28 @@ void main(List<String> args) async {
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
+  restartGameTimer();
+}
 
-  Timer.periodic(
-    frameRate,
-    (_) {
-      final now = DateTime.now().microsecondsSinceEpoch;
-      final dt = now - lastUpdateTime;
-      lastUpdateTime = now;
-      accumulatorTime += dt;
-      while (accumulatorTime > sliceTimeMicroseconds) {
-        update();
-        accumulatorTime -= sliceTimeMicroseconds;
-      }
+Timer? _timer;
+// used when user changes settings manually
+void restartGameTimer() {
+  _timer?.cancel();
+  var frameRate = Duration(milliseconds: gameSettings.frameRate);
+  _timer = Timer.periodic(frameRate, (_) => _gameCycle());
+}
 
-      draw();
-    },
-  );
+void _gameCycle() {
+  final now = DateTime.now().microsecondsSinceEpoch;
+  final dt = now - _lastUpdateTime;
+  _lastUpdateTime = now;
+  _accumulatorTime += dt;
+  while (_accumulatorTime > gameSettings.sliceTimeMicroseconds) {
+    update();
+    _accumulatorTime -= gameSettings.sliceTimeMicroseconds;
+  }
+
+  draw();
 }
 
 void update() {
@@ -73,7 +79,7 @@ void update() {
 }
 
 void _executeActions() {
-  for (var i = 0; i < maxPlayers; i++) {
+  for (var i = 0; i < gameSettings.maxPlayers; i++) {
     bulletsLoop.toggle(i, playerInputs[i].isBullet);
     bombsLoop.toggle(i, playerInputs[i].isBomb);
     dashLoop.toggle(i, playerInputs[i].isDash);
@@ -81,27 +87,27 @@ void _executeActions() {
 }
 
 void _physicUpdate() {
-  for (var i = 0; i < maxBullets; i++) {
+  for (var i = 0; i < gameSettings.maxBullets; i++) {
     ammunitionPhysicUpdate(
       ammo: bullets[i],
-      dt: sliceTimeSeconds,
-      maxDistance: bulletDistanceSquared,
-      hitDistance: bulletPlayerCollisionDistanceSquare,
-      power: bulletPower,
+      dt: gameSettings.sliceTimeSeconds,
+      maxDistance: gameSettings.bulletDistanceSquared,
+      hitDistance: gameSettings.bulletPlayerCollisionDistanceSquare,
+      power: gameSettings.bulletPower,
     );
   }
 
-  for (var i = 0; i < maxBombs; i++) {
+  for (var i = 0; i < gameSettings.maxBombs; i++) {
     ammunitionPhysicUpdate(
       ammo: bombs[i],
-      dt: sliceTimeSeconds,
-      maxDistance: bombDistanceSquared,
-      hitDistance: bombPlayerCollisionDistanceSquare,
-      power: bombPower,
+      dt: gameSettings.sliceTimeSeconds,
+      maxDistance: gameSettings.bombDistanceSquared,
+      hitDistance: gameSettings.bombPlayerCollisionDistanceSquare,
+      power: gameSettings.bombPower,
     );
   }
 
-  for (var i = 0; i < maxPlayers; i++) {
+  for (var i = 0; i < gameSettings.maxPlayers; i++) {
     playerPhysicUpdate(playerInputs[i]);
   }
 }
@@ -115,7 +121,7 @@ void draw() {
     frags,
   );
 
-  hits.fillRange(0, maxPlayers.bitLength, 0);
+  hits.fillRange(0, gameSettings.maxPlayers.bitLength, 0);
 
   for (var channel in gameStateChannels) {
     channel.sink.add(bytes);

@@ -13,15 +13,15 @@ class BulletsLayer extends StatelessWidget {
       children: gameService.gameState.bullets.map(
         (bullet) {
           return Positioned(
-            top: bullet.position.y - bulletRadius,
-            left: bullet.position.x - bulletRadius,
-            height: bulletDiameter,
-            width: bulletDiameter,
-            child: const DecoratedBox(
+            top: bullet.position.y - gameSettings.bulletRadius,
+            left: bullet.position.x - gameSettings.bulletRadius,
+            height: gameSettings.bulletDiameter,
+            width: gameSettings.bulletDiameter,
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(bulletRadius),
+                  Radius.circular(gameSettings.bulletRadius),
                 ),
               ),
             ),

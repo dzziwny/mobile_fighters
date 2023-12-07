@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:core/src/constants.dart';
+import 'package:core/src/game_settings.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'ammunition.dart';
@@ -20,7 +20,7 @@ class Bomb extends Ammunition {
         id: id,
         shooterId: 0,
         angle: 0.0,
-        position: resetPosition,
+        position: gameSettings.resetPosition(),
         velocity: Vector2.zero(),
       );
 
@@ -37,7 +37,7 @@ class Bomb extends Ammunition {
   }
 
   static int bytesCount = Bomb.empty(0).toBytes().length;
-  static int allBytesCount = bytesCount * maxBombs;
+  static int allBytesCount = bytesCount * gameSettings.maxBombs;
 }
 
 class BombView {
@@ -55,8 +55,8 @@ class BombView {
   }
 
   factory BombView.empty(int id) => BombView(
-        battleGroundEndXInt,
-        battleGroundEndYInt,
+        gameSettings.battleGroundEndXInt,
+        gameSettings.battleGroundEndYInt,
       );
 
   static List<BombView> listFromBytes(Uint8List bytes) {

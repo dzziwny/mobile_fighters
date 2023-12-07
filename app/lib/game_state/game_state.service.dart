@@ -9,7 +9,7 @@ class GameStateService {
   GameStateService() {
     gameDataWs.data().listen(
       (state) {
-        for (var i = 0; i < maxPlayers; i++) {
+        for (var i = 0; i < gameSettings.maxPlayers; i++) {
           gameData.players[i].device = state.players[i].device;
           gameData.players[i].isActive = state.players[i].isActive;
           gameData.players[i].nick = state.players[i].nick;
@@ -20,7 +20,7 @@ class GameStateService {
 
     gameStateWs.data().listen(
       (state) {
-        for (var i = 0; i < maxPlayers; i++) {
+        for (var i = 0; i < gameSettings.maxPlayers; i++) {
           gameState.players[i].x = state.players[i].x;
           gameState.players[i].y = state.players[i].y;
           gameState.players[i].angle = state.players[i].angle;
@@ -31,13 +31,13 @@ class GameStateService {
           gameState.hits[i] = state.hits[i];
         }
 
-        for (var i = 0; i < maxBullets; i++) {
+        for (var i = 0; i < gameSettings.maxBullets; i++) {
           gameState.bullets[i].position.x = state.bullets[i].position.x;
           gameState.bullets[i].position.y = state.bullets[i].position.y;
           gameState.bullets[i].angle = state.bullets[i].angle;
         }
 
-        for (var i = 0; i < maxBombs; i++) {
+        for (var i = 0; i < gameSettings.maxBombs; i++) {
           gameState.bombs[i].x = state.bombs[i].x;
           gameState.bombs[i].y = state.bombs[i].y;
         }

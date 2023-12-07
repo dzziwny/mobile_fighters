@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 
-import 'ammunition_loop.dart';
 import '../setup.dart';
+import 'ammunition_loop.dart';
 
 class BulletsLoop extends AmmunitionCooldown<Bullet> {
   BulletsLoop({
@@ -17,9 +17,9 @@ class BulletsLoop extends AmmunitionCooldown<Bullet> {
 }
 
 final bulletsLoop = BulletsLoop(
-  ammunitionPerPlayer: maxBullePerPlayer,
+  ammunitionPerPlayer: gameSettings.maxBullePerPlayer,
   currentAmmo: currentBullets,
   magazine: bullets,
-  cooldown: bulletsCooldown,
-  initVelocity: initBulletVelocity,
+  cooldown: Duration(milliseconds: gameSettings.bulletsCooldown),
+  initVelocity: gameSettings.bulletVelocity,
 );

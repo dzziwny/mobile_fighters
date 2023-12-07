@@ -4,20 +4,18 @@ import 'dart:convert';
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 
+import '../main.dart';
 import '../setup.dart';
 
-Future<Response> setGamePhysicsHandler(Request request) async {
+Future<Response> setGameSettingsHandler(Request request) async {
   final body = await request.readAsString();
   final json = jsonDecode(body);
-  final physics = GamePhysics.fromJson(json);
-
-  gamePhysics.f = physics.f;
-  gamePhysics.k = physics.k;
-  gamePhysics.n = physics.n;
-
+  gameSettings = GameSettings.fromJson(json);
   for (var player in players) {
     player.resetGamePhysics();
   }
+
+  restartGameTimer();
 
   return Response.ok(null);
 }

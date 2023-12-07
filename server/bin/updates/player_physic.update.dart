@@ -14,7 +14,7 @@ Future<void> playerPhysicUpdate(
     return;
   }
 
-  const dt = sliceTimeSeconds;
+  final dt = gameSettings.sliceTimeSeconds;
   final velocity = Vector2(player.velocityX, player.velocityY);
   final friction = _calculateFriction(player, velocity);
   final netForce = Vector2(state.inputForceX, state.inputForceY) + friction;
@@ -34,10 +34,12 @@ Future<void> playerPhysicUpdate(
     ..angle = state.angle;
 
   /// Boundary bouncing
-  if (player.y == battleGroundStartY || player.y == battleGroundEndY) {
+  if (player.y == gameSettings.battleGroundStartY ||
+      player.y == gameSettings.battleGroundEndY) {
     player.velocityY = -player.velocityY;
   }
-  if (player.x == battleGroundStartX || player.x == battleGroundEndX) {
+  if (player.x == gameSettings.battleGroundStartX ||
+      player.x == gameSettings.battleGroundEndX) {
     player.velocityX = -player.velocityX;
   }
 }
@@ -55,16 +57,16 @@ Vector2 _calculateFriction(Player player, Vector2 velocity) {
 double _resolveX(Player player, double dt, Vector2 momentum) {
   // TODO co to jest xd ???
   if (momentum.isNaN) {
-    return battleGroundStartX;
+    return gameSettings.battleGroundStartX;
   }
 
   var x = player.x + momentum.x * dt;
-  if (x > battleGroundEndX) {
-    return battleGroundEndX;
+  if (x > gameSettings.battleGroundEndX) {
+    return gameSettings.battleGroundEndX;
   }
 
-  if (x < battleGroundStartX) {
-    return battleGroundStartX;
+  if (x < gameSettings.battleGroundStartX) {
+    return gameSettings.battleGroundStartX;
   }
 
   return x;
@@ -74,16 +76,16 @@ double _resolveY(Player physic, double dt, Vector2 force) {
   // TODO co to jest xd ???
 
   if (force.isNaN) {
-    return battleGroundStartY;
+    return gameSettings.battleGroundStartY;
   }
 
   var y = physic.y + force.y * dt;
-  if (y > battleGroundEndY) {
-    return battleGroundEndY;
+  if (y > gameSettings.battleGroundEndY) {
+    return gameSettings.battleGroundEndY;
   }
 
-  if (y < battleGroundStartY) {
-    return battleGroundStartY;
+  if (y < gameSettings.battleGroundStartY) {
+    return gameSettings.battleGroundStartY;
   }
 
   return y;

@@ -57,7 +57,6 @@ class MobileControlsBloc extends ControlsBloc {
     _sendPlayerState();
   }
 
-  // TODO use int's
   void updateKnob(double x, double y, double angle) {
     _x = x.toBytes();
     _y = y.toBytes();

@@ -1,12 +1,19 @@
 import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
 import 'package:bubble_fight/server_client.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'debug_game_settings.dart';
 
-class DebugGameSettingsButton extends StatelessWidget {
+class DebugGameSettingsButton extends StatefulWidget {
   const DebugGameSettingsButton({super.key});
+
+  @override
+  State<DebugGameSettingsButton> createState() =>
+      _DebugGameSettingsButtonState();
+}
+
+class _DebugGameSettingsButtonState extends State<DebugGameSettingsButton> {
+  final _controller = DebugGameSettingsController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,9 @@ class DebugGameSettingsButton extends StatelessWidget {
         showDialog(
           context: context,
           builder: (context) {
-            final physics = GamePhysics();
             return AlertDialog(
               title: const Text('Settings'),
-              content: DebugGameSettings(physics: physics),
+              content: DebugGameSettings(controller: _controller),
               actions: [
                 ElevatedButton(
                   onPressed: () {
@@ -29,7 +35,7 @@ class DebugGameSettingsButton extends StatelessWidget {
                 FilledButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
-                    serverClient.setGamePhysics(physics);
+                    serverClient.setGameSettings(_controller.settings);
                     playgroundFocusNode.requestFocus();
                   },
                   child: const Text('Apply'),

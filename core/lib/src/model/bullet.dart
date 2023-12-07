@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:core/src/constants.dart';
 import 'package:core/src/extensions.dart';
+import 'package:core/src/game_settings.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'ammunition.dart';
@@ -17,11 +17,11 @@ class BulletViewModel {
 
   factory BulletViewModel.empty() => BulletViewModel(
         angle: 0.0,
-        position: resetPosition,
+        position: gameSettings.resetPosition(),
       );
 
   static int bytesCount = BulletViewModel.empty().toBytes().length;
-  static int allBytesCount = bytesCount * maxBullets;
+  static int allBytesCount = bytesCount * gameSettings.maxBullets;
 
   Uint8List toBytes() {
     final bytes = <int>[
@@ -80,15 +80,16 @@ class Bullet extends BulletViewModel implements Ammunition {
       shooterId: 0,
       velocity: Vector2.zero(),
       angle: 0.0,
-      position: resetPosition,
+      position: gameSettings.resetPosition(),
     );
   }
 
-  static int bytesCount = Bullet.empty(0).toBytes().length * maxBullets;
+  static int bytesCount =
+      Bullet.empty(0).toBytes().length * gameSettings.maxBullets;
 
   @override
   void reset() {
-    position = resetPosition;
+    position = gameSettings.resetPosition();
     velocity = Vector2.zero();
   }
 }

@@ -21,21 +21,21 @@ class PlaygroundLayer extends StatelessWidget {
     controlsBloc.rotate(angle);
   }
 
-  static const frame = GameFrame(
-    sizex: battleGroundWidth,
-    sizey: battleGroundHeight,
+  static var frame = GameFrame(
+    sizex: gameSettings.battleGroundWidth,
+    sizey: gameSettings.battleGroundHeight,
   );
 
   static double frameWidth =
-      frame.sizex + battleGroundFrameHorizontalThickness * 2;
+      frame.sizex + gameSettings.battleGroundFrameHorizontalThickness * 2;
   static double frameHeight =
-      frame.sizey + battleGroundFrameVerticalThickness * 2;
+      frame.sizey + gameSettings.battleGroundFrameVerticalThickness * 2;
 
   static double playerOffsetx = frame.sizex / 2;
   static double playerOffsety = frame.sizey / 2;
 
-  static double frameOffsetx = (frameWidth - screenWidth) / 2;
-  static double frameOffsety = (frameHeight - screenHeight) / 2;
+  static double frameOffsetx = (frameWidth - gameSettings.screenWidth) / 2;
+  static double frameOffsety = (frameHeight - gameSettings.screenHeight) / 2;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +67,8 @@ class PlaygroundLayer extends StatelessWidget {
                     image: AssetImage("assets/cosmos_background.gif"),
                   ),
                 ),
-                width: screenWidth,
-                height: screenHeight,
+                width: gameSettings.screenWidth,
+                height: gameSettings.screenHeight,
                 child: ClipRect(
                   child: PlaygroundAutoRefreshWrapper(
                     frameWidth: frameWidth,

@@ -1,3 +1,4 @@
+import 'package:bubble_fight/consts.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -24,13 +25,13 @@ class _StartWindowLayerState extends State<StartWindowLayer> {
           return const SizedBox.shrink();
         }
 
-        return const MouseRegion(
+        return MouseRegion(
           child: Center(
             child: FittedBox(
               child: SizedBox(
-                width: screenWidth,
-                height: screenHeight,
-                child: Center(
+                width: gameSettings.screenWidth,
+                height: gameSettings.screenHeight,
+                child: const Center(
                   child: SizedBox(
                     height: 500.0,
                     child: FittedBox(
