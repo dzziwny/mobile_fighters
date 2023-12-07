@@ -16,7 +16,7 @@ class HitDto {
 
   factory HitDto.empty(int id) => HitDto(
         playerId: id,
-        hp: gameSettings.startHp,
+        hp: gameSettings.playerStartHp,
       );
 
   static List<HitDto> hitsFromBytes(Uint8List bytes) {

@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 
+import '../ammunition/bomb_loop.dart';
+import '../ammunition/bullet_loop.dart';
 import '../main.dart';
 import '../setup.dart';
 
@@ -15,6 +17,8 @@ Future<Response> setGameSettingsHandler(Request request) async {
     player.resetGamePhysics();
   }
 
+  bulletsLoop = getBulletLoop();
+  bombsLoop = getBombLoop();
   restartGameTimer();
 
   return Response.ok(null);

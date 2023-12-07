@@ -7,6 +7,7 @@ part 'game_settings.g.dart';
 
 @JsonSerializable()
 class GameSettings {
+  // Frames
   /// Set the desired frame rate (e.g., 60 frames per second)
   final int frameRate;
 
@@ -14,26 +15,47 @@ class GameSettings {
   final int sliceTimeMicroseconds;
   final double sliceTimeSeconds;
 
-  final double frictionN;
-  final double frictionK;
-  final double forceRatio;
+  // Player
+  final int maxPlayers;
+  final double playerFrictionN;
+  final double playerFrictionK;
+  final double playerForceRatio;
+  final double playerStartHp;
+  final double playerRadius;
+
+  // Dash
   final double dashFrictionK;
-  final double dashforceRation;
-  final double bulletVelocity;
+  final double dashForceRatio;
   final int dashCooldown;
   final int dashDuration;
 
-  // PLAYERS FEATURES
-  final int maxPlayers;
-  final double startHp;
+  // Bullet
+  final int maxBullePerPlayer;
+  final int maxBullets;
+  final double bulletRadius;
+  final double bulletDiameter;
+  final double bulletRadiusSquared;
+  final double bulletDistance;
+  final double bulletDistanceSquared;
+  final double bulletPlayerCollisionDistanceSquare;
+  final int bulletsCooldown;
+  final int bulletPower;
+  final double bulletVelocity;
 
-  final double playerRadius;
-  final double playerRadiusSquare;
-  final double playerDiameter;
-  final double playerPhoneHeight;
-  final double playerPhoneWidth;
+  // Bomb
+  final int maxBombsPerPlayer;
+  final int maxBombs;
+  final double bombVelocity;
+  final double bombRadius;
+  final double bombDiameter;
+  final double bombRadiusSquared;
+  final double bombDistance;
+  final double bombDistanceSquared;
+  final double bombPlayerCollisionDistanceSquare;
+  final int bombCooldown;
+  final int bombPower;
 
-  // BOARD
+  // Board
   final int battleGroundWidth;
   final int battleGroundHeight;
 
@@ -56,64 +78,71 @@ class GameSettings {
 
   final double battleGroundScreenRatio;
 
-  // Ultra HD xddd
   final double screenWidth;
   final double screenHeight;
-
-  // RESPAWNS
   final int respawnWidth;
 
-  // BULLET
-  final int maxBullePerPlayer;
-  final int maxBullets;
-  final double bulletRadius;
-  final double bulletDiameter;
-  final double bulletRadiusSquared;
-  final double bulletDistance;
-  final double bulletDistanceSquared;
-  final double bulletPlayerCollisionDistanceSquare;
-  final int bulletsCooldown;
-  final int bulletPower;
-
-  // BOMB
-  final int maxBombsPerPlayer;
-  final int maxBombs;
-  final double initBombVelocity;
-  final double bombRadius;
-  final double bombDiameter;
-  final double bombRadiusSquared;
-  final double bombDistance;
-  final double bombDistanceSquared;
-  final double bombPlayerCollisionDistanceSquare;
-  final int bombCooldown;
-  final int bombPower;
-
   GameSettings copyWith({
-    double? frictionK,
-    double? frictionN,
-    double? forceRatio,
     int? frameRate,
+    int? sliceTimeMicroseconds,
+    double? playerFrictionK,
+    double? playerFrictionN,
+    double? playerForceRatio,
+    double? playerStartHp,
+    double? playerRadius,
+    double? dashFrictionK,
+    double? dashForceRatio,
+    int? dashCooldown,
+    int? dashDuration,
+    double? bulletRadius,
+    double? bulletDistance,
+    int? bulletsCooldown,
+    int? bulletPower,
+    double? bulletVelocity,
+    double? bombRadius,
+    double? bombDistance,
+    int? bombCooldown,
+    int? bombPower,
+    double? bombVelocity,
   }) =>
       GameSettings(
-        frictionK: frictionK ?? this.frictionK,
-        frictionN: frictionN ?? this.frictionN,
-        forceRatio: forceRatio ?? this.forceRatio,
+        playerFrictionK: playerFrictionK ?? this.playerFrictionK,
+        playerFrictionN: playerFrictionN ?? this.playerFrictionN,
+        playerForceRatio: playerForceRatio ?? this.playerForceRatio,
         frameRate: frameRate ?? this.frameRate,
+        sliceTimeMicroseconds:
+            sliceTimeMicroseconds ?? this.sliceTimeMicroseconds,
+        playerStartHp: playerStartHp ?? this.playerStartHp,
+        playerRadius: playerRadius ?? this.playerRadius,
+        dashFrictionK: dashFrictionK ?? this.dashFrictionK,
+        dashForceRatio: dashForceRatio ?? this.dashForceRatio,
+        dashCooldown: dashCooldown ?? this.dashCooldown,
+        dashDuration: dashDuration ?? this.dashDuration,
+        bulletRadius: bulletRadius ?? this.bulletRadius,
+        bulletDistance: bulletDistance ?? this.bulletDistance,
+        bulletsCooldown: bulletsCooldown ?? this.bulletsCooldown,
+        bulletPower: bulletPower ?? this.bulletPower,
+        bulletVelocity: bulletVelocity ?? this.bulletVelocity,
+        bombRadius: bombRadius ?? this.bombRadius,
+        bombDistance: bombDistance ?? this.bombDistance,
+        bombCooldown: bombCooldown ?? this.bombCooldown,
+        bombPower: bombPower ?? this.bombPower,
+        bombVelocity: bombVelocity ?? this.bombVelocity,
       );
 
   const GameSettings({
     this.frameRate = 1000 ~/ 60,
-    this.sliceTimeMicroseconds = 5000,
-    this.frictionN = 0.23,
-    this.frictionK = 0.6,
-    this.forceRatio = 12.0,
+    this.sliceTimeMicroseconds = 4000,
+    this.playerFrictionN = 0.23,
+    this.playerFrictionK = 0.6,
+    this.playerForceRatio = 10.0,
     this.dashFrictionK = 0.0,
-    this.dashforceRation = 10.0,
+    this.dashForceRatio = 10.0,
     this.bulletVelocity = 2000.0,
     this.dashCooldown = 2,
     this.dashDuration = 1,
     this.maxPlayers = 10,
-    this.startHp = 210.0,
+    this.playerStartHp = 210.0,
     this.playerRadius = 40.0,
     this.battleGroundWidth = 0xfff,
     this.battleGroundHeight = 0x777,
@@ -127,16 +156,12 @@ class GameSettings {
     this.bulletsCooldown = 100,
     this.bulletPower = 10,
     this.maxBombsPerPlayer = 1,
-    this.initBombVelocity = 1000.0,
+    this.bombVelocity = 1000.0,
     this.bombRadius = 100.0,
     this.bombDistance = 500.0,
     this.bombCooldown = 2,
     this.bombPower = 70,
   })  : sliceTimeSeconds = sliceTimeMicroseconds / 1000000.0,
-        playerRadiusSquare = playerRadius * playerRadius,
-        playerDiameter = playerRadius * 2,
-        playerPhoneHeight = (playerRadius * 2) + 64.0,
-        playerPhoneWidth = (playerRadius * 2) + 9.0,
         battleGroundStartX = battleGroundStartXInt + 0.0,
         battleGroundEndX = battleGroundStartXInt + battleGroundWidth + 0.0,
         battleGroundEndXInt = battleGroundStartXInt + battleGroundWidth,

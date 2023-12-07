@@ -60,7 +60,7 @@ Future<void> _createPlayer(int id, PlayToServerDto dto) async {
     ..nick = dto.nick
     ..team = team
     ..device = dto.device
-    ..hp = gameSettings.startHp
+    ..hp = gameSettings.playerStartHp
     ..isActive = true;
 
   shareGameData();

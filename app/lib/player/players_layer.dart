@@ -1,5 +1,5 @@
-import 'package:bubble_fight/consts.dart';
 import 'package:bubble_fight/game_state/game_state.service.dart';
+import 'package:bubble_fight/game_ui_settings.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -51,16 +51,16 @@ class _Player extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: player.y - playerHeightOffest,
-      left: player.x - playerWidthOffest,
+      top: player.y - gameUISettings.playerHeightOffest,
+      left: player.x - gameUISettings.playerWidthOffest,
       child: SizedBox(
-        height: fullPlayerAreaHeight,
+        height: gameUISettings.fullPlayerAreaHeight,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: playerNickHeight,
-              width: fullPlayerAreaWidth,
+              height: gameUISettings.playerNickHeight,
+              width: gameUISettings.fullPlayerAreaWidth,
               child: FittedBox(
                 child: Text(
                   metadata.nick,
@@ -72,10 +72,10 @@ class _Player extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: hpBarNickSpace),
+            SizedBox(height: gameUISettings.hpBarNickSpace),
             SizedBox(
-              height: hpBarHeight,
-              width: fullPlayerAreaWidth,
+              height: gameUISettings.hpBarHeight,
+              width: gameUISettings.fullPlayerAreaWidth,
               child: FittedBox(
                 child: SizedBox(
                   width: 300.0,
@@ -83,15 +83,15 @@ class _Player extends StatelessWidget {
                     thumbColor: theme.colorScheme.error,
                     activeColor: theme.colorScheme.error,
                     value: player.hp.toDouble(),
-                    max: gameSettings.startHp,
+                    max: gameSettings.playerStartHp,
                     onChanged: (double value) {},
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: nickCharacterSpace),
+            SizedBox(height: gameUISettings.nickCharacterSpace),
             SizedBox(
-              height: gameSettings.playerPhoneHeight,
+              height: gameUISettings.playerPhoneHeight,
               child: Transform.rotate(
                 angle: player.angle,
                 child: Container(
@@ -105,8 +105,8 @@ class _Player extends StatelessWidget {
                       ),
                     ],
                   ),
-                  height: gameSettings.playerPhoneHeight,
-                  width: gameSettings.playerPhoneWidth,
+                  height: gameUISettings.playerPhoneHeight,
+                  width: gameUISettings.playerPhoneWidth,
                   child: FittedBox(
                     child: Stack(
                       children: [

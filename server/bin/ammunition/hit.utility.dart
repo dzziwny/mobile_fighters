@@ -59,7 +59,7 @@ void handlePlayerDead(int enemyId, int killerId) {
     ..x = respawnX
     ..y = respawnY
     ..angle = respawnAngle
-    ..hp = gameSettings.startHp
+    ..hp = gameSettings.playerStartHp
     ..isBombCooldownBit = 0
     ..isDashCooldownBit = 0;
 

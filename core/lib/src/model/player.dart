@@ -80,9 +80,9 @@ class Player extends PlayerViewModel {
   Team team = Team.blue;
   Device device = Device.iphone;
   bool isActive = false;
-  double forceRatio = gameSettings.forceRatio;
-  double frictionK = gameSettings.frictionK;
-  double frictionN = gameSettings.frictionN;
+  double forceRatio = gameSettings.playerForceRatio;
+  double frictionK = gameSettings.playerFrictionK;
+  double frictionN = gameSettings.playerFrictionN;
   int isDashActiveBit = 0;
   int isDashCooldownBit = 0;
   int isBombCooldownBit = 0;
@@ -109,7 +109,7 @@ class Player extends PlayerViewModel {
   }) : super(
           x: x ?? gameSettings.resetX,
           y: y ?? gameSettings.resetY,
-          hp: hp ?? gameSettings.startHp,
+          hp: hp ?? gameSettings.playerStartHp,
         );
 
   factory Player.empty(int id) => Player(id: id);
@@ -145,24 +145,24 @@ class Player extends PlayerViewModel {
     x = gameSettings.resetX;
     y = gameSettings.resetY;
     angle = 0.0;
-    hp = gameSettings.startHp;
+    hp = gameSettings.playerStartHp;
     velocityX = 0.0;
     velocityY = 0.0;
     nick = '';
     team = Team.blue;
     device = Device.iphone;
-    forceRatio = gameSettings.forceRatio;
-    frictionK = gameSettings.frictionK;
-    frictionN = gameSettings.frictionN;
+    forceRatio = gameSettings.playerForceRatio;
+    frictionK = gameSettings.playerFrictionK;
+    frictionN = gameSettings.playerFrictionN;
     isDashActiveBit = 0;
     isDashCooldownBit = 0;
     isBombCooldownBit = 0;
   }
 
   void resetGamePhysics() {
-    forceRatio = gameSettings.forceRatio;
-    frictionK = gameSettings.frictionK;
-    frictionN = gameSettings.frictionN;
+    forceRatio = gameSettings.playerForceRatio;
+    frictionK = gameSettings.playerFrictionK;
+    frictionN = gameSettings.playerFrictionN;
   }
 }
 

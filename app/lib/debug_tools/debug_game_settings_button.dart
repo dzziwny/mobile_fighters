@@ -1,5 +1,7 @@
 import 'package:bubble_fight/60hz_refreshable_playground/playground_layer.dart';
+import 'package:bubble_fight/game_ui_settings.dart';
 import 'package:bubble_fight/server_client.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'debug_game_settings.dart';
@@ -35,7 +37,12 @@ class _DebugGameSettingsButtonState extends State<DebugGameSettingsButton> {
                 FilledButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
-                    serverClient.setGameSettings(_controller.settings);
+                    await serverClient.setGameSettings(_controller.settings);
+                    gameSettings = _controller.settings;
+                    gameUISettings = GameUISettings(
+                      settings: gameSettings.copyWith(),
+                    );
+
                     playgroundFocusNode.requestFocus();
                   },
                   child: const Text('Apply'),

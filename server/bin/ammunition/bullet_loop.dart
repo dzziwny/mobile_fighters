@@ -16,10 +16,12 @@ class BulletsLoop extends AmmunitionCooldown<Bullet> {
   void onCooldownEnd(int playerId) {}
 }
 
-final bulletsLoop = BulletsLoop(
-  ammunitionPerPlayer: gameSettings.maxBullePerPlayer,
-  currentAmmo: currentBullets,
-  magazine: bullets,
-  cooldown: Duration(milliseconds: gameSettings.bulletsCooldown),
-  initVelocity: gameSettings.bulletVelocity,
-);
+var bulletsLoop = getBulletLoop();
+
+BulletsLoop getBulletLoop() => BulletsLoop(
+      ammunitionPerPlayer: gameSettings.maxBullePerPlayer,
+      currentAmmo: currentBullets,
+      magazine: bullets,
+      cooldown: Duration(milliseconds: gameSettings.bulletsCooldown),
+      initVelocity: gameSettings.bulletVelocity,
+    );

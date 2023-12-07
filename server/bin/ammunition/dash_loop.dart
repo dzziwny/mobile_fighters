@@ -11,8 +11,8 @@ class DashLoop extends Cooldown {
   @override
   void onAction(int playerId) {
     players[playerId]
-      ..frictionK = gameSettings.frictionK
-      ..forceRatio = gameSettings.forceRatio
+      ..frictionK = gameSettings.playerFrictionK
+      ..forceRatio = gameSettings.playerForceRatio
       ..isDashActiveBit = Bits.dashActive
       ..isDashCooldownBit = Bits.dashCooldown;
 
@@ -20,8 +20,8 @@ class DashLoop extends Cooldown {
       Duration(seconds: gameSettings.dashDuration),
       () {
         players[playerId]
-          ..frictionK = gameSettings.frictionK
-          ..forceRatio = gameSettings.forceRatio
+          ..frictionK = gameSettings.playerFrictionK
+          ..forceRatio = gameSettings.playerForceRatio
           ..isDashActiveBit = 0;
       },
     );

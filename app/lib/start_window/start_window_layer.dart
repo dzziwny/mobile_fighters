@@ -1,4 +1,4 @@
-import 'package:bubble_fight/consts.dart';
+import 'package:bubble_fight/game_ui_settings.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -31,14 +31,14 @@ class _StartWindowLayerState extends State<StartWindowLayer> {
               child: SizedBox(
                 width: gameSettings.screenWidth,
                 height: gameSettings.screenHeight,
-                child: const Center(
+                child: Center(
                   child: SizedBox(
                     height: 500.0,
                     child: FittedBox(
                       child: SizedBox(
-                        width: 600 * goldenRatio,
+                        width: 600 * gameUISettings.goldenRatio,
                         height: 600,
-                        child: StartWindow(),
+                        child: const StartWindow(),
                       ),
                     ),
                   ),
