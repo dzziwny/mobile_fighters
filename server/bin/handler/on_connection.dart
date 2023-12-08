@@ -13,6 +13,8 @@ import '../setup.dart';
 abstract class OnConnection implements Disposable {
   StreamSubscription? _mobileSubscription;
 
+  static final _timers = List<Timer?>.filled(gameSettings.maxPlayers, null);
+
   late Player player;
 
   void onInit(int playerId, WebSocketChannel channel) {}
@@ -32,12 +34,10 @@ abstract class OnConnection implements Disposable {
             _mobileSubscription = channel.stream.listen(
               (data) => onData(intId, data),
               onError: (error) {
-                // TODO reconnect
-                print('Error: $error');
+                onChannelClose(intId);
               },
               onDone: () {
-                // TODO dac userowi np. minute i kick
-                print('Done');
+                onChannelClose(intId);
               },
             );
           },
@@ -46,6 +46,22 @@ abstract class OnConnection implements Disposable {
         final response = await handler(request);
         return response;
       };
+
+  void onChannelClose(int id) {
+    final timer = _timers[id];
+    if (timer != null) {
+      return;
+    }
+
+    _timers[id] = Timer(
+      Duration(minutes: 1),
+      () {
+        players[id].deactivate();
+        playerMetadatas[id].deactivate();
+        _timers[id] = null;
+      },
+    );
+  }
 
   @override
   Future onDispose() async {
