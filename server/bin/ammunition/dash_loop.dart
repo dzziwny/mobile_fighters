@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
+import 'package:vector_math/vector_math.dart';
 
+import '../register_di.dart';
 import '../setup.dart';
 import 'loop.dart';
 
@@ -11,17 +13,20 @@ class DashLoop extends Cooldown {
   @override
   void onAction(int playerId) {
     players[playerId]
-      ..frictionK = gameSettings.playerFrictionK
-      ..forceRatio = gameSettings.playerForceRatio
+      ..isDashActive = true
       ..isDashActiveBit = Bits.dashActive
       ..isDashCooldownBit = Bits.dashCooldown;
 
     Timer(
       Duration(seconds: gameSettings.dashDuration),
       () {
+        final state = playerInputs[playerId];
+        final normalizedInput =
+            Vector2(state.inputForceX, state.inputForceY).normalized();
         players[playerId]
-          ..frictionK = gameSettings.playerFrictionK
-          ..forceRatio = gameSettings.playerForceRatio
+          ..velocityX = normalizedInput.x * gameSettings.dashAfterForceRatio
+          ..velocityY = normalizedInput.y * gameSettings.dashAfterForceRatio
+          ..isDashActive = false
           ..isDashActiveBit = 0;
       },
     );
@@ -33,8 +38,9 @@ class DashLoop extends Cooldown {
   }
 }
 
-final dashLoop = DashLoop(
-  cooldown: Duration(
-    seconds: gameSettings.dashCooldown,
-  ),
-);
+var dashLoop = getDashLoop();
+DashLoop getDashLoop() => DashLoop(
+      cooldown: Duration(
+        seconds: gameSettings.dashCooldown,
+      ),
+    );

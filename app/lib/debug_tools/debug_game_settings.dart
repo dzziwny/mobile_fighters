@@ -37,24 +37,24 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
     text: widget.controller.settings.playerForceRatio.toString(),
   );
   late final _playerStartHpController = TextEditingController(
-    text: widget.controller.settings.playerForceRatio.toString(),
+    text: widget.controller.settings.playerStartHp.toString(),
   );
   late final _playerRadiusController = TextEditingController(
-    text: widget.controller.settings.playerForceRatio.toString(),
+    text: widget.controller.settings.playerRadius.toString(),
   );
 
   // Dash
-  late final _dashFrictionKController = TextEditingController(
-    text: widget.controller.settings.playerFrictionK.toString(),
-  );
   late final _dashForceRatioController = TextEditingController(
-    text: widget.controller.settings.playerFrictionK.toString(),
+    text: widget.controller.settings.dashForceRatio.toString(),
+  );
+  late final _dashAfterForceRatioController = TextEditingController(
+    text: widget.controller.settings.dashAfterForceRatio.toString(),
   );
   late final _dashCooldownController = TextEditingController(
-    text: widget.controller.settings.playerFrictionK.toString(),
+    text: widget.controller.settings.dashCooldown.toString(),
   );
   late final _dashDurationController = TextEditingController(
-    text: widget.controller.settings.playerFrictionK.toString(),
+    text: widget.controller.settings.dashDuration.toString(),
   );
 
   // Bullet
@@ -232,21 +232,6 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
               const Text('Dash'),
               Flexible(
                 child: TextField(
-                  controller: _dashFrictionKController,
-                  decoration: const InputDecoration(
-                    labelText: 'friction k',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    widget.controller.settings =
-                        widget.controller.settings.copyWith(
-                      dashFrictionK: double.tryParse(value),
-                    );
-                  },
-                ),
-              ),
-              Flexible(
-                child: TextField(
                   controller: _dashForceRatioController,
                   decoration: const InputDecoration(
                     labelText: 'force',
@@ -256,6 +241,21 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
                     widget.controller.settings =
                         widget.controller.settings.copyWith(
                       dashForceRatio: double.tryParse(value),
+                    );
+                  },
+                ),
+              ),
+              Flexible(
+                child: TextField(
+                  controller: _dashAfterForceRatioController,
+                  decoration: const InputDecoration(
+                    labelText: 'force after',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    widget.controller.settings =
+                        widget.controller.settings.copyWith(
+                      dashAfterForceRatio: double.tryParse(value),
                     );
                   },
                 ),

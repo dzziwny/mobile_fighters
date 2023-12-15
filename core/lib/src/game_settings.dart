@@ -24,8 +24,8 @@ class GameSettings {
   final double playerRadius;
 
   // Dash
-  final double dashFrictionK;
   final double dashForceRatio;
+  final double dashAfterForceRatio;
   final int dashCooldown;
   final int dashDuration;
 
@@ -91,7 +91,9 @@ class GameSettings {
     double? playerStartHp,
     double? playerRadius,
     double? dashFrictionK,
+    double? dashFrictionN,
     double? dashForceRatio,
+    double? dashAfterForceRatio,
     int? dashCooldown,
     int? dashDuration,
     double? bulletRadius,
@@ -114,8 +116,8 @@ class GameSettings {
             sliceTimeMicroseconds ?? this.sliceTimeMicroseconds,
         playerStartHp: playerStartHp ?? this.playerStartHp,
         playerRadius: playerRadius ?? this.playerRadius,
-        dashFrictionK: dashFrictionK ?? this.dashFrictionK,
         dashForceRatio: dashForceRatio ?? this.dashForceRatio,
+        dashAfterForceRatio: dashAfterForceRatio ?? this.dashAfterForceRatio,
         dashCooldown: dashCooldown ?? this.dashCooldown,
         dashDuration: dashDuration ?? this.dashDuration,
         bulletRadius: bulletRadius ?? this.bulletRadius,
@@ -136,9 +138,8 @@ class GameSettings {
     this.playerFrictionN = 0.23,
     this.playerFrictionK = 0.6,
     this.playerForceRatio = 10.0,
-    this.dashFrictionK = 0.0,
-    this.dashForceRatio = 10.0,
-    this.bulletVelocity = 2000.0,
+    this.dashForceRatio = 4.0,
+    this.dashAfterForceRatio = 650.0,
     this.dashCooldown = 2,
     this.dashDuration = 1,
     this.maxPlayers = 10,
@@ -155,6 +156,7 @@ class GameSettings {
     this.bulletDistance = 316.0,
     this.bulletsCooldown = 100,
     this.bulletPower = 10,
+    this.bulletVelocity = 2000.0,
     this.maxBombsPerPlayer = 1,
     this.bombVelocity = 1000.0,
     this.bombRadius = 100.0,

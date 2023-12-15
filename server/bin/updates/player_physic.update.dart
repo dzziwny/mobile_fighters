@@ -14,6 +14,38 @@ Future<void> playerPhysicUpdate(
     return;
   }
 
+  if (player.isDashActive) {
+    _calculateDashPosition(player, state);
+  } else {
+    _calculatePosition(player, state);
+  }
+}
+
+void _calculateDashPosition(Player player, PlayerControlsState state) {
+  final normalizedInput =
+      Vector2(state.inputForceX, state.inputForceY).normalized();
+
+  var x = player.x + normalizedInput.x * gameSettings.dashForceRatio;
+  if (x > gameSettings.battleGroundEndX) {
+    x = gameSettings.battleGroundEndX;
+  } else if (x < gameSettings.battleGroundStartX) {
+    x = gameSettings.battleGroundStartX;
+  }
+
+  var y = player.y + normalizedInput.y * gameSettings.dashForceRatio;
+  if (y > gameSettings.battleGroundEndY) {
+    y = gameSettings.battleGroundEndY;
+  } else if (y < gameSettings.battleGroundStartY) {
+    y = gameSettings.battleGroundStartY;
+  }
+
+  player
+    ..x = x
+    ..y = y
+    ..angle = state.angle;
+}
+
+void _calculatePosition(Player player, PlayerControlsState state) {
   final dt = gameSettings.sliceTimeSeconds;
   final velocity = Vector2(player.velocityX, player.velocityY);
   final friction = _calculateFriction(player, velocity);
@@ -22,15 +54,9 @@ Future<void> playerPhysicUpdate(
 
   player
     ..velocityX = netVelocity.x
-    ..velocityY = netVelocity.y;
-
-  final x = _resolveX(player, dt, netVelocity);
-  final y = _resolveY(player, dt, netVelocity);
-
-  final position = Vector2(x, y);
-  player
-    ..x = position.x
-    ..y = position.y
+    ..velocityY = netVelocity.y
+    ..x = _resolveX(player, dt, netVelocity)
+    ..y = _resolveY(player, dt, netVelocity)
     ..angle = state.angle;
 
   /// Boundary bouncing
