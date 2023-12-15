@@ -45,15 +45,13 @@ void hitPlayer(
 void handlePlayerDead(int enemyId, int killerId) {
   frags[killerId] |= Bits.frags[enemyId];
   final player = players[enemyId];
-  final playerMetadata = playerMetadatas[enemyId];
-
-  var respawnX = gameSettings.battleGroundStartX +
-      Random().nextInt(gameSettings.respawnWidth);
-  if (playerMetadata.team == Team.red) {
+  final offsetX = Random().nextInt(gameSettings.respawnWidth);
+  var respawnX = gameSettings.battleGroundStartX + offsetX;
+  if (player.team == Team.red) {
     respawnX = gameSettings.battleGroundEndX - respawnX;
   }
-  final respawnY = gameSettings.battleGroundStartY +
-      Random().nextInt(gameSettings.battleGroundHeight);
+  final offsetY = Random().nextInt(gameSettings.battleGroundHeight);
+  final respawnY = gameSettings.battleGroundStartY + offsetY;
   final respawnAngle = Random().nextInt(100) / 10.0;
   player
     ..x = respawnX
