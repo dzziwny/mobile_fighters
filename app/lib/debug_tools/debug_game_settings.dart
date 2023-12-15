@@ -25,6 +25,9 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
   late final _sliceTimeController = TextEditingController(
     text: widget.controller.settings.sliceTimeMicroseconds.toString(),
   );
+  late final _gameDrawRateController = TextEditingController(
+    text: widget.controller.settings.gameDrawRate.toString(),
+  );
 
   // Player
   late final _playerFrictionKController = TextEditingController(
@@ -125,6 +128,21 @@ class _DebugGameSettingsState extends State<DebugGameSettings> {
                     widget.controller.settings =
                         widget.controller.settings.copyWith(
                       sliceTimeMicroseconds: int.tryParse(value),
+                    );
+                  },
+                ),
+              ),
+              Flexible(
+                child: TextField(
+                  controller: _gameDrawRateController,
+                  decoration: const InputDecoration(
+                    labelText: 'game draw (μs)',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    widget.controller.settings =
+                        widget.controller.settings.copyWith(
+                      gameDrawRate: int.tryParse(value),
                     );
                   },
                 ),

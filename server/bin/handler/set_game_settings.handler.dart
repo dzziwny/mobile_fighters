@@ -21,7 +21,8 @@ Future<Response> setGameSettingsHandler(Request request) async {
   bulletsLoop = getBulletLoop();
   bombsLoop = getBombLoop();
   dashLoop = getDashLoop();
-  restartGameTimer();
+  restartGameCycleTimer();
+  restartDrawTimer();
 
   return Response.ok(null);
 }

@@ -49,15 +49,23 @@ void main(List<String> args) async {
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
-  restartGameTimer();
+  restartGameCycleTimer();
+  restartDrawTimer();
 }
 
-Timer? _timer;
+Timer? _gameCycleTimer;
 // used when user changes settings manually
-void restartGameTimer() {
-  _timer?.cancel();
+void restartGameCycleTimer() {
+  _gameCycleTimer?.cancel();
   var frameRate = Duration(milliseconds: gameSettings.frameRate);
-  _timer = Timer.periodic(frameRate, (_) => _gameCycle());
+  _gameCycleTimer = Timer.periodic(frameRate, (_) => _gameCycle());
+}
+
+Timer? _drawTimer;
+void restartDrawTimer() {
+  _drawTimer?.cancel();
+  var rate = Duration(microseconds: gameSettings.gameDrawRate);
+  _drawTimer = Timer.periodic(rate, (_) => draw());
 }
 
 void _gameCycle() {
@@ -69,8 +77,6 @@ void _gameCycle() {
     update();
     _accumulatorTime -= gameSettings.sliceTimeMicroseconds;
   }
-
-  draw();
 }
 
 void update() {

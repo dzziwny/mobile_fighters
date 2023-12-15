@@ -10,6 +10,7 @@ class GameSettings {
   // Frames
   /// Set the desired frame rate (e.g., 60 frames per second)
   final int frameRate;
+  final int gameDrawRate;
 
   /// If there are lags, try make sliceTime smaller
   final int sliceTimeMicroseconds;
@@ -84,6 +85,7 @@ class GameSettings {
 
   GameSettings copyWith({
     int? frameRate,
+    int? gameDrawRate,
     int? sliceTimeMicroseconds,
     double? playerFrictionK,
     double? playerFrictionN,
@@ -108,10 +110,11 @@ class GameSettings {
     double? bombVelocity,
   }) =>
       GameSettings(
+        frameRate: frameRate ?? this.frameRate,
+        gameDrawRate: gameDrawRate ?? this.gameDrawRate,
         playerFrictionK: playerFrictionK ?? this.playerFrictionK,
         playerFrictionN: playerFrictionN ?? this.playerFrictionN,
         playerForceRatio: playerForceRatio ?? this.playerForceRatio,
-        frameRate: frameRate ?? this.frameRate,
         sliceTimeMicroseconds:
             sliceTimeMicroseconds ?? this.sliceTimeMicroseconds,
         playerStartHp: playerStartHp ?? this.playerStartHp,
@@ -134,6 +137,7 @@ class GameSettings {
 
   const GameSettings({
     this.frameRate = 1000 ~/ 60,
+    this.gameDrawRate = 16000,
     this.sliceTimeMicroseconds = 4000,
     this.playerFrictionN = 0.23,
     this.playerFrictionK = 0.6,
