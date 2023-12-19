@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
 
+import '../main.dart';
 import '../setup.dart';
 
 Future<Response> playHandler(Request request) async {
@@ -27,6 +28,7 @@ Future<Response> playHandler(Request request) async {
   guids[dto.guid] = id;
   await _createPlayer(id, dto);
   final responseDto = PlayFromServerDto(id: id);
+  tryStartGame();
   return Response.ok(jsonEncode(responseDto));
 }
 

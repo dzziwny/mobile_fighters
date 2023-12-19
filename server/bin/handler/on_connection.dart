@@ -56,8 +56,7 @@ abstract class OnConnection implements Disposable {
     _timers[id] = Timer(
       Duration(minutes: 1),
       () {
-        players[id].deactivate();
-        playerMetadatas[id].deactivate();
+        removePlayer(id);
         _timers[id] = null;
       },
     );

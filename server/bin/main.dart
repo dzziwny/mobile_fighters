@@ -49,8 +49,6 @@ void main(List<String> args) async {
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
   print('Server listening on ${server.address.host}:${server.port}');
-  restartGameCycleTimer();
-  restartDrawTimer();
 }
 
 Timer? _gameCycleTimer;
@@ -66,6 +64,22 @@ void restartDrawTimer() {
   _drawTimer?.cancel();
   var rate = Duration(microseconds: gameSettings.gameDrawRate);
   _drawTimer = Timer.periodic(rate, (_) => draw());
+}
+
+void stopGame() {
+  _gameCycleTimer?.cancel();
+  _drawTimer?.cancel();
+  print('Game is stopped');
+}
+
+void tryStartGame() {
+  if (_gameCycleTimer?.isActive == true) {
+    return;
+  }
+
+  restartGameCycleTimer();
+  restartDrawTimer();
+  print('Game is started');
 }
 
 void _gameCycle() {

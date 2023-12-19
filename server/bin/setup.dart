@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:core/core.dart';
 
+import 'main.dart';
 import 'register_di.dart';
 
 final guids = <String, int>{};
@@ -57,6 +58,11 @@ void removePlayer(int id) {
   redTeam.remove(id);
   blueTeam.remove(id);
   guids.removeWhere((key, value) => value == id);
+
+  final isAnyPlayer = players.any((player) => player.isActive);
+  if (!isAnyPlayer) {
+    stopGame();
+  }
 
   shareGameData();
 }
