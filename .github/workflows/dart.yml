@@ -22,44 +22,30 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Print dart version
-        run: dart --version
-        
-      - name: Print flutter version
-        run: flutter --version
-
       # Core
       - name: Go to core
-        run: cd core
-      - name: Install core dependencies
-        run: dart pub get
-      - name: Run build runner
-        run: dart run build_runner build --delete-conflicting-outputs
-        
+        working-directory: ./core
+        run: |
+          dart pub get
+          dart run build_runner build --delete-conflicting-outputs
+          
       # Server
       - name: Go to server
-        run: cd ../server
-      - name: Install server dependencies
-        run: dart pub get
-      - name: Run build runner
-        run: dart run build_runner build --delete-conflicting-outputs
-
+        working-directory: ./server
+        run: |
+          dart pub get
+          dart run build_runner build --delete-conflicting-outputs
+          
       # App
       - name: Go to app
-        run: cd ../app
-      - name: Install app dependencies
-        run: flutter pub get
-      - name: Run build runner
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        working-directory: ./app
+        run: |
+          flutter pub get
+          flutter run build_runner build --delete-conflicting-outputs
 
-      - name: Back to root directory
-        run: cd ..
-
-      # Uncomment this step to verify the use of 'dart format' on each commit.
+      # Analyze with dart
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: dart analyze
 
