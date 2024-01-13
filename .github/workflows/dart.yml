@@ -23,25 +23,25 @@ jobs:
           channel: 'stable'
 
       # Core
-      - name: Go to core
+      - name: Build core
         working-directory: ./core
         run: |
           dart pub get
           dart run build_runner build --delete-conflicting-outputs
           
       # Server
-      - name: Go to server
+      - name: Build server
         working-directory: ./server
         run: |
           dart pub get
           dart run build_runner build --delete-conflicting-outputs
           
       # App
-      - name: Go to app
+      - name: Build app
         working-directory: ./app
         run: |
           flutter pub get
-          flutter run build_runner build --delete-conflicting-outputs
+          flutter pub run build_runner build --delete-conflicting-outputs
 
       # Analyze with dart
       - name: Verify formatting
