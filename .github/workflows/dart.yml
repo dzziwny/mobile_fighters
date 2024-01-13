@@ -64,10 +64,7 @@ jobs:
         with:
           name: mobile_fighters_api.aot
           path: mobile_fighters_api.aot
-          warn: Output a warning but do not fail the action
-          error: Error uploading artifacts
-          ignore: Uploading artifact ignored
-          if-no-files-found: mobile_fighters_api.aot not found
+          if-no-files-found: error
           retention-days: 1
           compression-level: 0
           
