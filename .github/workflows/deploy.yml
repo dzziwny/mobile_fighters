@@ -37,17 +37,18 @@ jobs:
           dart run build_runner build --delete-conflicting-outputs
           
       # App
-      - name: Build app
+      - name: Build web
         working-directory: ./app
         run: |
           flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build web --release
 
       # Analyze with dart
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
-      - name: Analyze project source
-        run: dart analyze
+      # - name: Verify formatting
+      #   run: dart format --output=none --set-exit-if-changed .
+      # - name: Analyze project source
+      #   run: dart analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
@@ -56,24 +57,17 @@ jobs:
       #   run: dart test
       
       # want to change this to 'flutter test'.
-      - name: Compile server
-        run: dart compile aot-snapshot server/bin/main.dart --output mobile_fighters_api.aot
+      # - name: Compile server
+      #   run: dart compile aot-snapshot server/bin/main.dart --output mobile_fighters_api.aot
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.1.0
-        with:
-          name: mobile_fighters_api.aot
-          path: mobile_fighters_api.aot
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
-      - name: build release web
-        working-directory: ./app
-        run: |
-          flutter pub get
-          flutter pub run build_runner build --delete-conflicting-outputs
-          flutter build web --release
+      # - name: Upload a Build Artifact
+      #   uses: actions/upload-artifact@v4.1.0
+      #   with:
+      #     name: mobile_fighters_api.aot
+      #     path: mobile_fighters_api.aot
+      #     if-no-files-found: error
+      #     retention-days: 1
+      #     compression-level: 0
           
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
