@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:shelf/shelf.dart';
@@ -46,8 +45,7 @@ void main(List<String> args) async {
   final handler =
       Pipeline().addMiddleware(corsHeaders()).addHandler(router.call);
 
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
-  final server = await serve(handler, ip, port);
+  final server = await serve(handler, ip, 80);
   print('Server listening on ${server.address.host}:${server.port}');
 }
 

@@ -15,14 +15,15 @@ Future<void> initializeInstances() async {
   prefs = await SharedPreferences.getInstance();
   uuid = getUuid(prefs);
   serverClient = ServerClient(uuid: uuid);
-  final ip = prefs.getString('previousIp');
-  if (ip != null) {
-    final isReconnected = await serverClient.tryReconnect(uuid, ip);
-    if (isReconnected) {
-      startWindowController.set(false);
-      playgroundFocusNode.requestFocus();
-    }
-  }
+  // final ip = prefs.getString('previousIp');
+  // final ip = '13.60.19.89:8080';
+  // if (ip != null) {
+  //   final isReconnected = await serverClient.tryReconnect(uuid, ip);
+  //   if (isReconnected) {
+  //     startWindowController.set(false);
+  //     playgroundFocusNode.requestFocus();
+  //   }
+  // }
 
   gameDataWs;
   gameStateWs;

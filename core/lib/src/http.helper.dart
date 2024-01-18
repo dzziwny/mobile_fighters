@@ -8,14 +8,12 @@ import 'endpoints.dart';
 import 'model/_model.dart';
 
 final port = '8080';
-// monte
-// final host = '192.168.1.108';
+
+// AWS
+final host = '13.53.50.202';
 
 // no internet
-final host = '0.0.0.0';
-
-// strzeszyn
-// final host = '192.168.1.25';
+// final host = '0.0.0.0';
 
 // sii warszawa
 // final host = '10.254.33.19';
