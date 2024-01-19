@@ -32,6 +32,7 @@ void main(List<String> args) async {
   final ip = '0.0.0.0';
   final router = Router()
     ..get('/ping', (Request req) => Response.ok('ping'))
+    ..get('/version', (Request req) => Response.ok('1.0.0'))
     ..get(Endpoint.gameFrame, gameFrameHandler)
     ..post(Endpoint.connect, connectHandler)
     ..post(Endpoint.play, playHandler)
@@ -75,6 +76,7 @@ void tryStartGame() {
     return;
   }
 
+  _lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
   restartGameCycleTimer();
   restartDrawTimer();
   print('Game is started');

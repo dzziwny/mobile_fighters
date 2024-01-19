@@ -5,9 +5,9 @@ import 'package:http/http.dart';
 
 import 'connect.dto.dart';
 
-Future<ConnectResponseDto> connect$(String guid, String ip) async {
+Future<ConnectResponseDto> connect$(String guid, String base) async {
   final response = await post(
-    Uri.parse('http://$ip${Endpoint.connect}'),
+    Uri.parse('$base${Endpoint.connect}'),
     body: jsonEncode(
       ConnectRequestDto(guid: guid).toJson(),
     ),

@@ -7,17 +7,17 @@ import 'dto/_dto.dart';
 import 'endpoints.dart';
 import 'model/_model.dart';
 
-final port = '8080';
+const port = '8080';
 
 // AWS
-final host = '13.53.50.202';
+const host = '13.53.50.202';
 
 // no internet
 // final host = '0.0.0.0';
 
 // sii warszawa
 // final host = '10.254.33.19';
-final base = 'http://$host:$port';
+const base = 'http://$host:$port';
 
 Future<PlayFromServerDto> play$(
     String guid, String ip, String nick, Device device) async {

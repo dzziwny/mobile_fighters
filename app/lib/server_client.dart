@@ -38,9 +38,9 @@ class ServerClient implements Disposable {
     });
   }
 
-  Future<bool> tryReconnect(String uuid, String ip) async {
+  Future<bool> tryReconnect(String uuid, String base) async {
     state.value = state.value.copyWith(isConnecting: true);
-    final response = await connect$(uuid, ip);
+    final response = await connect$(uuid, base);
 
     final id = response.id;
     if (id == null) {
@@ -54,7 +54,7 @@ class ServerClient implements Disposable {
 
     state.value = state.value.copyWith(
       id: id,
-      lastIp: ip,
+      lastIp: base,
       isConnecting: false,
       isInitialized: true,
     );

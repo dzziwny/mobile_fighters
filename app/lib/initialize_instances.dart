@@ -4,6 +4,7 @@ import 'package:bubble_fight/game_state/game_state.service.dart';
 import 'package:bubble_fight/game_state/game_state_ws.dart';
 import 'package:bubble_fight/server_client.dart';
 import 'package:bubble_fight/start_window/start_window.controller.dart';
+import 'package:core/core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -18,11 +19,11 @@ Future<void> initializeInstances() async {
   // final ip = prefs.getString('previousIp');
   // final ip = '13.60.19.89:8080';
   // if (ip != null) {
-  //   final isReconnected = await serverClient.tryReconnect(uuid, ip);
-  //   if (isReconnected) {
-  //     startWindowController.set(false);
-  //     playgroundFocusNode.requestFocus();
-  //   }
+    final isReconnected = await serverClient.tryReconnect(uuid, base);
+    if (isReconnected) {
+      startWindowController.set(false);
+      playgroundFocusNode.requestFocus();
+    }
   // }
 
   gameDataWs;
