@@ -21,7 +21,7 @@ class _StartWindowState extends State<StartWindow> {
     text: 'elo',
   );
   final ipController = TextEditingController(
-    text: '$host:$port',
+    text: host,
   );
 
   int selectedIndex = 0;
