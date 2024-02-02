@@ -72,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag mobilefighters:$(date +%s)
+        run: docker build . --file Dockerfile --tag mf:$(date +%s)
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
