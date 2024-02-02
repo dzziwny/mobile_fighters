@@ -64,7 +64,7 @@ class ServerClient implements Disposable {
 
   Future<void> play(String ip, String nick, Device device) async {
     state.value = state.value.copyWith(isPreparingToplay: true);
-    final response = await play$(uuid, 'http://$ip', nick, device);
+    final response = await play$(uuid, '$scheme://$ip', nick, device);
     prefs.setString('previousIp', ip);
     state.value = state.value.copyWith(
       id: response.id,
@@ -75,11 +75,11 @@ class ServerClient implements Disposable {
   }
 
   Future<void> leaveGame() async {
-    await leaveGame$(uuid, state.value.id, 'http://${state.value.lastIp}');
+    await leaveGame$(uuid, state.value.id, '$scheme://${state.value.lastIp}');
   }
 
   Future<void> setGameSettings(GameSettings settings) =>
-      setGameSettings$(settings, 'http://${state.value.lastIp}');
+      setGameSettings$(settings, '$scheme://${state.value.lastIp}');
 
   Stream<WebSocketChannel> channel(Socket socket) {
     return _stateStream

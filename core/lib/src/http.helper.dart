@@ -7,15 +7,16 @@ import 'dto/_dto.dart';
 import 'endpoints.dart';
 import 'model/_model.dart';
 
-// AWS
-const host = '16.170.238.8';
+// Azure
+const scheme = 'https';
+const host = 'mobilefighters.azurewebsites.net';
+const base = '$scheme://$host';
 
-// no internet
+// local
+// const scheme = 'http';
 // final host = '0.0.0.0';
+// const base = '$scheme://$host';
 
-// sii warszawa
-// final host = '10.254.33.19';
-const base = 'http://$host';
 
 Future<PlayFromServerDto> play$(
     String guid, String ip, String nick, Device device) async {
