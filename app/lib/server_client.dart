@@ -93,12 +93,12 @@ class ServerClient implements Disposable {
         .switchMap((state) {
       final id = state.id;
       final ip = state.lastIp;
-      final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
+      final uri = Uri.parse('$wsScheme://$ip${socket.route(id: id)}');
       var channel = WebSocketChannel.connect(uri);
       return Stream.periodic(const Duration(seconds: 2)).map(
         (_) {
           if (channel.closeCode != null || channel.closeReason != null) {
-            final uri = Uri.parse('ws://$ip${socket.route(id: id)}');
+            final uri = Uri.parse('$wsScheme://$ip${socket.route(id: id)}');
             channel = WebSocketChannel.connect(uri);
           }
 

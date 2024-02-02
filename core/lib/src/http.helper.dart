@@ -9,11 +9,13 @@ import 'model/_model.dart';
 
 // Azure
 const scheme = 'https';
+const wsScheme = 'wss';
 const host = 'mobilefighters.azurewebsites.net';
 const base = '$scheme://$host';
 
 // local
 // const scheme = 'http';
+// const wsScheme = 'ws';
 // final host = '0.0.0.0';
 // const base = '$scheme://$host';
 
