@@ -45,10 +45,10 @@ jobs:
           flutter build web --release
 
       # Analyze with dart
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-      # - name: Analyze project source
-      #   run: dart analyze
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze project source
+        run: dart analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
@@ -68,6 +68,9 @@ jobs:
       #     if-no-files-found: error
       #     retention-days: 1
       #     compression-level: 0
+      
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag mobilefighters:$(date +%s)
           
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
