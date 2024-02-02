@@ -19,11 +19,11 @@ Future<void> initializeInstances() async {
   // final ip = prefs.getString('previousIp');
   // final ip = '13.60.19.89:8080';
   // if (ip != null) {
-    final isReconnected = await serverClient.tryReconnect(uuid, base);
-    if (isReconnected) {
-      startWindowController.set(false);
-      playgroundFocusNode.requestFocus();
-    }
+  final isReconnected = await serverClient.tryReconnect(uuid, base);
+  if (isReconnected) {
+    startWindowController.set(false);
+    playgroundFocusNode.requestFocus();
+  }
   // }
 
   gameDataWs;
