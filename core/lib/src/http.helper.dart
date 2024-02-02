@@ -17,7 +17,6 @@ const base = '$scheme://$host';
 // final host = '0.0.0.0';
 // const base = '$scheme://$host';
 
-
 Future<PlayFromServerDto> play$(
     String guid, String ip, String nick, Device device) async {
   final response = await post(
