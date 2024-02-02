@@ -52,48 +52,43 @@ jobs:
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build web --release
 
-      # # Analyze with dart
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-      # - name: Analyze project source
-      #   run: dart analyze
+      # Analyze with dart
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze project source
+        run: dart analyze
       
-      # - name: Build the Docker image
-      #   run: docker build . --file Dockerfile --tag mobile_fighters:$(date +%s)
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag mobile_fighters:$(date +%s)
 
-      # - name: Log in to the Container registry
-      #   uses: docker/login-action@v3
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
       
-      # - name: Push to firebase hosting
-      #   uses: FirebaseExtended/action-hosting-deploy@v0
-      #   with:
-      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
-      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MOBILE_FIGHTERS }}'
-      #     channelId: live
-      #     projectId: mobile-fighters
-
-      # - name: 'Login via Azure CLI'
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Push to firebase hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MOBILE_FIGHTERS }}'
+          channelId: live
+          projectId: mobile-fighters
 
       - name: 'Build and push image'
         uses: azure/docker-login@v1
