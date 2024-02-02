@@ -75,7 +75,7 @@ jobs:
         run: docker build . --file Dockerfile --tag mobilefighters:$(date +%s)
 
       - name: Log in to the Container registry
-        uses: docker/login-action@latest
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
