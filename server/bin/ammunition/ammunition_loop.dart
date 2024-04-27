@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../game_setup.dart';
 import 'loop.dart';
 
 abstract class AmmunitionCooldown<T extends Ammunition> extends Cooldown {
@@ -29,7 +28,7 @@ abstract class AmmunitionCooldown<T extends Ammunition> extends Cooldown {
       currentAttack = firstAmmo;
     }
 
-    final player = players[playerId];
+    final player = setup.players[playerId];
     final velocity = _initVelocityVector(player.angle, initVelocity);
     final position = Vector2(player.x, player.y);
 

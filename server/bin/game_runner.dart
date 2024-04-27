@@ -1,16 +1,14 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 
-import 'ammunition/ammunition.physic.dart';
-import 'ammunition/bomb_loop.dart';
-import 'ammunition/bullet_loop.dart';
-import 'ammunition/dash_loop.dart';
-import 'register_di.dart';
 import 'game_setup.dart';
-import 'updates/_updates.dart';
+import 'register_di.dart';
 
 class GameRunner {
+  final setup = GetIt.I<GameSetup>();
+
   Timer? _gameCycleTimer;
   Timer? _drawTimer;
 
@@ -53,53 +51,14 @@ class GameRunner {
     _lastUpdateTime = now;
     _accumulatorTime += dt;
     while (_accumulatorTime > gameSettings.sliceTimeMicroseconds) {
-      _update();
+      setup.update();
       _accumulatorTime -= gameSettings.sliceTimeMicroseconds;
-    }
-  }
-
-  void _update() {
-    _executeActions();
-    _physicUpdate();
-  }
-
-  void _executeActions() {
-    for (var i = 0; i < gameSettings.maxPlayers; i++) {
-      bulletsLoop.toggle(i, playerInputs[i].isBullet);
-      bombsLoop.toggle(i, playerInputs[i].isBomb);
-      dashLoop.toggle(i, playerInputs[i].isDash);
-    }
-  }
-
-  void _physicUpdate() {
-    for (var i = 0; i < gameSettings.maxBullets; i++) {
-      ammunitionPhysicUpdate(
-        ammo: bullets[i],
-        dt: gameSettings.sliceTimeSeconds,
-        maxDistance: gameSettings.bulletDistanceSquared,
-        hitDistance: gameSettings.bulletPlayerCollisionDistanceSquare,
-        power: gameSettings.bulletPower,
-      );
-    }
-
-    for (var i = 0; i < gameSettings.maxBombs; i++) {
-      ammunitionPhysicUpdate(
-        ammo: bombs[i],
-        dt: gameSettings.sliceTimeSeconds,
-        maxDistance: gameSettings.bombDistanceSquared,
-        hitDistance: gameSettings.bombPlayerCollisionDistanceSquare,
-        power: gameSettings.bombPower,
-      );
-    }
-
-    for (var i = 0; i < gameSettings.maxPlayers; i++) {
-      playerPhysicUpdate(playerInputs[i]);
     }
   }
 
   void _draw() {
     final bytes = GameState.bytes(
-      players,
+      setup.players,
       bombs,
       hits,
       bullets,

@@ -5,10 +5,12 @@ import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 
+import '../game_runner.dart';
 import '../game_setup.dart';
 
 Future<Response> leaveGameHandler(Request request) async {
   final setup = GetIt.I<GameSetup>();
+  final runner = GetIt.I<GameRunner>();
 
   final body = await request.readAsString();
   final json = jsonDecode(body);
@@ -19,5 +21,11 @@ Future<Response> leaveGameHandler(Request request) async {
   }
 
   setup.removePlayer(id);
+  final isAnyPlayer = setup.players.any((player) => player.isActive);
+  if (!isAnyPlayer) {
+    runner.stopGame();
+  }
+
+  setup.shareGameData();
   return Response.ok(null);
 }

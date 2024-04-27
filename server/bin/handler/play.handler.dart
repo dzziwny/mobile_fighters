@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
@@ -21,7 +20,7 @@ Future<Response> playHandler(Request request) async {
     return Response.ok(jsonEncode(PlayFromServerDto(id: guidId)));
   }
 
-  var id = assignPlayerId();
+  var id = setup.assignPlayerId();
   if (id == null) {
     return Response(
       HttpStatus.badRequest,
@@ -30,46 +29,8 @@ Future<Response> playHandler(Request request) async {
   }
 
   setup.guids[dto.guid] = id;
-  await _createPlayer(id, dto);
+  await setup.createPlayer(id, dto);
   final responseDto = PlayFromServerDto(id: id);
   runner.tryStartGame();
   return Response.ok(jsonEncode(responseDto));
 }
-
-int? assignPlayerId() {
-  for (var i = 0; i < gameSettings.maxPlayers; i++) {
-    if (!playerMetadatas[i].isActive) {
-      playerMetadatas[i].isActive = true;
-      return i;
-    }
-  }
-
-  return null;
-}
-
-Future<void> _createPlayer(int id, PlayToServerDto dto) async {
-  final team = _selectTeam(id);
-  var x = Random().nextInt(gameSettings.respawnWidth);
-  if (team == Team.red) {
-    x = gameSettings.battleGroundWidth - x;
-  }
-
-  final y = Random().nextInt(gameSettings.battleGroundHeight);
-  final angle = Random().nextInt(100) / 10.0;
-
-  players[id]
-    ..x = x.toDouble()
-    ..y = y.toDouble()
-    ..angle = angle
-    ..isBombCooldownBit = 0
-    ..isDashCooldownBit = 0
-    ..nick = dto.nick
-    ..team = team
-    ..device = dto.device
-    ..hp = gameSettings.playerStartHp
-    ..isActive = true;
-
-  shareGameData();
-}
-
-Team _selectTeam(int id) => id.isEven ? Team.blue : Team.red;

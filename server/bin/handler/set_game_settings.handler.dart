@@ -13,11 +13,12 @@ import '../game_setup.dart';
 
 Future<Response> setGameSettingsHandler(Request request) async {
   final runner = GetIt.I<GameRunner>();
+  final setup = GetIt.I<GameSetup>();
 
   final body = await request.readAsString();
   final json = jsonDecode(body);
   gameSettings = GameSettings.fromJson(json);
-  for (var player in players) {
+  for (var player in setup.players) {
     player.resetGamePhysics();
   }
 

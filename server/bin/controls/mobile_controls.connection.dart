@@ -4,7 +4,6 @@ import 'package:core/core.dart';
 
 import '../handler/on_connection.dart';
 import '../register_di.dart';
-import '../game_setup.dart';
 
 class MobileControlsConnection extends OnConnection {
   @override
@@ -21,7 +20,7 @@ class MobileControlsConnection extends OnConnection {
     }
 
     final angle = data.toDouble(9, 13);
-    final player = players[playerId];
+    final player = setup.players[playerId];
     playerInputs[playerId]
       ..inputForceX = x * player.forceRatio
       ..inputForceY = y * player.forceRatio

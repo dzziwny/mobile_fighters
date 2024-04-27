@@ -20,8 +20,8 @@ extension WithWeb on Router {
 }
 
 void main(List<String> args) async {
-  GetIt.I.registerSingleton(GameRunner());
   GetIt.I.registerSingleton(GameSetup());
+  GetIt.I.registerSingleton(GameRunner());
   final ip = '0.0.0.0';
   final router = Router()
     ..get('/ping', (Request req) => Response.ok('ping'))

@@ -4,7 +4,6 @@ import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../register_di.dart';
-import '../game_setup.dart';
 import 'loop.dart';
 
 class DashLoop extends Cooldown {
@@ -12,7 +11,7 @@ class DashLoop extends Cooldown {
 
   @override
   void onAction(int playerId) {
-    players[playerId]
+    setup.players[playerId]
       ..isDashActive = true
       ..isDashActiveBit = Bits.dashActive
       ..isDashCooldownBit = Bits.dashCooldown;
@@ -23,7 +22,7 @@ class DashLoop extends Cooldown {
         final state = playerInputs[playerId];
         final normalizedInput =
             Vector2(state.inputForceX, state.inputForceY).normalized();
-        players[playerId]
+        setup.players[playerId]
           ..velocityX = normalizedInput.x * gameSettings.dashAfterForceRatio
           ..velocityY = normalizedInput.y * gameSettings.dashAfterForceRatio
           ..isDashActive = false
@@ -34,7 +33,7 @@ class DashLoop extends Cooldown {
 
   @override
   void onCooldownEnd(int playerId) {
-    players[playerId].isDashCooldownBit = 0;
+    setup.players[playerId].isDashCooldownBit = 0;
   }
 }
 

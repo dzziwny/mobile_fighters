@@ -17,7 +17,7 @@ Future<Response> connectHandler(Request request) async {
     return Response.ok(jsonEncode(ConnectResponseDto()));
   }
 
-  final metadata = playerMetadatas[id];
+  final metadata = setup.playerMetadatas[id];
   final responseDto = ConnectResponseDto(id: metadata.isActive ? id : null);
   return Response.ok(jsonEncode(responseDto));
 }

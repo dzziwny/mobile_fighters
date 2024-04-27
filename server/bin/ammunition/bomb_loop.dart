@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 
-import 'ammunition_loop.dart';
 import '../game_setup.dart';
+import 'ammunition_loop.dart';
 
 class BombLoop extends AmmunitionCooldown<Bomb> {
   BombLoop({
@@ -15,12 +15,12 @@ class BombLoop extends AmmunitionCooldown<Bomb> {
   @override
   void onAction(int playerId) {
     super.onAction(playerId);
-    players[playerId].isBombCooldownBit = Bits.bombCooldown;
+    setup.players[playerId].isBombCooldownBit = Bits.bombCooldown;
   }
 
   @override
   void onCooldownEnd(int playerId) {
-    players[playerId].isBombCooldownBit = 0;
+    setup.players[playerId].isBombCooldownBit = 0;
   }
 }
 
