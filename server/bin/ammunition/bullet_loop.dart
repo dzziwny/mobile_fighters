@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 
-import '../game_setup.dart';
+import '../game.dart';
 import 'ammunition_loop.dart';
 
 class BulletsLoop extends AmmunitionCooldown<Bullet> {

@@ -6,21 +6,21 @@ import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 
 import '../game_runner.dart';
-import '../game_setup.dart';
+import '../game.dart';
 
 Future<Response> playHandler(Request request) async {
   final runner = GetIt.I<GameRunner>();
-  final setup = GetIt.I<GameSetup>();
+  final game = GetIt.I<Game>();
 
   final body = await request.readAsString();
   final json = jsonDecode(body);
   final dto = PlayToServerDto.fromJson(json);
-  final guidId = setup.guids[dto.guid];
+  final guidId = game.guids[dto.guid];
   if (guidId != null) {
     return Response.ok(jsonEncode(PlayFromServerDto(id: guidId)));
   }
 
-  var id = setup.assignPlayerId();
+  var id = game.assignPlayerId();
   if (id == null) {
     return Response(
       HttpStatus.badRequest,
@@ -28,8 +28,8 @@ Future<Response> playHandler(Request request) async {
     );
   }
 
-  setup.guids[dto.guid] = id;
-  await setup.createPlayer(id, dto);
+  game.guids[dto.guid] = id;
+  await game.createPlayer(id, dto);
   final responseDto = PlayFromServerDto(id: id);
   runner.tryStartGame();
   return Response.ok(jsonEncode(responseDto));

@@ -20,7 +20,7 @@ class MobileControlsConnection extends OnConnection {
     }
 
     final angle = data.toDouble(9, 13);
-    final player = setup.players[playerId];
+    final player = game.players[playerId];
     playerInputs[playerId]
       ..inputForceX = x * player.forceRatio
       ..inputForceY = y * player.forceRatio

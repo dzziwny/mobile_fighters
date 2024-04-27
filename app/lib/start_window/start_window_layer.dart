@@ -7,8 +7,8 @@ import 'start_window.dart';
 
 class StartWindowLayer extends StatefulWidget {
   const StartWindowLayer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StartWindowLayer> createState() => _StartWindowLayerState();

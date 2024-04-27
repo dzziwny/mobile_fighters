@@ -10,7 +10,7 @@ import 'ammunition/dash_loop.dart';
 import 'register_di.dart';
 import 'updates/player_physic.update.dart';
 
-class GameSetup {
+class Game {
   final guids = <String, int>{};
   final playerMetadatas = UnmodifiableListView(
     List.generate(gameSettings.maxPlayers, Player.empty),

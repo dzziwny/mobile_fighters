@@ -8,8 +8,8 @@ import 'start_window.controller.dart';
 
 class StartWindow extends StatefulWidget {
   const StartWindow({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StartWindow> createState() => _StartWindowState();
@@ -173,9 +173,9 @@ class _StartWindowState extends State<StartWindow> {
 
 class WarriorChooser extends StatefulWidget {
   const WarriorChooser({
-    Key? key,
+    super.key,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final void Function(int, Device) onChange;
 
@@ -302,13 +302,13 @@ class _WarriorChooserState extends State<WarriorChooser> {
 
 class ChooseWarriorSelectCard extends StatelessWidget {
   const ChooseWarriorSelectCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.selected,
     required this.child,
     this.onTap,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final String name;
   final bool enabled;

@@ -28,7 +28,7 @@ abstract class AmmunitionCooldown<T extends Ammunition> extends Cooldown {
       currentAttack = firstAmmo;
     }
 
-    final player = setup.players[playerId];
+    final player = game.players[playerId];
     final velocity = _initVelocityVector(player.angle, initVelocity);
     final position = Vector2(player.x, player.y);
 

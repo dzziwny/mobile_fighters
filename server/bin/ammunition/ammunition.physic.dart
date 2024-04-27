@@ -1,10 +1,10 @@
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../game_setup.dart';
+import '../game.dart';
 import 'hit.utility.dart';
 
-extension AmmunitionPhysicUpdate on GameSetup {
+extension AmmunitionPhysicUpdate on Game {
   void ammunitionPhysicUpdate({
     required Ammunition ammo,
     required double dt,

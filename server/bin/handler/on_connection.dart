@@ -9,10 +9,10 @@ import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../game_runner.dart';
-import '../game_setup.dart';
+import '../game.dart';
 
 abstract class OnConnection implements Disposable {
-  final setup = GetIt.I<GameSetup>();
+  final game = GetIt.I<Game>();
   final runner = GetIt.I<GameRunner>();
 
   StreamSubscription? _mobileSubscription;
@@ -31,7 +31,7 @@ abstract class OnConnection implements Disposable {
           return Response(HttpStatus.badRequest);
         }
 
-        player = setup.players[intId];
+        player = game.players[intId];
         final handler = webSocketHandler(
           (WebSocketChannel channel) {
             onInit(intId, channel);
@@ -60,13 +60,13 @@ abstract class OnConnection implements Disposable {
     _timers[id] = Timer(
       Duration(minutes: 1),
       () {
-        setup.removePlayer(id);
-        final isAnyPlayer = setup.players.any((player) => player.isActive);
+        game.removePlayer(id);
+        final isAnyPlayer = game.players.any((player) => player.isActive);
         if (!isAnyPlayer) {
           runner.stopGame();
         }
 
-        setup.shareGameData();
+        game.shareGameData();
         _timers[id] = null;
       },
     );

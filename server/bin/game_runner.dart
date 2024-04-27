@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 
-import 'game_setup.dart';
+import 'game.dart';
 import 'register_di.dart';
 
 class GameRunner {
-  final setup = GetIt.I<GameSetup>();
+  final game = GetIt.I<Game>();
 
   Timer? _gameCycleTimer;
   Timer? _drawTimer;
@@ -51,14 +51,14 @@ class GameRunner {
     _lastUpdateTime = now;
     _accumulatorTime += dt;
     while (_accumulatorTime > gameSettings.sliceTimeMicroseconds) {
-      setup.update();
+      game.update();
       _accumulatorTime -= gameSettings.sliceTimeMicroseconds;
     }
   }
 
   void _draw() {
     final bytes = GameState.bytes(
-      setup.players,
+      game.players,
       bombs,
       hits,
       bullets,

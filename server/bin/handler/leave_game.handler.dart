@@ -6,26 +6,26 @@ import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 
 import '../game_runner.dart';
-import '../game_setup.dart';
+import '../game.dart';
 
 Future<Response> leaveGameHandler(Request request) async {
-  final setup = GetIt.I<GameSetup>();
+  final game = GetIt.I<Game>();
   final runner = GetIt.I<GameRunner>();
 
   final body = await request.readAsString();
   final json = jsonDecode(body);
   final dto = LeaveGameDtoRequest.fromJson(json);
-  final id = setup.guids[dto.guid];
+  final id = game.guids[dto.guid];
   if (id == null || id != dto.id) {
     return Response.ok(null);
   }
 
-  setup.removePlayer(id);
-  final isAnyPlayer = setup.players.any((player) => player.isActive);
+  game.removePlayer(id);
+  final isAnyPlayer = game.players.any((player) => player.isActive);
   if (!isAnyPlayer) {
     runner.stopGame();
   }
 
-  setup.shareGameData();
+  game.shareGameData();
   return Response.ok(null);
 }

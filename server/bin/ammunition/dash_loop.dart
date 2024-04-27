@@ -11,7 +11,7 @@ class DashLoop extends Cooldown {
 
   @override
   void onAction(int playerId) {
-    setup.players[playerId]
+    game.players[playerId]
       ..isDashActive = true
       ..isDashActiveBit = Bits.dashActive
       ..isDashCooldownBit = Bits.dashCooldown;
@@ -22,7 +22,7 @@ class DashLoop extends Cooldown {
         final state = playerInputs[playerId];
         final normalizedInput =
             Vector2(state.inputForceX, state.inputForceY).normalized();
-        setup.players[playerId]
+        game.players[playerId]
           ..velocityX = normalizedInput.x * gameSettings.dashAfterForceRatio
           ..velocityY = normalizedInput.y * gameSettings.dashAfterForceRatio
           ..isDashActive = false
@@ -33,7 +33,7 @@ class DashLoop extends Cooldown {
 
   @override
   void onCooldownEnd(int playerId) {
-    setup.players[playerId].isDashCooldownBit = 0;
+    game.players[playerId].isDashCooldownBit = 0;
   }
 }
 

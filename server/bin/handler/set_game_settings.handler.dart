@@ -9,16 +9,16 @@ import '../ammunition/bomb_loop.dart';
 import '../ammunition/bullet_loop.dart';
 import '../ammunition/dash_loop.dart';
 import '../game_runner.dart';
-import '../game_setup.dart';
+import '../game.dart';
 
 Future<Response> setGameSettingsHandler(Request request) async {
   final runner = GetIt.I<GameRunner>();
-  final setup = GetIt.I<GameSetup>();
+  final game = GetIt.I<Game>();
 
   final body = await request.readAsString();
   final json = jsonDecode(body);
   gameSettings = GameSettings.fromJson(json);
-  for (var player in setup.players) {
+  for (var player in game.players) {
     player.resetGamePhysics();
   }
 

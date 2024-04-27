@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../game_setup.dart';
+import '../game.dart';
 
-extension Hitting on GameSetup {
+extension Hitting on Game {
   Player? isHit(Ammunition ammo, double hitDistance) {
     for (var i = 0; i < gameSettings.maxPlayers; i++) {
       if (i == ammo.shooterId) {

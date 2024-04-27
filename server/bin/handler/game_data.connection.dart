@@ -8,7 +8,7 @@ class GameDataConnection extends OnConnection {
   @override
   void onInit(int playerId, WebSocketChannel channel) {
     gameDataChannels.add(channel);
-    final data = GameData(players: setup.players).toString();
+    final data = GameData(players: game.players).toString();
     channel.sink.add(data);
   }
 }

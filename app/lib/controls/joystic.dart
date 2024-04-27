@@ -7,8 +7,8 @@ import 'mobile_controls.bloc.dart';
 
 class Joystic extends StatefulWidget {
   const Joystic({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Joystic> createState() => _JoysticState();
@@ -72,9 +72,7 @@ class _JoysticState extends State<Joystic> {
 class _Joystic extends StatelessWidget {
   const _Joystic({
     required Offset knobPosition,
-    Key? key,
-  })  : knobPosition = (knobPosition - const Offset(15.0, 15.0)),
-        super(key: key);
+  })  : knobPosition = (knobPosition - const Offset(15.0, 15.0));
 
   final Offset knobPosition;
 

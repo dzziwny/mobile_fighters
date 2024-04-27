@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../game_setup.dart';
+import '../game.dart';
 import '../inputs/player_state_input.dart';
 
-extension PlayerPhysicUpdate on GameSetup {
+extension PlayerPhysicUpdate on Game {
   Future<void> playerPhysicUpdate(
     PlayerControlsState state,
   ) async {

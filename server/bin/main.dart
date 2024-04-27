@@ -12,7 +12,7 @@ import 'handler/_handler.dart';
 import 'handler/connect.handler.dart';
 import 'handler/game_data.connection.dart';
 import 'handler/on_connection.dart';
-import 'game_setup.dart';
+import 'game.dart';
 
 extension WithWeb on Router {
   void ws(Socket endpoint, OnConnection onConnection) =>
@@ -20,7 +20,7 @@ extension WithWeb on Router {
 }
 
 void main(List<String> args) async {
-  GetIt.I.registerSingleton(GameSetup());
+  GetIt.I.registerSingleton(Game());
   GetIt.I.registerSingleton(GameRunner());
   final ip = '0.0.0.0';
   final router = Router()
