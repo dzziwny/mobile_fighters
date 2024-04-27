@@ -8,9 +8,11 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../setup.dart';
+import '../game_setup.dart';
 
 abstract class OnConnection implements Disposable {
+  final setup = GetIt.I<GameSetup>();
+
   StreamSubscription? _mobileSubscription;
 
   static final _timers = List<Timer?>.filled(gameSettings.maxPlayers, null);
@@ -56,7 +58,7 @@ abstract class OnConnection implements Disposable {
     _timers[id] = Timer(
       Duration(minutes: 1),
       () {
-        removePlayer(id);
+        setup.removePlayer(id);
         _timers[id] = null;
       },
     );

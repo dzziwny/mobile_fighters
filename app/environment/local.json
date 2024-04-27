@@ -1,0 +1,5 @@
+{
+    "SCHEME": "http",
+    "WS_SCHEME": "ws",
+    "HOST": "0.0.0.0"
+}

@@ -1,131 +1,203 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "app",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "app (profile)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "server",
-            "type": "dart",
-            "request": "launch",
-            "program": "bin/main.dart",
-            "cwd": "${workspaceFolder}/server",
-            "preLaunchTask": "killProcessOnPort8080"
-        },
-        {
-            "name": "server (release)",
-            "type": "dart",
-            "request": "launch",
-            "program": "bin/main.dart",
-            "cwd": "${workspaceFolder}/server",
-            "preLaunchTask": "killProcessOnPort8080",
-            "flutterMode": "release"
-        },
-        {
-            "name": "ONEPLUS A6000",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "0bf579b7",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "VOG L29",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "EHT7N19515004813",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "iPhone 6s",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "1d7c436495647f004145cfb02bfa09b547684a0f",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "iPhone SE",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "00008030-000244823CDA402E",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "chrome",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "chrome",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        {
-            "name": "macOS",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "macos",
-            "program": "lib/main.dart",
-            "cwd": "${workspaceFolder}/app"
-        },
-        
-    ],
-    "compounds": [
-        {
-          "name": "app/server",
-          "configurations": ["server", "app"],
-          "stopAll": true
-        },
-        {
-          "name": "app/server (profile)",
-          "configurations": ["server (release)", "app (profile)"],
-          "stopAll": true
-        },
-        {
-          "name": "server+2apps",
-          "configurations": ["server", "app", "app"],
-          "stopAll": true
-        },
-        {
-          "name": "server+3apps",
-          "configurations": ["server", "app", "app", "app"],
-          "stopAll": true
-        },
-        {
-          "name": "chrome,macos/server",
-          "configurations": ["server", "macOS", "chrome"],
-          "stopAll": true
-        },
-        {
-          "name": "all",
-          "configurations": ["server", "chrome","iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29", "macOS"],
-          "stopAll": true
-        },
-        {
-          "name": "all apps",
-          "configurations": ["chrome", "iPhone 6s", "iPhone SE", "ONEPLUS A6000", "VOG L29"],
-          "stopAll": true
-        },
-        {
-          "name": "3 mac 2 chrome",
-          "configurations": ["macOS", "macOS", "macOS", "chrome", "chrome"],
-          "stopAll": true
-        },
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(local) app",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
       ]
+    },
+    {
+      "name": "(local) app (profile)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "flutterMode": "profile",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) ONEPLUS A6000",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "0bf579b7",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) VOG L29",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "EHT7N19515004813",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) iPhone 6s",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "1d7c436495647f004145cfb02bfa09b547684a0f",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) iPhone SE",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "00008030-000244823CDA402E",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) chrome",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "(local) macOS",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "macos",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "toolArgs": [
+        "--dart-define-from-file",
+        "environment/local.json"
+      ]
+    },
+    {
+      "name": "server",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/main.dart",
+      "cwd": "${workspaceFolder}/server",
+      "preLaunchTask": "killProcessOnPort8080",
+      "postDebugTask": "killProcessOnPort8080"
+    },
+    {
+      "name": "server (release)",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/main.dart",
+      "cwd": "${workspaceFolder}/server",
+      "preLaunchTask": "killProcessOnPort8080",
+      "postDebugTask": "killProcessOnPort8080",
+      "flutterMode": "release"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "(local) app/server",
+      "configurations": [
+        "server",
+        "(local) app"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) app/server (profile)",
+      "configurations": [
+        "server (release)",
+        "(local) app (profile)"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) server+2 local apps",
+      "configurations": [
+        "server",
+        "(local) app",
+        "(local) app"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) server+3 local apps",
+      "configurations": [
+        "server",
+        "(local) app",
+        "(local) app",
+        "(local) app"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) chrome,macos/server",
+      "configurations": [
+        "server",
+        "(local) macOS",
+        "(local) chrome"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) all",
+      "configurations": [
+        "server",
+        "(local) chrome",
+        "(local) iPhone 6s",
+        "(local) iPhone SE",
+        "(local) ONEPLUS A6000",
+        "(local) VOG L29",
+        "(local) macOS"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) all apps",
+      "configurations": [
+        "(local) chrome",
+        "(local) iPhone 6s",
+        "(local) iPhone SE",
+        "(local) ONEPLUS A6000",
+        "(local) VOG L29"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "(local) 3 mac 2 chrome",
+      "configurations": [
+        "(local) macOS",
+        "(local) macOS",
+        "(local) macOS",
+        "(local) chrome",
+        "(local) chrome"
+      ],
+      "stopAll": true
+    },
+  ]
 }

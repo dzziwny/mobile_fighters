@@ -1,11 +1,32 @@
 import 'dart:collection';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 
-import 'main.dart';
+import 'game_runner.dart';
 import 'register_di.dart';
 
-final guids = <String, int>{};
+class GameSetup {
+  final runner = GetIt.I<GameRunner>();
+
+  final guids = <String, int>{};
+
+  void removePlayer(int id) {
+    players[id].deactivate();
+    playerMetadatas[id].deactivate();
+    redTeam.remove(id);
+    blueTeam.remove(id);
+    guids.removeWhere((key, value) => value == id);
+
+    final isAnyPlayer = players.any((player) => player.isActive);
+    if (!isAnyPlayer) {
+      runner.stopGame();
+    }
+
+    shareGameData();
+  }
+}
+
 final playerMetadatas =
     UnmodifiableListView(List.generate(gameSettings.maxPlayers, Player.empty));
 final bullets =
@@ -50,19 +71,4 @@ void shareGameData() {
   for (final channel in gameDataChannels) {
     channel.sink.add(data);
   }
-}
-
-void removePlayer(int id) {
-  players[id].deactivate();
-  playerMetadatas[id].deactivate();
-  redTeam.remove(id);
-  blueTeam.remove(id);
-  guids.removeWhere((key, value) => value == id);
-
-  final isAnyPlayer = players.any((player) => player.isActive);
-  if (!isAnyPlayer) {
-    stopGame();
-  }
-
-  shareGameData();
 }

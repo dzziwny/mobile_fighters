@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../register_di.dart';
-import '../setup.dart';
+import '../game_setup.dart';
 import 'loop.dart';
 
 class DashLoop extends Cooldown {

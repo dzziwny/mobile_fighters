@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 
 import 'ammunition_loop.dart';
-import '../setup.dart';
+import '../game_setup.dart';
 
 class BombLoop extends AmmunitionCooldown<Bomb> {
   BombLoop({

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../setup.dart';
+import '../game_setup.dart';
 
 Player? isHit(Ammunition ammo, double hitDistance) {
   for (var i = 0; i < gameSettings.maxPlayers; i++) {

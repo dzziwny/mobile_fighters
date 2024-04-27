@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../register_di.dart';
-import '../setup.dart';
+import '../game_setup.dart';
 import 'on_connection.dart';
 
 class GameDataConnection extends OnConnection {

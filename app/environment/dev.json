@@ -1,0 +1,5 @@
+{
+    "SCHEME": "https",
+    "WS_SCHEME": "wss",
+    "HOST": "mobilefighters.azurewebsites.net"
+}

@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 
 import '../handler/on_connection.dart';
 import '../register_di.dart';
-import '../setup.dart';
+import '../game_setup.dart';
 
 class MobileControlsConnection extends OnConnection {
   @override

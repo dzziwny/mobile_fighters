@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../inputs/player_state_input.dart';
-import '../setup.dart';
+import '../game_setup.dart';
 
 Future<void> playerPhysicUpdate(
   PlayerControlsState state,

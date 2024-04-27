@@ -7,17 +7,10 @@ import 'dto/_dto.dart';
 import 'endpoints.dart';
 import 'model/_model.dart';
 
-// Azure
-const scheme = 'https';
-const wsScheme = 'wss';
-const host = 'mobilefighters.azurewebsites.net';
+const scheme = String.fromEnvironment('SCHEME');
+const wsScheme = String.fromEnvironment('WS_SCHEME');
+const host = String.fromEnvironment('HOST');
 const base = '$scheme://$host';
-
-// local
-// const scheme = 'http';
-// const wsScheme = 'ws';
-// final host = '0.0.0.0';
-// const base = '$scheme://$host';
 
 Future<PlayFromServerDto> play$(
     String guid, String ip, String nick, Device device) async {

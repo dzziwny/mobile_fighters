@@ -3,16 +3,20 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:core/core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart';
 
-import '../main.dart';
-import '../setup.dart';
+import '../game_runner.dart';
+import '../game_setup.dart';
 
 Future<Response> playHandler(Request request) async {
+  final runner = GetIt.I<GameRunner>();
+  final setup = GetIt.I<GameSetup>();
+
   final body = await request.readAsString();
   final json = jsonDecode(body);
   final dto = PlayToServerDto.fromJson(json);
-  final guidId = guids[dto.guid];
+  final guidId = setup.guids[dto.guid];
   if (guidId != null) {
     return Response.ok(jsonEncode(PlayFromServerDto(id: guidId)));
   }
@@ -25,10 +29,10 @@ Future<Response> playHandler(Request request) async {
     );
   }
 
-  guids[dto.guid] = id;
+  setup.guids[dto.guid] = id;
   await _createPlayer(id, dto);
   final responseDto = PlayFromServerDto(id: id);
-  tryStartGame();
+  runner.tryStartGame();
   return Response.ok(jsonEncode(responseDto));
 }
 
