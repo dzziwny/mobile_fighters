@@ -7,17 +7,16 @@ import 'loop.dart';
 
 abstract class AmmunitionCooldown<T extends Ammunition> extends Cooldown {
   final int ammunitionPerPlayer;
-  final List<T> magazine;
-  final List<int> currentAmmo;
   final double initVelocity;
 
   AmmunitionCooldown({
     required this.ammunitionPerPlayer,
-    required this.magazine,
-    required this.currentAmmo,
     required this.initVelocity,
     required super.cooldown,
   });
+
+  List<int> get currentAmmo;
+  List<T> get magazine;
 
   @override
   void onAction(int playerId) {

@@ -21,15 +21,8 @@ class GameRunner {
     }
 
     _lastUpdateTime = DateTime.now().microsecondsSinceEpoch;
-    restartGameCycleTimer();
-    restartDrawTimer();
+    restartGameCycle();
     print('Game is started');
-  }
-
-  void restartGameCycleTimer() {
-    _gameCycleTimer?.cancel();
-    var frameRate = Duration(milliseconds: gameSettings.frameRate);
-    _gameCycleTimer = Timer.periodic(frameRate, (_) => _gameCycle());
   }
 
   void stopGame() {
@@ -39,10 +32,18 @@ class GameRunner {
   }
 
   // used when user changes settings manually
-  void restartDrawTimer() {
+  void restartGameCycle() {
+    _gameCycleTimer?.cancel();
+    _gameCycleTimer = Timer.periodic(
+      Duration(milliseconds: gameSettings.frameRate),
+      (_) => _gameCycle(),
+    );
+
     _drawTimer?.cancel();
-    var rate = Duration(microseconds: gameSettings.gameDrawRate);
-    _drawTimer = Timer.periodic(rate, (_) => _draw());
+    _drawTimer = Timer.periodic(
+      Duration(microseconds: gameSettings.gameDrawRate),
+      (_) => _draw(),
+    );
   }
 
   void _gameCycle() {
@@ -59,13 +60,13 @@ class GameRunner {
   void _draw() {
     final bytes = GameState.bytes(
       game.players,
-      bombs,
-      hits,
-      bullets,
-      frags,
+      game.bombs,
+      game.hits,
+      game.bullets,
+      game.frags,
     );
 
-    hits.fillRange(0, gameSettings.maxPlayers.bitLength, 0);
+    game.hits.fillRange(0, gameSettings.maxPlayers.bitLength, 0);
 
     for (var channel in gameStateChannels) {
       channel.sink.add(bytes);
