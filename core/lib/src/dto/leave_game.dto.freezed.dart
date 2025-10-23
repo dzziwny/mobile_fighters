@@ -12,7 +12,7 @@ part of 'leave_game.dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 LeaveGameDtoRequest _$LeaveGameDtoRequestFromJson(Map<String, dynamic> json) {
   return _LeaveGameDtoRequest.fromJson(json);
@@ -23,8 +23,12 @@ mixin _$LeaveGameDtoRequest {
   String get guid => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
 
+  /// Serializes this LeaveGameDtoRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LeaveGameDtoRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LeaveGameDtoRequestCopyWith<LeaveGameDtoRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$LeaveGameDtoRequestCopyWithImpl<$Res, $Val extends LeaveGameDtoRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LeaveGameDtoRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$LeaveGameDtoRequestImplCopyWithImpl<$Res>
       $Res Function(_$LeaveGameDtoRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LeaveGameDtoRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -124,7 +132,7 @@ class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LeaveGameDtoRequestImpl &&
@@ -132,11 +140,13 @@ class _$LeaveGameDtoRequestImpl implements _LeaveGameDtoRequest {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, guid, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LeaveGameDtoRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LeaveGameDtoRequestImplCopyWith<_$LeaveGameDtoRequestImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _LeaveGameDtoRequest implements LeaveGameDtoRequest {
   String get guid;
   @override
   int get id;
+
+  /// Create a copy of LeaveGameDtoRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LeaveGameDtoRequestImplCopyWith<_$LeaveGameDtoRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

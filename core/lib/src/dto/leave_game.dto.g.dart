@@ -10,7 +10,7 @@ _$LeaveGameDtoRequestImpl _$$LeaveGameDtoRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$LeaveGameDtoRequestImpl(
       guid: json['guid'] as String,
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$LeaveGameDtoRequestImplToJson(

@@ -4,7 +4,8 @@ publish_to: none
 version: 1.0.2
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: 3.9.2
+  flutter: 3.35.5
 
 dependencies:
   args: ^2.0.0
@@ -16,9 +17,10 @@ dependencies:
   shelf_router: ^1.0.0
   shelf_web_socket: ^1.0.2
   synchronized: ^3.0.1
-  uuid: ^4.2.1
-  vector_math: ^2.1.2
+  uuid: ^4.5.1
+  vector_math: ^2.2.0
   web_socket_channel: ^2.2.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   build_runner: ^2.3.3
